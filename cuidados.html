@@ -249,12 +249,13 @@
         }
 
         footer {
-            background: linear-gradient(to top, rgb(255, 217, 92), rgba(233, 233, 233, 0.1));
+            background: linear-gradient(to top, #E8D5C4, #F5EBE0);
             padding: 40px 20px;
             text-align: center;
             border-top: 3px solid #d4af37;
-            color: #000000;
-            text-shadow: 1px 1px 2px #d4af37;
+            border-bottom: 3px solid #d4af37;
+            color: #4a3f35;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .footer-container {
@@ -266,7 +267,7 @@
         }
 
         .footer-column h4 {
-            color: #333;
+            color: #4a3f35;
             font-size: 18px;
             margin-bottom: 20px;
             font-weight: bold;
@@ -283,7 +284,7 @@
 
         .footer-column ul li a {
             text-decoration: none;
-            color: #333;
+            color: #4a3f35;
             font-size: 16px;
             font-weight: 600;
             transition: color 0.3s ease;
@@ -296,7 +297,7 @@
         .footer-socials a {
             display: flex;
             text-decoration: none;
-            color: #333;
+            color: #4a3f35;
             margin-right: 15px;
             font-size: 20px;
             transition: color 0.3s ease;
@@ -308,6 +309,23 @@
 
         footer p {
             margin: 20px 0 0;
+            color: #4a3f35;
+        }
+
+        .footer-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .footer-link:hover {
+            color: #fff;
+            background-color: #8b5cf6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -478,6 +496,7 @@
                     </a>
                 </div>
             </div>
+             <p style="color: rgba(74, 63, 53, 0.7); text-align: center; margin-top: 10px;">Criado por Chris - Visite meu <a href="https://ehochris-pixelcraft-portfolio-where-code-meets-elegance.static.hf.space/index.html" class="footer-link" target="_blank">site pessoal</a>.</p>
         </div>
 
         <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>

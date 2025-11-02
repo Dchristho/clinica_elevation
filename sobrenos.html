@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Nós - Salão Elevation</title>
-
-   
-    
     
     <!-- Adiciona o link para o Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -26,8 +23,6 @@
             background-color: #000;
             padding: 20px;
             text-align: center;
-            border-bottom: 3px solid #d4af37;
-            border-top: 3px solid #d4af37;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -41,8 +36,6 @@
         section {
             padding: 60px 20px;
             text-align: center;
-            border-top: 2px solid #d4af37;
-            border-bottom: 2px solid #d4af37;
         }
 
         section h2 {
@@ -78,13 +71,12 @@
             background-color: #555;
         }
 
-        /* Botão de Exploração (em fundo preto com letras douradas) */
+        /* Botão de Exploração */
         .explore-section {
             background-color: #ffffff;
             color: #d4af37;
             text-align: center;
             padding: 20px;
-            border-top: 2px solid #d4af37;
             margin-top: 40px;
         }
 
@@ -103,6 +95,7 @@
             text-decoration: none;
             transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
             display: inline-block;
+            margin: 0 10px 10px;
         }
 
         .explore-button:hover {
@@ -122,7 +115,7 @@
         }
 
         .footer-column h4 {
-            color: #333;
+            color: #4a3f35;
             font-size: 16px;
             margin-bottom: 15px;
         }
@@ -134,18 +127,18 @@
 
         .footer-column ul li a {
             text-decoration: none;
-            color: #666;
+            color: #4a3f35;
             font-size: 14px;
             transition: color 0.3s ease;
         }
 
         .footer-column ul li a:hover {
-            color: #333;
+            color: #d4af37;
         }
 
         .footer-socials a {
             text-decoration: none;
-            color: #333;
+            color: #4a3f35;
             margin-right: 15px;
             font-size: 20px;
             transition: color 0.3s ease;
@@ -156,17 +149,35 @@
         }
 
         footer {
-            background: linear-gradient(to top, rgb(255, 217, 92), rgba(233, 233, 233, 0.1));
+            background: linear-gradient(to top, #E8D5C4, #F5EBE0);
             padding: 40px 20px;
             text-align: center;
-            color: #000000;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            color: #4a3f35;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid #d4af37;
+            border-bottom: 3px solid #d4af37;
         }
 
         footer p {
             margin: 0;
             font-size: 14px;
-            color: #333;
+            color: #4a3f35;
+        }
+
+        .footer-link {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .footer-link:hover {
+            color: #fff;
+            background-color: #8b5cf6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -197,7 +208,7 @@
             }
 
             .footer-socials a {
-                font-size: 28px; /* Ícones maiores para facilitar o toque */
+                font-size: 28px;
             }
         }
     </style>
@@ -240,6 +251,7 @@
                     </a>
                 </div>
             </div>
+             <p style="color: rgba(74, 63, 53, 0.7); text-align: center; margin-top: 10px;">Criado por Chris - Visite meu <a href="https://ehochris-pixelcraft-portfolio-where-code-meets-elegance.static.hf.space/index.html" class="footer-link" target="_blank">site pessoal</a>.</p>
         </div>
         <b><p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p></b>
     </footer>
