@@ -1,154 +1,186 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serviços - Salão Elevation</title>
+    <title>Serviços - Clínica Elevation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
             font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
+            background: #f9f9f9;
             color: #333;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
         header {
+            background: #000;
+            padding: 25px 20px;
             text-align: center;
-            background-color: #000;
-            color: #fff;
-            padding: 20px;
-            border-bottom: 3px solid #d4af37;
-            position: relative;
+            border-bottom: 4px solid #d4af37;
         }
+        h1 { font-size: 2.8em; color: #d4af37; }
 
-        h1 {
-            margin: 0;
-            font-size: 2.5em;
-            color: #d4af37;
+        .back-button {
+            position: fixed;
+            top: 20px; left: 20px;
+            background: #333; color: #fff;
+            border: none; padding: 12px 18px;
+            border-radius: 8px; font-size: 15px;
+            cursor: pointer; z-index: 999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
+        .back-button:hover { background: #555; }
 
-        .container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+        .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 35px;
         }
 
         .service {
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
         }
-
-        .service:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Botão de reserva */
-        .service a {
-            text-decoration: none;
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #d4af37;
-            color: #fff;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 600;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .service a:hover {
-            background-color: #b5942f;
-            box-shadow: 0 4px 12px rgba(180, 148, 47, 0.4);
-        }
+        .service:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(0,0,0,0.18); }
 
         .service-title {
+            padding: 25px 25px 15px;
+            font-size: 1.9em;
             color: #d4af37;
-            font-size: 1.8em;
-            margin-bottom: 15px;
             position: relative;
-            padding-bottom: 10px;
         }
-
-        .service-title:after {
+        .service-title::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
+            bottom: 0; left: 25px;
+            width: 70px; height: 4px;
             background: #d4af37;
+            border-radius: 2px;
+        }
+
+        /* GALERIA CIRCULAR PREMIUM */
+        .circular-gallery {
+            width: 100%;
+            height: 380px;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+            background: linear-gradient(135deg, #fdfdfd, #f0f0f0);
+            user-select: none;
+        }
+        .circular-gallery:active { cursor: grabbing; }
+
+        .circular-gallery .track {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: flex;
+            align-items: center;
+            transform: translate(-50%, -50%);
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .circular-gallery img {
+            height: 290px;
+            width: auto;
+            border-radius: 18px;
+            object-fit: cover;
+            margin: 0 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            flex-shrink: 0;
+            opacity: 0.6;
+            transform: scale(0.88);
+            transition: all 0.5s ease;
+        }
+
+        .circular-gallery img.active {
+            opacity: 1;
+            transform: scale(1.08);
+            box-shadow: 0 25px 60px rgba(212, 175, 55, 0.5);
+            z-index: 10;
         }
 
         .service-description {
+            padding: 20px 25px 10px;
             color: #555;
             font-size: 1.05em;
-            line-height: 1.6;
-            margin-bottom: 15px;
         }
 
-        /* Estilos do carrossel Swiper */
-        .swiper-container {
-            width: 100%;
-            height: 350px;
-            margin: 20px 0;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .swiper-slide {
+        .service a {
+            display: block;
+            margin: 0 25px 25px;
+            padding: 14px 20px;
+            background: #d4af37;
+            color: white;
             text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .service a:hover {
+            background: #b5942f;
+            transform: translateY(-3px);
         }
 
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background-color: #f5f5f5;
+        /* SEÇÃO EXPLORE */
+        .explore-section {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+        .explore-section h3 { font-size: 1.9em; margin-bottom: 25px; color: #d4af37; }
+        .explore-button {
+            background-color: #000000;
+            color: #d4af37;
+            font-size: 1.2em;
+            padding: 14px 28px;
+            border: 2px solid #d4af37;
+            border-radius: 30px;
+            text-decoration: none;
+            margin: 0 12px 12px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .explore-button:hover {
+            background-color: #d4af37;
+            color: #ffffff;
+            transform: translateY(-4px);
         }
 
-        /* Footer */
+        /* RODAPÉ 100% IGUAL AO SEU ÚLTIMO EXEMPLO */
+        footer {
+            background: linear-gradient(to top, #E8D5C4, #F5EBE0);
+            padding: 40px 20px;
+            text-align: center;
+            color: #4a3f35;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid #d4af37;
+            border-bottom: 3px solid #d4af37;
+            margin-top: 60px;
+        }
+
         .footer-container {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 20px;
-            margin-top: 30px;
+            max-width: 1200px;
+            margin: 0 auto 30px;
         }
 
         .footer-column h4 {
             color: #4a3f35;
             font-size: 16px;
             margin-bottom: 15px;
-        }
-
-        .footer-column ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-column ul li a {
-            text-decoration: none;
-            color: #4a3f35;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-
-        .footer-column ul li a:hover {
-            color: #d4af37;
         }
 
         .footer-socials a {
@@ -163,26 +195,10 @@
             color: #d4af37;
         }
 
-        footer {
-            background: linear-gradient(to top, #E8D5C4, #F5EBE0);
-            padding: 40px 20px;
-            text-align: center;
-            color: #4a3f35;
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
-            margin-top: 40px;
-        }
-
-        footer p {
-            margin: 0;
-            font-size: 14px;
-            color: #4a3f35;
-        }
-
         .footer-link {
             color: #8b5cf6;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
             padding: 2px 8px;
             border-radius: 4px;
         }
@@ -194,256 +210,182 @@
             box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
         }
 
+        footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #4a3f35;
+        }
+
         @media (max-width: 768px) {
-            .back-button {
-                font-size: 14px;
-                padding: 10px 14px;
-            }
-
-            section h2 {
-                font-size: 1.8em;
-            }
-
-            .footer-container {
-                flex-direction: column;
-                text-align: left;
-            }
-
-            .footer-column {
-                margin-bottom: 20px;
-            }
-
-            .footer-socials {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 15px;
-                margin-top: 15px;
-            }
-
-            .footer-socials a {
-                font-size: 28px;
-            }
-            
-            .swiper-container {
-                height: 280px;
-            }
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .back-button:hover {
-            background-color: #555;
-        }
-
-        /* Botão de Exploração */
-        .explore-section {
-            background-color: #ffffff;
-            color: #000000;
-            text-align: center;
-            padding: 30px 20px;
-            border-top: 2px solid #d4af37;
-            margin-top: 40px;
-        }
-
-        .explore-section h3 {
-            font-size: 1.8em;
-            margin-bottom: 25px;
-            color: #d4af37;
-        }
-
-        .explore-button {
-            background-color: #000000;
-            color: #d4af37;
-            font-size: 1.2em;
-            padding: 12px 24px;
-            border: 2px solid #d4af37;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin: 0 10px 10px;
-        }
-
-        .explore-button:hover {
-            background-color: #d4af37;
-            color: #ffffff;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            transform: translateY(-3px);
-        }
-        
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+            .circular-gallery { height: 300px; }
+            .circular-gallery img { height: 220px; margin: 0 15px; }
+            .footer-container { flex-direction: column; text-align: center; }
+            .footer-socials { justify-content: center; gap: 20px; margin-top: 15px; }
+            .footer-socials a { font-size: 28px; }
         }
     </style>
 </head>
-
 <body>
-    <!-- Botão de Voltar -->
+
     <button class="back-button" onclick="window.history.back()">Voltar</button>
 
     <header>
-        <h1>Serviços</h1>
+        <h1>Nossos Serviços</h1>
     </header>
 
     <div class="container">
         <div class="service-grid">
-            <!-- Serviço 1 - Criolipolise -->
+
+            <!-- 1. Criolipolise -->
             <div class="service">
                 <h2 class="service-title">Criolipolise</h2>
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="criolipolise-1.jpeg" alt="Criolipolise">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="antesedepoiscripo.jpg" alt="Criolipolise">
-                        </div>
+                <div class="circular-gallery">
+                    <div class="track">
+                        <img src="criolipolise-1.jpeg" alt="Criolipolise" class="active">
+                        <img src="antesedepoiscripo.jpg" alt="Antes e Depois">
+                        <img src="criolipolise-1.jpeg" alt="Criolipolise">
+                        <img src="antesedepoiscripo.jpg" alt="Antes e Depois">
                     </div>
                 </div>
-                <p class="service-description"><b>Transformação visual completa com criopolise para redefinir contornos corporais.</b></p>
-                <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Criolipolise!" target="_blank">Agendamento</a>
+                <p class="service-description"><b>Eliminação de gordura localizada por congelamento controlado.</b></p>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Criolipolise" target="_blank">Agendar via WhatsApp</a>
             </div>
 
-            <!-- Serviço 2 - Corte e Estilo -->
+            <!-- 2. Corte e Estilo -->
             <div class="service">
                 <h2 class="service-title">Corte e Estilo</h2>
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="cortecabelo1.jpeg" alt="Corte e Estilo">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="cortecabelo2.jpeg" alt="Corte e Estilo">
-                        </div>
+                <div class="circular-gallery">
+                    <div class="track">
+                        <img src="cortecabelo1.jpeg" alt="Corte 1" class="active">
+                        <img src="cortecabelo2.jpeg" alt="Corte 2">
+                        <img src="cortecabelo1.jpeg" alt="Corte 1">
+                        <img src="cortecabelo2.jpeg" alt="Corte 2">
                     </div>
                 </div>
-                <p class="service-description"><b>É o que define o estilo visual dos cabelos e consequentemente, o estilo visual da pessoa. Acompanhar o design do corte, com a personalidade da pessoa, torna a mesma mais autêntica e única.</b></p>
-                <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Cortes%20de%20Cabelo%20do%20Salão%20Elevation!" target="_blank">Agendamento</a>
+                <p class="service-description"><b>Cortes modernos e personalizados que realçam sua beleza.</b></p>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20um%20Corte" target="_blank">Agendar via WhatsApp</a>
             </div>
 
-            <!-- Serviço 3 - Manicure -->
+            <!-- 3. Manicure -->
             <div class="service">
                 <h2 class="service-title">Manicure</h2>
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="manicure1.jpeg" alt="Manicure">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="manicure2.jpeg" alt="Manicure">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="manicure3.jpeg" alt="Manicure">
-                        </div>
+                <div class="circular-gallery">
+                    <div class="track">
+                        <img src="manicure1.jpeg" alt="Manicure 1" class="active">
+                        <img src="manicure2.jpeg" alt="Manicure 2">
+                        <img src="manicure3.jpeg" alt="Manicure 3">
+                        <img src="manicure1.jpeg" alt="Manicure 1">
                     </div>
                 </div>
-                <p class="service-description"><b>São cuidados, responsáveis pela saúde e pela beleza das mãos e dos pés.</b></p>
-                <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Manicure%20do%20Salão%20Elevation!" target="_blank">Agendamento</a>
+                <p class="service-description"><b>Cuidados completos para mãos e pés com longa duração.</b></p>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Manicure" target="_blank">Agendar via WhatsApp</a>
             </div>
 
-            <!-- Serviço 4 - Design de Sobrancelhas -->
+            <!-- 4. Design de Sobrancelhas -->
             <div class="service">
                 <h2 class="service-title">Design de Sobrancelhas</h2>
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="sobrancelha.png" alt="Design de Sobrancelhas">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="sobrahenna2.jpg" alt="Design de Sobrancelhas">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="sobrahenna1.jpeg" alt="Design de Sobrancelhas">
-                        </div>
+                <div class="circular-gallery">
+                    <div class="track">
+                        <img src="sobrancelha.png" alt="Sobrancelhas" class="active">
+                        <img src="sobrahenna2.jpg" alt="Henna">
+                        <img src="sobrahenna1.jpeg" alt="Design">
+                        <img src="sobrancelha.png" alt="Sobrancelhas">
                     </div>
                 </div>
-                <p class="service-description"><b>Modelagem perfeita para valorizar seu olhar, com técnicas de henna e laminagem para um resultado natural e duradouro.</b></p>
-                <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Design%20de%20Sobrancelhas%20do%20Salão%20Elevation!" target="_blank">Agendamento</a>
+                <p class="service-description"><b>Modelagem perfeita com henna para um olhar marcante.</b></p>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Design%20de%20Sobrancelhas" target="_blank">Agendar via WhatsApp</a>
             </div>
 
-            <!-- Serviço 5 - Unhas em Gel -->
+            <!-- 5. Unhas em Gel -->
             <div class="service">
                 <h2 class="service-title">Unhas em Gel</h2>
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="unhasgel1.webp" alt="Unhas em Gel">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="unhasgel2.webp" alt="Unhas em Gel">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="unhasgel3.webp" alt="Unhas em Gel">
-                        </div>
+                <div class="circular-gallery">
+                    <div class="track">
+                        <img src="unhasgel1.webp" alt="Unhas Gel 1" class="active">
+                        <img src="unhasgel2.webp" alt="Unhas Gel 2">
+                        <img src="unhasgel3.webp" alt="Unhas Gel 3">
+                        <img src="unhasgel1.webp" alt="Unhas Gel 1">
                     </div>
                 </div>
-                <p class="service-description"><b>Alongamento e fortalecimento com gel, garantindo durabilidade e beleza por semanas com acabamento perfeito.</b></p>
-                <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Unhas%20em%20Gel%20do%20Salão%20Elevation!" target="_blank">Agendamento</a>
+                <p class="service-description"><b>Alongamento e fortalecimento com gel de alta durabilidade.</b></p>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Unhas%20em%20Gel" target="_blank">Agendar via WhatsApp</a>
             </div>
+
         </div>
     </div>
 
     <div class="explore-section">
-        <h3>Explore nossos serviços</h3>
-        <a href="espaço.html" class="explore-button">Espaço</a>
+        <h3>Explore mais sobre nós</h3>
+        <a href="espaço.html" class="explore-button">Nosso Espaço</a>
         <a href="sobrenos.html" class="explore-button">Sobre Nós</a>
     </div>
 
+    <!-- RODAPÉ 100% IGUAL AO SEU EXEMPLO -->
     <footer>
         <div class="footer-container">
             <div class="footer-column">
                 <b><h4>Redes Sociais</h4></b>
                 <div class="footer-socials">
                     <a href="https://www.facebook.com/salao_elevation" target="_blank">
-                        <i class="fab fa-facebook-f"></i> Facebook
+                        Facebook
                     </a>
                     <a href="https://www.instagram.com/salao_elevation" target="_blank">
-                        <i class="fab fa-instagram"></i> Instagram
+                        Instagram
                     </a>
                     <a href="https://api.whatsapp.com/message/67PXANH2XQKSN1?autoload=1&app_absent=0" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
+                        WhatsApp
                     </a>
                     <a href="https://www.tiktok.com/@salao_elevation" target="_blank">
-                        <i class="fab fa-tiktok"></i> TikTok
+                        TikTok
                     </a>
                 </div>
             </div>
-             <p style="color: rgba(74, 63, 53, 0.7); text-align: center; margin-top: 10px;">Criado por Chris - Visite meu <a href="https://ehochris-pixelcraft-portfolio-where-code-meets-elegance.static.hf.space/index.html" class="footer-link" target="_blank">site pessoal</a>.</p>
+            <p style="color: rgba(74, 63, 53, 0.7); text-align: center; margin-top: 10px; width: 100%;">
+                Criado por Chris - Visite meu <a href="https://ehochris-pixelcraft-portfolio-where-code-meets-elegance.static.hf.space/index.html" class="footer-link" target="_blank">site pessoal</a>.
+            </p>
         </div>
         <b><p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p></b>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- SCRIPT DA GALERIA CIRCULAR -->
     <script>
-        // Inicializar todos os carrosséis
-        document.addEventListener('DOMContentLoaded', function() {
-            const allSwipers = document.querySelectorAll('.swiper-container');
-            
-            allSwipers.forEach(swiper => {
-                new Swiper(swiper, {
-                    loop: true,
-                    autoplay: {
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    }
+        document.querySelectorAll('.circular-gallery').forEach(gallery => {
+            const track = gallery.querySelector('.track');
+            const imgs = [...gallery.querySelectorAll('img')];
+            const total = imgs.length / 2;
+            let index = 0;
+
+            imgs.forEach(img => track.appendChild(img.cloneNode()));
+
+            function update() {
+                const offset = -index * 340;
+                track.style.transform = `translate(-50%, -50%) translateX(${offset}px)`;
+                gallery.querySelectorAll('img').forEach((img, i) => {
+                    img.classList.toggle('active', i === index || i === index + total);
                 });
+            }
+
+            let isDown = false, startX;
+            gallery.addEventListener('mousedown', e => { isDown = true; startX = e.pageX; });
+            gallery.addEventListener('mouseleave', () => isDown = false);
+            gallery.addEventListener('mouseup', () => isDown = false);
+            gallery.addEventListener('mousemove', e => {
+                if (!isDown) return;
+                e.preventDefault();
+                const walk = e.pageX - startX;
+                if (Math.abs(walk) > 80) {
+                    index = walk > 0 ? (index - 1 + total) % total : (index + 1) % total;
+                    update();
+                    startX = e.pageX;
+                }
             });
+
+            setInterval(() => {
+                index = (index + 1) % total;
+                update();
+            }, 5000);
+
+            update();
         });
     </script>
 </body>
