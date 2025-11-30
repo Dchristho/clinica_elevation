@@ -60,20 +60,65 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         
+        /* ====================== LOGO COM EFEITO GLARE LUXUOSO ====================== */
         .logo {
             display: flex;
             align-items: center;
         }
-        
-        .logo img {
-            height: 50px;
-            transition: all 0.3s ease;
+
+        .glare-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
         }
-        
-        .navbar.scrolled .logo img {
+
+        .glare-image {
+            height: 50px;
+            transition: all 0.4s ease;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+        }
+
+        .navbar.scrolled .glare-image {
             height: 40px;
         }
-        
+
+        .glare {
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(
+                115deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.15) 45%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(212, 175, 55, 0.6) 52%,  /* brilho dourado no centro */
+                rgba(255, 255, 255, 0.15) 55%,
+                transparent 70%
+            );
+            transform: rotate(30deg);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .glare-container:hover .glare {
+            top: -70%;
+            left: -70%;
+            opacity: 1;
+            transition-duration: 0.7s;
+        }
+
+        .glare-container:hover .glare-image {
+            transform: scale(1.1);
+            filter: brightness(1.2) drop-shadow(0 0 25px rgba(212, 175, 55, 0.6));
+        }
+        /* ===================================================================== */
+
         .nav-links {
             display: flex;
             list-style: none;
@@ -260,8 +305,12 @@
         <div class="header-background"></div>
         
         <nav class="navbar">
+            <!-- LOGO COM EFEITO GLARE LUXUOSO -->
             <div class="logo">
-                <img src="logonovosalao.png" alt="Salão Elevation">
+                <div class="glare-container">
+                    <img src="logonovosalao.png" alt="Salão Elevation" class="glare-image">
+                    <div class="glare"></div>
+                </div>
             </div>
             
             <ul class="nav-links">
@@ -299,17 +348,22 @@
             }
         });
         
-        // Menu mobile (você pode implementar a funcionalidade completa)
+        // Menu mobile simples
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.display = (navLinks.style.display === 'flex') ? 'none' : 'flex';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = 0;
+            navLinks.style.width = '100%';
+            navLinks.style.background = 'rgba(0,0,0,0.95)';
+            navLinks.style.padding = '20px 0';
         });
-        
-     
     </script>
     
     <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2025/09/06/16/20250906163757-P63KJWE6.js" defer></script>
+    <script src="https://files.bpcontent.cloud/2025/09/06/16/20250906163757-P63KJWE6.js" defer></script>
     
 </body>
 </html>
