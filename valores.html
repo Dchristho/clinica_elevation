@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serviços - Clínica Elevation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             background: #f9f9f9;
@@ -20,20 +26,36 @@
             text-align: center;
             border-bottom: 4px solid #d4af37;
         }
-        h1 { font-size: 2.8em; color: #d4af37; }
+
+        h1 {
+            font-size: 2.8em;
+            color: #d4af37;
+        }
 
         .back-button {
             position: fixed;
-            top: 20px; left: 20px;
-            background: #333; color: #fff;
-            border: none; padding: 12px 18px;
-            border-radius: 8px; font-size: 15px;
-            cursor: pointer; z-index: 999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            top: 20px;
+            left: 20px;
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        .back-button:hover { background: #555; }
 
-        .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; }
+        .back-button:hover {
+            background: #555;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
 
         .service-grid {
             display: grid;
@@ -45,10 +67,14 @@
             background: #fff;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.4s ease;
         }
-        .service:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(0,0,0,0.18); }
+
+        .service:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
+        }
 
         .service-title {
             padding: 25px 25px 15px;
@@ -56,11 +82,14 @@
             color: #d4af37;
             position: relative;
         }
+
         .service-title::after {
             content: '';
             position: absolute;
-            bottom: 0; left: 25px;
-            width: 70px; height: 4px;
+            bottom: 0;
+            left: 25px;
+            width: 70px;
+            height: 4px;
             background: #d4af37;
             border-radius: 2px;
         }
@@ -75,7 +104,10 @@
             background: linear-gradient(135deg, #fdfdfd, #f0f0f0);
             user-select: none;
         }
-        .circular-gallery:active { cursor: grabbing; }
+
+        .circular-gallery:active {
+            cursor: grabbing;
+        }
 
         .circular-gallery .track {
             position: absolute;
@@ -93,7 +125,7 @@
             border-radius: 18px;
             object-fit: cover;
             margin: 0 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
             flex-shrink: 0;
             opacity: 0.6;
             transform: scale(0.88);
@@ -125,6 +157,7 @@
             font-weight: 600;
             transition: all 0.3s;
         }
+
         .service a:hover {
             background: #b5942f;
             transform: translateY(-3px);
@@ -137,7 +170,13 @@
             padding: 40px 20px;
             margin-top: 50px;
         }
-        .explore-section h3 { font-size: 1.9em; margin-bottom: 25px; color: #d4af37; }
+
+        .explore-section h3 {
+            font-size: 1.9em;
+            margin-bottom: 25px;
+            color: #d4af37;
+        }
+
         .explore-button {
             background-color: #000000;
             color: #d4af37;
@@ -150,6 +189,7 @@
             display: inline-block;
             transition: all 0.3s ease;
         }
+
         .explore-button:hover {
             background-color: #d4af37;
             color: #ffffff;
@@ -157,74 +197,147 @@
         }
 
         /* RODAPÉ 100% IGUAL AO SEU ÚLTIMO EXEMPLO */
+        /* Footer Moderno */
         footer {
-            background: linear-gradient(to top, #E8D5C4, #F5EBE0);
-            padding: 40px 20px;
-            text-align: center;
-            color: #4a3f35;
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
-            border-top: 3px solid #d4af37;
-            border-bottom: 3px solid #d4af37;
-            margin-top: 60px;
+            background-color: #111;
+            color: #fff;
+            padding: 60px 20px 20px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .footer-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
             max-width: 1200px;
-            margin: 0 auto 30px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
         }
 
         .footer-column h4 {
-            color: #4a3f35;
-            font-size: 16px;
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 2px;
+            background-color: #d4af37;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
             margin-bottom: 15px;
         }
 
-        .footer-socials a {
+        .footer-column ul li a {
+            color: #bbb;
             text-decoration: none;
-            color: #4a3f35;
-            margin-right: 15px;
-            font-size: 20px;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
         }
 
-        .footer-socials a:hover {
+        .footer-column ul li a i {
+            margin-right: 10px;
+            font-size: 0.9rem;
             color: #d4af37;
         }
 
-        .footer-link {
-            color: #8b5cf6;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .footer-link:hover {
+        .footer-column ul li a:hover {
             color: #fff;
-            background-color: #8b5cf6;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+            transform: translateX(5px);
         }
 
-        footer p {
-            margin: 0;
-            font-size: 14px;
-            color: #4a3f35;
+        .footer-socials {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .footer-socials a {
+            width: 40px;
+            height: 40px;
+            background-color: #222;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            text-decoration: none;
+        }
+
+        .footer-socials a:hover {
+            background-color: #d4af37;
+            color: #111;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .footer-bottom p {
+            margin: 10px 0;
+        }
+
+        .credit-link {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .credit-link:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
-            .circular-gallery { height: 300px; }
-            .circular-gallery img { height: 220px; margin: 0 15px; }
-            .footer-container { flex-direction: column; text-align: center; }
-            .footer-socials { justify-content: center; gap: 20px; margin-top: 15px; }
-            .footer-socials a { font-size: 28px; }
+            footer {
+                padding: 40px 20px 20px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-column h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-column ul li a {
+                justify-content: center;
+            }
+
+            .footer-socials {
+                justify-content: center;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <button class="back-button" onclick="window.history.back()">Voltar</button>
@@ -243,11 +356,12 @@
                     <div class="track">
                         <img src="criolipolise-1.jpeg" alt="Criolipolise" class="active">
                         <img src="antesedepoiscripo.jpg" alt="Antes e Depois">
-                        
+
                     </div>
                 </div>
                 <p class="service-description"><b>Eliminação de gordura localizada por congelamento controlado.</b></p>
-                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Criolipolise" target="_blank">Agendar via WhatsApp</a>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Criolipolise"
+                    target="_blank">Agendar via WhatsApp</a>
             </div>
 
             <!-- 2. Corte e Estilo -->
@@ -257,12 +371,13 @@
                     <div class="track">
                         <img src="cortecabelo1.jpeg" alt="Corte 1" class="active">
                         <img src="cortecabelo2.jpeg" alt="Corte 2">
-                       
-                        
+
+
                     </div>
                 </div>
                 <p class="service-description"><b>Cortes modernos e personalizados que realçam sua beleza.</b></p>
-                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20um%20Corte" target="_blank">Agendar via WhatsApp</a>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20um%20Corte"
+                    target="_blank">Agendar via WhatsApp</a>
             </div>
 
             <!-- 3. Manicure -->
@@ -273,11 +388,12 @@
                         <img src="manicure1.jpeg" alt="Manicure 1" class="active">
                         <img src="manicure2.jpeg" alt="Manicure 2">
                         <img src="manicure3.jpeg" alt="Manicure 3">
-                        
+
                     </div>
                 </div>
                 <p class="service-description"><b>Cuidados completos para mãos e pés com longa duração.</b></p>
-                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Manicure" target="_blank">Agendar via WhatsApp</a>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Manicure"
+                    target="_blank">Agendar via WhatsApp</a>
             </div>
 
             <!-- 4. Design de Sobrancelhas -->
@@ -288,11 +404,12 @@
                         <img src="sobrancelha.png" alt="Sobrancelhas" class="active">
                         <img src="sobrahenna2.jpg" alt="Henna">
                         <img src="sobrahenna1.jpeg" alt="Design">
-                       
+
                     </div>
                 </div>
                 <p class="service-description"><b>Modelagem perfeita com henna para um olhar marcante.</b></p>
-                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Design%20de%20Sobrancelhas" target="_blank">Agendar via WhatsApp</a>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Design%20de%20Sobrancelhas"
+                    target="_blank">Agendar via WhatsApp</a>
             </div>
 
             <!-- 5. Unhas em Gel -->
@@ -303,11 +420,12 @@
                         <img src="unhasgel1.webp" alt="Unhas Gel 1" class="active">
                         <img src="WhatsApp Image 2025-09-17 at 10.52.23.jpeg" alt="Unhas Gel 2">
                         <img src="WhatsApp Image 2025-09-17 at 10.52.19.jpeg" alt="Unhas Gel 3">
-                      
+
                     </div>
                 </div>
                 <p class="service-description"><b>Alongamento e fortalecimento com gel de alta durabilidade.</b></p>
-                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Unhas%20em%20Gel" target="_blank">Agendar via WhatsApp</a>
+                <a href="https://api.whatsapp.com/send?phone=5511980272343&text=Olá!%20Quero%20agendar%20Unhas%20em%20Gel"
+                    target="_blank">Agendar via WhatsApp</a>
             </div>
 
         </div>
@@ -323,27 +441,50 @@
     <footer>
         <div class="footer-container">
             <div class="footer-column">
-                <b><h4>Redes Sociais</h4></b>
+                <h4>Clínica Elevation</h4>
+                <p style="color: #bbb; line-height: 1.6; margin-bottom: 20px;">
+                    Especialistas em realçar sua beleza natural com sofisticação e cuidado profissional. Viva a
+                    experiência Elevation.
+                </p>
                 <div class="footer-socials">
-                    <a href="https://www.facebook.com/salao_elevation" target="_blank">
-                        Facebook
-                    </a>
-                    <a href="https://www.instagram.com/salao_elevation" target="_blank">
-                        Instagram
-                    </a>
-                    <a href="https://api.whatsapp.com/message/67PXANH2XQKSN1?autoload=1&app_absent=0" target="_blank">
-                        WhatsApp
-                    </a>
-                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank">
-                        TikTok
-                    </a>
+                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" title="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank" title="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100064480581505" target="_blank"
+                        title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank" title="TikTok"><i
+                            class="fab fa-tiktok"></i></a>
                 </div>
             </div>
-            <p style="color: rgba(74, 63, 53, 0.7); text-align: center; margin-top: 10px; width: 100%;">
-                Criado por Chris - Visite meu <a href="https://chrisdev-mauve.vercel.app/" class="footer-link" target="_blank">site pessoal</a>.
-            </p>
+
+            <div class="footer-column">
+                <h4>Links Rápidos</h4>
+                <ul>
+                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Nosso Espaço</a></li>
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Serviços e Preços</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Dicas de Cuidados</a></li>
+                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Sobre a Clínica</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank"><i class="fas fa-phone-alt"></i>
+                            Agendamentos via WhatsApp</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Localização Premium</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> contato@salaoelevation.com.br</a></li>
+                    <li><a href="#"><i class="fas fa-clock"></i> Seg - Sáb: 09h às 19h</a></li>
+                </ul>
+            </div>
         </div>
-        <b><p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p></b>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <p>Desenvolvido com carinho por <a href="https://chrisdev-mauve.vercel.app/" class="credit-link"
+                    target="_blank">ChrisDev</a></p>
+        </div>
     </footer>
 
     <!-- SCRIPT DA GALERIA CIRCULAR -->
@@ -388,4 +529,5 @@
         });
     </script>
 </body>
+
 </html>

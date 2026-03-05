@@ -1,5 +1,6 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -156,7 +157,8 @@
             margin-top: 20px;
         }
 
-        .price-table th, .price-table td {
+        .price-table th,
+        .price-table td {
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
@@ -248,127 +250,149 @@
             background-color: #b5942f;
         }
 
+        /* Footer Moderno */
         footer {
-            background: linear-gradient(to top, #E8D5C4, #F5EBE0);
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 3px solid #d4af37;
-            border-bottom: 3px solid #d4af37;
-            color: #4a3f35;
-            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+            background-color: #111;
+            color: #fff;
+            padding: 60px 20px 20px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .footer-container {
-            width: 90%;
+            max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
         }
 
         .footer-column h4 {
-            color: #4a3f35;
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: bold;
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 2px;
+            background-color: #d4af37;
         }
 
         .footer-column ul {
-            padding: 0;
             list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .footer-column ul li {
-            margin: 10px 0;
+            margin-bottom: 15px;
         }
 
         .footer-column ul li a {
+            color: #bbb;
             text-decoration: none;
-            color: #4a3f35;
-            font-size: 16px;
-            font-weight: 600;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column ul li a i {
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: #d4af37;
         }
 
         .footer-column ul li a:hover {
-            color: #d4af37;
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .footer-socials a {
+            width: 40px;
+            height: 40px;
+            background-color: #222;
+            color: #fff;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
             text-decoration: none;
-            color: #4a3f35;
-            margin-right: 15px;
-            font-size: 20px;
-            transition: color 0.3s ease;
         }
 
         .footer-socials a:hover {
+            background-color: #d4af37;
+            color: #111;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .footer-bottom p {
+            margin: 10px 0;
+        }
+
+        .credit-link {
             color: #d4af37;
-        }
-
-        footer p {
-            margin: 20px 0 0;
-            color: #4a3f35;
-        }
-
-        .footer-link {
-            color: #8b5cf6;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            padding: 2px 8px;
-            border-radius: 4px;
+            font-weight: 500;
         }
 
-        .footer-link:hover {
-            color: #fff;
-            background-color: #8b5cf6;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+        .credit-link:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
-            .service-details {
-                grid-template-columns: 1fr;
-            }
-            
-            .service-info {
-                order: 2;
-            }
-            
-            .service-image-container {
-                order: 1;
-            }
-            
-            .footer-container {
-                flex-direction: column;
-                align-items: center;
+            footer {
+                padding: 40px 20px 20px;
             }
 
-            .footer-column {
+            .footer-container {
+                grid-template-columns: 1fr;
                 text-align: center;
-                margin-bottom: 20px;
+            }
+
+            .footer-column h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-column ul li a {
+                justify-content: center;
             }
 
             .footer-socials {
                 justify-content: center;
-                gap: 20px;
-            }
-            
-            .price-table {
-                font-size: 0.9em;
-            }
-            
-            .services-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 
 <body>
-   
+
 
     <div class="hero">
         <button class="back-button" onclick="window.history.back()">Voltar</button>
@@ -378,12 +402,14 @@
     <div class="service-container">
         <div class="service-header">
             <h2>Tratamentos Exclusivos para seu Bem-Estar</h2>
-            <p>Nossos tratamentos especiais são cuidadosamente desenvolvidos para promover relaxamento, rejuvenescimento e equilíbrio entre corpo e mente.</p>
+            <p>Nossos tratamentos especiais são cuidadosamente desenvolvidos para promover relaxamento, rejuvenescimento
+                e equilíbrio entre corpo e mente.</p>
         </div>
 
         <div class="service-details">
             <div class="service-image-container">
-                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Cuidados Especiais" class="service-image">
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Cuidados Especiais"
+                    class="service-image">
             </div>
             <div class="service-info">
                 <h3>Benefícios dos Nossos Cuidados Especiais</h3>
@@ -400,57 +426,64 @@
 
         <div class="price-section">
             <h3>Nossos Serviços de Cuidados Especiais</h3>
-            
+
             <div class="services-grid">
                 <div class="service-card">
                     <img src="facialtrat.jpeg" alt="Tratamento Facial">
                     <div class="service-card-content">
                         <h3>Tratamento Facial</h3>
                         <p>Procedimentos que reduzem sinais de envelhecimento, como rugas e manchas.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Tratamento%20Facial%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Tratamento%20Facial%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
-                
+
                 <div class="service-card">
                     <img src="massagem-relaxante.jpg" alt="Massagem Relaxante">
                     <div class="service-card-content">
                         <h3>Massagem Relaxante</h3>
                         <p>Promove alívio de tensões, melhora a circulação e reduz o estresse.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Massagem%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Massagem%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
-                
+
                 <div class="service-card">
                     <img src="bubum na nuca.jpg" alt="Bumbum na Nuca">
                     <div class="service-card-content">
                         <h3>Bumbum na Nuca</h3>
                         <p>Técnica para fortalecer os glúteos e tratar a flacidez, melhorando a forma.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Bumbum na Nuca%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Bumbum na Nuca%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
-                
+
                 <div class="service-card">
                     <img src="drenagem.jpg" alt="Drenagem Linfática">
                     <div class="service-card-content">
                         <h3>Drenagem Linfática</h3>
                         <p>Estimula a circulação e reduz a retenção de líquidos.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Drenagem%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Drenagem%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
-  <div class="service-card">
+                <div class="service-card">
                     <img src="harmfacial.jpg" alt="leaser">
                     <div class="service-card-content">
                         <h3>Harmonização Facial</h3>
                         <p>Suaviza suas linhas, redefine contornos e devolve o viço à sua expressão.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
-             <div class="service-card">
+                <div class="service-card">
                     <img src="img1-depilacao-laser-1024x1024.webp" alt="leaser">
                     <div class="service-card-content">
                         <h3>Depilação a Leaser</h3>
-                        <p>A tecnologoia a Laeser oferece resultados duradouros, liberando você para o que realmente importa.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <p>A tecnologoia a Laeser oferece resultados duradouros, liberando você para o que realmente
+                            importa.</p>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
 
@@ -459,47 +492,65 @@
                     <div class="service-card-content">
                         <h3>Ofurô</h3>
                         <p>Banhos relaxantes em imersão, com massagem de ondas de água para relaxamento profundo.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!" target="_blank">Agendar</a>
+                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!"
+                            target="_blank">Agendar</a>
                     </div>
                 </div>
             </div>
-            
-            <a href="https://wa.me/message/67PXANH2XQKSN1" class="cta-button" target="_blank">Fale Conosco para Mais Informações</a>
+
+            <a href="https://wa.me/message/67PXANH2XQKSN1" class="cta-button" target="_blank">Fale Conosco para Mais
+                Informações</a>
         </div>
     </div>
 
     <footer>
         <div class="footer-container">
             <div class="footer-column">
-                <h4>Explorar</h4>
+                <h4>Clínica Elevation</h4>
+                <p style="color: #bbb; line-height: 1.6; margin-bottom: 20px;">
+                    Especialistas em realçar sua beleza natural com sofisticação e cuidado profissional. Viva a
+                    experiência Elevation.
+                </p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" title="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank" title="WhatsApp"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100064480581505" target="_blank"
+                        title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank" title="TikTok"><i
+                            class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Links Rápidos</h4>
                 <ul>
-                    <li><a href="espaço.html">Espaço</a></li>
-                    <li><a href="valores.html">Serviços e Agendamento</a></li>
-                    <li><a href="sobrenos.html">Sobre nós</a></li>
+                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Nosso Espaço</a></li>
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Serviços e Preços</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Dicas de Cuidados</a></li>
+                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Sobre a Clínica</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4>Redes Sociais</h4>
-                <div class="footer-socials">
-                    <a href="https://www.facebook.com/profile.php?id=100064480581505&mibextid=ZbWKwL" target="_blank">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                    </a>
-                    <a href="https://www.instagram.com/salao_elevation" target="_blank">
-                        <i class="fab fa-instagram"></i> Instagram
-                    </a>
-                    <a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank">
-                        <i class="fab fa-tiktok"></i> TikTok
-                    </a>
-                </div>
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank"><i class="fas fa-phone-alt"></i>
+                            Agendamentos via WhatsApp</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Localização Premium</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> contato@salaoelevation.com.br</a></li>
+                    <li><a href="#"><i class="fas fa-clock"></i> Seg - Sáb: 09h às 19h</a></li>
+                </ul>
             </div>
-             <p style="color: rgba(74, 63, 53, 0.7); text-align: center; margin-top: 10px;">Criado por Chris - Visite meu <a href="https://chrisdev-mauve.vercel.app/" class="footer-link" target="_blank">site pessoal</a>.</p>
         </div>
 
-        <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <p>Desenvolvido com carinho por <a href="https://chrisdev-mauve.vercel.app/" class="credit-link"
+                    target="_blank">ChrisDev</a></p>
+        </div>
     </footer>
 </body>
+
 </html>
