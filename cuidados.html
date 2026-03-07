@@ -4,387 +4,468 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuidados Especiais - Salão Elevation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Cuidados Especiais - Clínica Elevation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
     <style>
-        /* Estilo geral */
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #b5942f;
+            --beige-light: #FDFBF7;
+            --beige-accent: #f5ece0;
+            --dark-text: #2c2c2c;
+            --muted-text: #666;
+            --white: #ffffff;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            margin: 0;
-            font-family: 'Poppins', Arial, sans-serif;
-            background-color: #f7f8fa;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--beige-light);
+            color: var(--dark-text);
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        header {
-            position: relative;
-            text-align: center;
-            padding: 10px 0;
-            background-color: #000;
-            color: #fff;
-        }
-
-        header img {
-            max-height: 200px;
-            width: auto;
-        }
-
-        .hero {
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.3)), url("logonovosalao.png");
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-            padding: 100px 20px;
-            color: #fff;
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: 3em;
-            margin: 0;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 12px 18px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .back-button:hover {
-            background-color: #555;
-        }
-
-        .service-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .service-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .service-header h2 {
-            font-size: 2.5em;
-            color: #d4af37;
-            margin-bottom: 15px;
-        }
-
-        .service-header p {
-            font-size: 1.2em;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .service-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .service-image {
+        /* Botão Home/Voltar Premium */
+        .nav-header {
+            position: fixed;
+            top: 0;
             width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(253, 251, 247, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
         }
 
-        .service-image:hover {
-            transform: scale(1.02);
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            background: var(--white);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
-        .service-info {
+        .back-link:hover {
+            background: var(--gold);
+            color: var(--white);
+            transform: translateX(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Hero Light Section com Degradê Bege */
+        .hero {
+            height: 65vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }
-
-        .service-info h3 {
-            font-size: 1.8em;
-            color: #000;
-            margin-bottom: 20px;
-        }
-
-        .service-info ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .service-info ul li {
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--beige-accent), var(--beige-light) 40%, var(--beige-light)), url('logonovosalao.png');
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            margin-top: 60px;
             position: relative;
-            padding-left: 30px;
+            box-shadow: inset 0 -50px 50px -50px rgba(212, 175, 55, 0.2);
         }
 
-        .service-info ul li:before {
-            content: "\f058";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            color: #d4af37;
-            position: absolute;
-            left: 0;
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: var(--dark-text);
+            margin-bottom: 15px;
+            position: relative;
         }
 
-        .price-section {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin: 40px 0;
+        .hero h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--gold);
+            margin: 20px auto 0;
+        }
+
+        /* Section Intro */
+        .intro-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
             text-align: center;
         }
 
-        .price-section h3 {
-            font-size: 1.8em;
-            color: #d4af37;
-            margin-bottom: 20px;
+        .intro-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--gold);
+            margin-bottom: 25px;
         }
 
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .intro-section p {
+            font-size: 1.2rem;
+            color: var(--muted-text);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
         }
 
-        .price-table th,
-        .price-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        .price-table th {
-            background-color: #f8f8f8;
-            font-weight: bold;
-        }
-
-        .price-table tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        .price {
-            color: #d4af37;
-            font-weight: bold;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background-color: #d4af37;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 1.2em;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        .cta-button:hover {
-            background-color: #b5942f;
-        }
-
-        .services-grid {
+        /* Feature Layout */
+        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 0 20px 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-img {
+            position: relative;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: var(--transition);
+        }
+
+        .feature-img.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feature-img img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: 20px 20px 0 var(--beige-accent);
+        }
+
+        .feature-content {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: var(--transition);
+        }
+
+        .feature-content.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feature-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--dark-text);
+        }
+
+        .benefits-list {
+            list-style: none;
+        }
+
+        .benefits-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            font-size: 1.1rem;
+            color: var(--muted-text);
+        }
+
+        .benefits-list i {
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin-top: 3px;
+        }
+
+        /* Service Cards Light */
+        .services-wrapper {
+            background: var(--white);
+            padding: 120px 20px;
+        }
+
+        .services-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .services-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
         }
 
         .service-card {
-            background: white;
-            border-radius: 10px;
+            background: var(--beige-light);
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05);
+            border-color: var(--gold);
         }
 
-        .service-card img {
+        .card-image {
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.8s ease;
         }
 
-        .service-card-content {
-            padding: 20px;
+        .service-card:hover .card-image img {
+            transform: scale(1.1);
         }
 
-        .service-card h3 {
-            color: #000;
-            margin-top: 0;
-            font-size: 1.4em;
+        .card-body {
+            padding: 40px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .service-card p {
-            color: #666;
-            margin-bottom: 20px;
+        .card-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark-text);
         }
 
-        .service-card a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #d4af37;
-            color: white;
+        .card-body p {
+            color: var(--muted-text);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .btn-schedule {
+            margin-top: auto;
+            display: block;
+            padding: 16px 30px;
+            background: var(--white);
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            text-align: center;
             text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            transition: var(--transition);
         }
 
-        .service-card a:hover {
-            background-color: #b5942f;
+        .btn-schedule:hover {
+            background: var(--gold);
+            color: var(--white);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
         }
 
-        /* Footer Moderno */
+        /* CTA Section Light */
+        .cta-section {
+            padding: 150px 20px;
+            text-align: center;
+            background: var(--beige-accent);
+        }
+
+        .cta-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 40px;
+        }
+
+        .btn-main-cta {
+            display: inline-block;
+            padding: 20px 50px;
+            background: var(--gold);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 100px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: var(--transition);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-main-cta:hover {
+            background: var(--gold-dark);
+            transform: scale(1.05);
+            box-shadow: 0 20px 45px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Footer Light/Gold Unificado */
         footer {
-            background-color: #111;
-            color: #fff;
-            padding: 60px 20px 20px;
-            font-family: 'Poppins', sans-serif;
+            background: #111;
+            color: var(--white);
+            padding: 100px 20px 40px;
         }
 
-        .footer-container {
+        .footer-grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            text-align: left;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 60px;
         }
 
-        .footer-column h4 {
-            color: #d4af37;
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            position: relative;
+        .footer-col h4 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 30px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            position: relative;
         }
 
-        .footer-column h4::after {
+        .footer-col h4::after {
             content: '';
             position: absolute;
             left: 0;
             bottom: -10px;
-            width: 40px;
+            width: 50px;
             height: 2px;
-            background-color: #d4af37;
+            background: var(--gold);
         }
 
-        .footer-column ul {
+        .footer-list {
             list-style: none;
-            padding: 0;
-            margin: 0;
         }
 
-        .footer-column ul li {
-            margin-bottom: 15px;
+        .footer-list li {
+            margin-bottom: 18px;
         }
 
-        .footer-column ul li a {
+        .footer-list a,
+        .contact-info li {
             color: #bbb;
             text-decoration: none;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            gap: 12px;
+            transition: var(--transition);
         }
 
-        .footer-column ul li a i {
-            margin-right: 10px;
-            font-size: 0.9rem;
-            color: #d4af37;
+        .footer-list a:hover {
+            color: var(--white);
+            transform: translateX(8px);
         }
 
-        .footer-column ul li a:hover {
-            color: #fff;
-            transform: translateX(5px);
-        }
-
-        .footer-socials {
+        .social-links {
             display: flex;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
-        .footer-socials a {
-            width: 40px;
-            height: 40px;
-            background-color: #222;
-            color: #fff;
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
+            color: var(--white);
             text-decoration: none;
+            transition: var(--transition);
         }
 
-        .footer-socials a:hover {
-            background-color: #d4af37;
-            color: #111;
+        .social-link:hover {
+            background: var(--gold);
+            color: #000;
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
 
         .footer-bottom {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #222;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            color: #666;
             font-size: 0.9rem;
-            color: #777;
         }
 
-        .footer-bottom p {
-            margin: 10px 0;
-        }
+        /* Responsividade */
+        @media (max-width: 968px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .credit-link {
-            color: #d4af37;
-            text-decoration: none;
-            font-weight: 500;
-        }
+            .feature-img img {
+                box-shadow: 15px 15px 0 var(--beige-accent);
+            }
 
-        .credit-link:hover {
-            text-decoration: underline;
+            .hero {
+                height: 50vh;
+            }
         }
 
         @media (max-width: 768px) {
-            footer {
-                padding: 40px 20px 20px;
+            .nav-header {
+                padding: 15px 20px;
             }
 
-            .footer-container {
+            .service-grid {
                 grid-template-columns: 1fr;
+            }
+
+            footer {
                 text-align: center;
             }
 
-            .footer-column h4::after {
+            .footer-col h4::after {
                 left: 50%;
                 transform: translateX(-50%);
             }
 
-            .footer-column ul li a {
+            .footer-list a,
+            .contact-info li {
                 justify-content: center;
             }
 
-            .footer-socials {
+            .social-links {
                 justify-content: center;
             }
         }
@@ -393,164 +474,214 @@
 
 <body>
 
+    <nav class="nav-header">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-chevron-left"></i> Início
+        </a>
+    </nav>
 
     <div class="hero">
-        <button class="back-button" onclick="window.history.back()">Voltar</button>
         <h1>Cuidados Especiais</h1>
+        <p>A arte do bem-estar e da revitalização</p>
     </div>
 
-    <div class="service-container">
-        <div class="service-header">
-            <h2>Tratamentos Exclusivos para seu Bem-Estar</h2>
+    <section class="intro-section">
+        <div class="reveal">
+            <h2>Tratamentos Exclusivos</h2>
             <p>Nossos tratamentos especiais são cuidadosamente desenvolvidos para promover relaxamento, rejuvenescimento
-                e equilíbrio entre corpo e mente.</p>
+                e o equilíbrio perfeito entre corpo e mente.</p>
         </div>
+    </section>
 
-        <div class="service-details">
-            <div class="service-image-container">
-                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Cuidados Especiais"
-                    class="service-image">
-            </div>
-            <div class="service-info">
-                <h3>Benefícios dos Nossos Cuidados Especiais</h3>
-                <ul>
-                    <li>Promovem relaxamento profundo e alívio do estresse</li>
-                    <li>Estimulam a circulação sanguínea e linfática</li>
-                    <li>Reduzem tensões musculares e dores</li>
-                    <li>Melhoram a qualidade da pele e textura</li>
-                    <li>Proporcionam momentos exclusivos de autocuidado</li>
-                    <li>Utilizamos produtos naturais e de alta qualidade</li>
-                </ul>
-            </div>
+    <section class="feature-grid">
+        <div class="feature-img reveal-left">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=800"
+                alt="Ambiente de Cuidado">
         </div>
+        <div class="feature-content reveal-right">
+            <h3>Pura Revitalização</h3>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check-circle"></i> Relaxamento profundo e alívio do estresse cotidiano.</li>
+                <li><i class="fas fa-check-circle"></i> Estímulo vital da circulação sanguínea e linfática.</li>
+                <li><i class="fas fa-check-circle"></i> Redução efetiva de tensões musculares.</li>
+                <li><i class="fas fa-check-circle"></i> Melhora visível na textura e saúde da pele.</li>
+                <li><i class="fas fa-check-circle"></i> Momentos de autocuidado em um ambiente exclusivo.</li>
+                <li><i class="fas fa-check-circle"></i> Uso de produtos de alta performance e origem natural.</li>
+            </ul>
+        </div>
+    </section>
 
-        <div class="price-section">
-            <h3>Nossos Serviços de Cuidados Especiais</h3>
+    <div class="services-wrapper">
+        <div class="services-container">
+            <div class="services-header reveal">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold);">Nosso Menu
+                    Especial</h2>
+            </div>
 
-            <div class="services-grid">
-                <div class="service-card">
-                    <img src="facialtrat.jpeg" alt="Tratamento Facial">
-                    <div class="service-card-content">
+            <div class="service-grid">
+                <!-- Facial -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="facialtrat.jpeg" alt="Tratamento Facial">
+                    </div>
+                    <div class="card-body">
                         <h3>Tratamento Facial</h3>
-                        <p>Procedimentos que reduzem sinais de envelhecimento, como rugas e manchas.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Tratamento%20Facial%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
+                        <p>Ciência estética para reduzir sinais de envelhecimento, devolvendo o viço e a juventude à sua
+                            pele.</p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20no%20Tratamento%20Facial"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
                     </div>
                 </div>
 
-                <div class="service-card">
-                    <img src="massagem-relaxante.jpg" alt="Massagem Relaxante">
-                    <div class="service-card-content">
+                <!-- Massagem -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="massagem-relaxante.jpg" alt="Massagem Relaxante">
+                    </div>
+                    <div class="card-body">
                         <h3>Massagem Relaxante</h3>
-                        <p>Promove alívio de tensões, melhora a circulação e reduz o estresse.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Massagem%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
+                        <p>Toque terapêutico para alívio imediato de tensões, promovendo uma profunda sensação de paz.
+                        </p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20na%20Massagem%20Relaxante"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
                     </div>
                 </div>
 
-                <div class="service-card">
-                    <img src="bubum na nuca.jpg" alt="Bumbum na Nuca">
-                    <div class="service-card-content">
+                <!-- Glúteos -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="bubum na nuca.jpg" alt="Bumbum na Nuca">
+                    </div>
+                    <div class="card-body">
                         <h3>Bumbum na Nuca</h3>
-                        <p>Técnica para fortalecer os glúteos e tratar a flacidez, melhorando a forma.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Bumbum na Nuca%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
+                        <p>Protocolos focados em tonicidade e firmeza, melhorando o contorno corporal com eficácia.</p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20no%20Bumbum%20na%20Nuca"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
                     </div>
                 </div>
 
-                <div class="service-card">
-                    <img src="drenagem.jpg" alt="Drenagem Linfática">
-                    <div class="service-card-content">
+                <!-- Drenagem -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="drenagem.jpg" alt="Drenagem Linfática">
+                    </div>
+                    <div class="card-body">
                         <h3>Drenagem Linfática</h3>
-                        <p>Estimula a circulação e reduz a retenção de líquidos.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Drenagem%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <img src="harmfacial.jpg" alt="leaser">
-                    <div class="service-card-content">
-                        <h3>Harmonização Facial</h3>
-                        <p>Suaviza suas linhas, redefine contornos e devolve o viço à sua expressão.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
-                    </div>
-                </div>
-                <div class="service-card">
-                    <img src="img1-depilacao-laser-1024x1024.webp" alt="leaser">
-                    <div class="service-card-content">
-                        <h3>Depilação a Leaser</h3>
-                        <p>A tecnologoia a Laeser oferece resultados duradouros, liberando você para o que realmente
-                            importa.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
+                        <p>Eliminação de toxinas e redução de líquidos para um corpo leve e revigorado.</p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20na%20Drenagem%20Linfática"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
                     </div>
                 </div>
 
-                <div class="service-card">
-                    <img src="img2site.jpeg" alt="Ofurô">
-                    <div class="service-card-content">
-                        <h3>Ofurô</h3>
-                        <p>Banhos relaxantes em imersão, com massagem de ondas de água para relaxamento profundo.</p>
-                        <a href="//api.whatsapp.com/send?phone=5511980272343&text=Olá,%20estou%20interessado%20no%20serviço%20de%20Ofurô%20do%20Salão%20Elevation!"
-                            target="_blank">Agendar</a>
+                <!-- Harmonização -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="harmfacial.jpg" alt="Harmonização Facial">
+                    </div>
+                    <div class="card-body">
+                        <h3>Harmonização Facial</h3>
+                        <p>Redefinição de contornos e suavização de linhas para uma expressão mais harmônica e radiante.
+                        </p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20na%20Harmonização%20Facial"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+
+                <!-- Laser -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="img1-depilacao-laser-1024x1024.webp" alt="Depilação a Laser">
+                    </div>
+                    <div class="card-body">
+                        <h3>Depilação a Laser</h3>
+                        <p>Liberdade duradoura com a tecnologia laser mais segura e eficaz do mercado.</p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20na%20Depilação%20a%20Laser"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+
+                <!-- Ofurô -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="img2site.jpeg" alt="Ofurô">
+                    </div>
+                    <div class="card-body">
+                        <h3>Ritual de Ofurô</h3>
+                        <p>Imersão relaxante em águas aquecidas, um verdadeiro banho de harmonia e silêncio.</p>
+                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20no%20Ofurô"
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
                     </div>
                 </div>
             </div>
-
-            <a href="https://wa.me/message/67PXANH2XQKSN1" class="cta-button" target="_blank">Fale Conosco para Mais
-                Informações</a>
         </div>
     </div>
+
+    <section class="cta-section">
+        <h2 class="reveal">Pronta para viver esse momento?</h2>
+        <a href="https://wa.me/message/67PXANH2XQKSN1" class="btn-main-cta reveal" target="_blank">Falar com nossa
+            Consultora</a>
+    </section>
 
     <footer>
-        <div class="footer-container">
-            <div class="footer-column">
+        <div class="footer-grid">
+            <div class="footer-col">
                 <h4>Clínica Elevation</h4>
-                <p style="color: #bbb; line-height: 1.6; margin-bottom: 20px;">
-                    Especialistas em realçar sua beleza natural com sofisticação e cuidado profissional. Viva a
-                    experiência Elevation.
-                </p>
-                <div class="footer-socials">
-                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" title="Instagram"><i
+                <p>Onde a beleza e o bem-estar transcendem o comum através da exclusividade.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/clinica_elevation" class="social-link" target="_blank"><i
                             class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank" title="WhatsApp"><i
+                    <a href="https://wa.me/message/67PXANH2XQKSN1" class="social-link" target="_blank"><i
                             class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.facebook.com/profile.php?id=100064480581505" target="_blank"
-                        title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank" title="TikTok"><i
+                    <a href="https://www.tiktok.com/@salao_elevation" class="social-link" target="_blank"><i
                             class="fab fa-tiktok"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
 
-            <div class="footer-column">
-                <h4>Links Rápidos</h4>
-                <ul>
-                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Nosso Espaço</a></li>
-                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Serviços e Preços</a></li>
-                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Dicas de Cuidados</a></li>
-                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Sobre a Clínica</a></li>
+            <div class="footer-col">
+                <h4>Privilégios</h4>
+                <ul class="footer-list">
+                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Conhecer o Espaço</a></li>
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Menu de Serviços</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Protocolos Especiais</a></li>
+                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Nossa História</a></li>
                 </ul>
             </div>
 
-            <div class="footer-column">
-                <h4>Contato</h4>
-                <ul>
-                    <li><a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank"><i class="fas fa-phone-alt"></i>
-                            Agendamentos via WhatsApp</a></li>
-                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Localização Premium</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> contato@salaoelevation.com.br</a></li>
-                    <li><a href="#"><i class="fas fa-clock"></i> Seg - Sáb: 09h às 19h</a></li>
+            <div class="footer-col">
+                <h4>Atendimento VIP</h4>
+                <ul class="footer-list">
+                    <li><i class="fas fa-phone-alt"></i> (11) 98027-2343</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Localização Premium</li>
+                    <li><i class="fas fa-clock"></i> Seg - Sáb: 09h às 19h</li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
             <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
-            <p>Desenvolvido com carinho por <a href="https://chrisdev-mauve.vercel.app/" class="credit-link"
-                    target="_blank">ChrisDev</a></p>
+            <p>Criado com sofisticação por <a href="https://chrisdev-mauve.vercel.app/"
+                    style="color: var(--gold); text-decoration: none;" target="_blank">ChrisDev</a></p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+            const handleReveal = () => {
+                reveals.forEach(el => {
+                    const top = el.getBoundingClientRect().top;
+                    if (top < window.innerHeight - 80) {
+                        el.classList.add('visible');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', handleReveal);
+            handleReveal();
+        });
+    </script>
 </body>
 
 </html>

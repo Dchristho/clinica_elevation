@@ -1,617 +1,539 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salão Elevation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>Beleza & Estilo - Clínica Elevation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
     <style>
-        /* Estilo geral modernizado */
         :root {
-            --primary: #d4af37;
-            --primary-dark: #b5942f;
-            --dark: #121212;
-            --darker: #0a0a0a;
-            --light: #ffffff;
-            --gray: #888;
-            --light-gray: #f1f1f1;
+            --gold: #d4af37;
+            --dark: #111;
+            --darkER: #0a0a0a;
+            --light: #f9f9f9;
+            --text-muted: #bbb;
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--dark);
-            color: var(--light);
+            background-color: var(--darkER);
+            color: #fff;
+            overflow-x: hidden;
             line-height: 1.6;
         }
-        
-        /* Header moderno */
-        header {
-            background-color: var(--darker);
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 100;
+
+        /* Botão Home/Logo Premium - Resolvendo o problema do USER */
+        .header-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            backdrop-filter: blur(5px);
         }
-        
-        header img {
-            max-height: 120px;
+
+        .logo-home {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: var(--transition);
+        }
+
+        .logo-home img {
+            height: 40px;
             width: auto;
-            display: block;
-            margin: 0 auto;
-            transition: transform 0.3s ease;
+            filter: brightness(0) invert(1);
+            /* Garante visibilidade no fundo escuro */
         }
-        
-        header img:hover {
-            transform: scale(1.03);
+
+        .logo-home span {
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
         }
-        
-        /* Hero section */
+
+        .logo-home:hover {
+            background: var(--gold);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .logo-home:hover span {
+            color: var(--darkER);
+        }
+
+        .logo-home:hover img {
+            filter: brightness(0);
+            /* Fica preto quando o fundo vira dourado */
+        }
+
+        /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("logonovosalao.png");
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('logonovosalao.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            text-align: center;
-            padding: 120px 20px;
-            position: relative;
-            overflow: hidden;
+            padding: 20px;
         }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
+
         .hero h1 {
-            font-size: 3.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            color: var(--gold);
             margin-bottom: 20px;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--primary), #f5f5f5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: none;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1.2s forwards 0.3s;
         }
-        
+
         .hero p {
-            font-size: 1.2rem;
-            color: var(--light);
-            margin-bottom: 30px;
-            opacity: 0.9;
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: #fff;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.2s forwards 0.6s;
+            font-weight: 300;
         }
-        
-        /* Serviços - Cards modernos */
-        .services {
-            padding: 80px 20px;
-            background-color: var(--darker);
-        }
-        
-        .services-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .services-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .services-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--primary);
-        }
-        
-        .services-title p {
-            color: var(--gray);
-            max-width: 700px;
+
+        /* Seção de Serviços */
+        .services-section {
+            padding: 150px 20px;
+            max-width: 1300px;
             margin: 0 auto;
         }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .feature {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
+
+        .section-header {
             text-align: center;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            backdrop-filter: blur(5px);
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
         }
-        
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
-            z-index: -1;
+
+        .section-header.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        
-        .feature:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-        
-        .feature i {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-        
-        .feature:hover i {
-            transform: scale(1.1);
-        }
-        
-        .feature h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--light);
-        }
-        
-        .feature p {
-            color: var(--gray);
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--gold);
             margin-bottom: 20px;
         }
-        
-        .feature-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
         }
-        
-        /* Rodapé luxuoso */
-        .luxury-footer {
-            position: relative;
-            background-color: #111111;
-            color: #ffffff;
-            padding-top: 80px;
-            margin-top: 0;
-        }
-        
-        .footer-wave {
-            position: absolute;
-            top: -100px;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            overflow: hidden;
-            line-height: 0;
-            transform: rotate(180deg);
-        }
-        
-        .footer-wave svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 100px;
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 40px;
-        }
-        
-        .footer-columns {
+
+        .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
         }
-        
-        .footer-col {
+
+        .service-card {
+            text-decoration: none;
+            color: inherit;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:hover {
+            background: rgba(212, 175, 55, 0.05);
+            border-color: var(--gold);
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .service-card i {
+            font-size: 4rem;
+            color: var(--gold);
             margin-bottom: 30px;
+            transition: var(--transition);
         }
-        
-        .logo-col {
-            max-width: 300px;
+
+        .service-card:hover i {
+            transform: scale(1.1) rotate(5deg);
         }
-        
-        .footer-logo {
-            height: 60px;
+
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
             margin-bottom: 20px;
-            filter: brightness(0) invert(1);
+            color: #fff;
         }
-        
-        .footer-description {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-            margin-bottom: 25px;
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
         }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .social-icon {
-            color: #ffffff;
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(212, 175, 55, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icon:hover {
-            background-color: #d4af37;
-            color: #000000;
-            transform: translateY(-3px);
-        }
-        
-        .footer-title {
-            color: #d4af37;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+
+        /* Footer Luxuoso Re-estilizado */
+        footer {
+            background: var(--dark);
+            padding: 120px 20px 40px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
             position: relative;
-            padding-bottom: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        
-        .footer-title:after {
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 60px;
+        }
+
+        .footer-col h4 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .footer-col h4::after {
             content: '';
             position: absolute;
-            bottom: 0;
             left: 0;
+            bottom: -10px;
             width: 50px;
             height: 2px;
-            background-color: #d4af37;
+            background: var(--gold);
         }
-        
-        .contact-title {
-            margin-top: 30px;
-        }
-        
+
         .footer-links {
             list-style: none;
         }
-        
+
         .footer-links li {
-            margin-bottom: 12px;
+            margin-bottom: 18px;
         }
-        
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            padding-left: 15px;
-        }
-        
-        .footer-links a:before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #d4af37;
-        }
-        
-        .footer-links a:hover {
-            color: #d4af37;
-            padding-left: 20px;
-        }
-        
-        .footer-hours {
-            list-style: none;
-        }
-        
-        .footer-hours li {
-            margin-bottom: 10px;
-            color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .footer-hours span {
-            color: #ffffff;
-            font-weight: 500;
-        }
-        
-        .footer-contact {
-            list-style: none;
-        }
-        
+
+        .footer-links a,
         .footer-contact li {
-            margin-bottom: 15px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-muted);
+            text-decoration: none;
             display: flex;
             align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            font-size: 1rem;
         }
-        
+
+        .footer-links a:hover {
+            color: #fff;
+            transform: translateX(8px);
+        }
+
+        .footer-contact li {
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
         .footer-contact i {
-            color: #d4af37;
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
+            color: var(--gold);
+            margin-top: 5px;
         }
-        
-        .payment-methods {
+
+        /* Preservando Formas de Pagamento no Rodapé */
+        .payment-section {
             margin-top: 30px;
         }
-        
-        .payment-icons {
-            display: flex;
-            gap: 15px;
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .payment-icons i {
-            transition: all 0.3s ease;
-        }
-        
-        .payment-icons i:hover {
-            color: #d4af37;
-            transform: translateY(-3px);
-        }
-        
-        .footer-bottom {
-            background-color: #000000;
-            padding: 20px 0;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .copyright {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.9rem;
-        }
-        
-        .legal-links {
+
+        .payment-methods {
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
-        
-        .legal-links a {
-            color: rgba(255, 255, 255, 0.5);
+
+        .payment-methods i {
+            font-size: 2.5rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .payment-methods i:hover {
+            color: var(--gold);
+            transform: translateY(-5px);
+        }
+
+        .social-box {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: #fff;
             text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .social-link:hover {
+            background: var(--gold);
+            color: var(--dark);
+            transform: translateY(-5px) rotate(360deg);
+        }
+
+        .footer-bottom {
+            margin-top: 100px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: #555;
             font-size: 0.9rem;
-            transition: all 0.3s ease;
+            margin-bottom: 15px;
         }
-        
+
+        .legal-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .legal-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
         .legal-links a:hover {
-            color: #d4af37;
+            color: var(--gold);
         }
-        
-        /* Responsivo */
-        @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
+
+        /* Keyframes */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-        
+
+        /* Responsividade */
         @media (max-width: 768px) {
-            .hero {
-                padding: 80px 20px;
+            .header-nav {
+                padding: 15px 20px;
             }
-            
+
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 3.5rem;
             }
-            
-            .footer-columns {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .footer-container {
-                flex-direction: column;
-                gap: 10px;
+
+            footer {
                 text-align: center;
             }
-            
-            .logo-col {
-                max-width: 100%;
+
+            .footer-col h4::after {
+                left: 50%;
+                transform: translateX(-50%);
             }
-            
-            .legal-links {
+
+            .footer-links a,
+            .footer-contact li {
                 justify-content: center;
-                flex-wrap: wrap;
             }
-        }
-        
-        @media (max-width: 576px) {
-            .hero h1 {
-                font-size: 1.8rem;
+
+            .payment-methods,
+            .social-box {
+                justify-content: center;
             }
-            
-            .features {
-                grid-template-columns: 1fr;
+
+            .logo-home {
+                padding: 8px 15px;
             }
+
+            .logo-home span {
+                display: none;
+            }
+
+            /* Mobile simplificado */
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <a href="index.html">
-            <img src="logonovosalao.png" alt="Logo Salão Elevation" />
+
+    <!-- Header com Logo/Botão Home Renovado -->
+    <nav class="header-nav">
+        <a href="index.html" class="logo-home">
+            <img src="logonovosalao.png" alt="Elevation Logo">
+            <span>Início</span>
         </a>
-    </header>
+    </nav>
 
     <section class="hero">
-        <div class="hero-content">
-            <h1>ELEVE SUA BELEZA</h1>
-            <p>Descubra a excelência em cuidados capilares e estéticos no Clínica Elevation</p>
-        </div>
+        <h1>ELEVE SUA BELEZA</h1>
+        <p>Descubra a excelência em cuidados capilares e estéticos na Clínica Elevation</p>
     </section>
 
-    <section class="services" id="services">
-        <div class="services-title">
+    <section class="services-section">
+        <div class="section-header reveal">
             <h2>Nossos Serviços</h2>
             <p>Oferecemos tratamentos exclusivos com os melhores produtos do mercado</p>
         </div>
-        
-        <div class="features">
-            <a href="valores.html" class="feature-link">
-                <div class="feature">
-                    <i class="fas fa-cut"></i>
-                    <h3>Catálogos de Serviços</h3>
-                    <p>Transformamos seu visual com equipamentos e de ponta modernos e personalizados para realçar sua beleza única.</p>
-                </div>
+
+        <div class="services-grid">
+            <a href="valores.html" class="service-card reveal">
+                <i class="fas fa-cut"></i>
+                <h3>Catálogos de Serviços</h3>
+                <p>Transformamos seu visual com equipamentos de ponta modernos e personalizados para realçar sua beleza
+                    única.</p>
             </a>
-            
-            <a href="maquiagem.html" class="feature-link">
-                <div class="feature">
-                    <i class="fas fa-paint-brush"></i>
-                    <h3>Maquiagem Profissional</h3>
-                    <p>Tons vibrantes e duradouros para destacar sua personalidade em qualquer ocasião.</p>
-                </div>
+
+            <a href="maquiagem.html" class="service-card reveal">
+                <i class="fas fa-paint-brush"></i>
+                <h3>Maquiagem Profissional</h3>
+                <p>Tons vibrantes e duradouros para destacar sua personalidade em qualquer ocasião.</p>
             </a>
-            
-            <a href="cuidados.html" class="feature-link">
-                <div class="feature">
-                    <i class="fas fa-spa"></i>
-                    <h3>Tratamentos Especiais</h3>
-                    <p>Momentos de relaxamento e cuidados intensivos para revitalizar cabelos e pele.</p>
-                </div>
+
+            <a href="cuidados.html" class="service-card reveal">
+                <i class="fas fa-spa"></i>
+                <h3>Tratamentos Especiais</h3>
+                <p>Momentos de relaxamento e cuidados intensivos para revitalizar cabelos e pele.</p>
             </a>
         </div>
     </section>
 
-    <footer class="luxury-footer">
-        <div class="footer-wave">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="#d4af37"></path>
-                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="#d4af37"></path>
-                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="#d4af37"></path>
-            </svg>
-        </div>
-        
-        <div class="footer-content">
-            <div class="footer-columns">
-                <div class="footer-col logo-col">
-                   
-                    <p class="footer-description">Eleve sua beleza ao próximo nível com nossos tratamentos exclusivos e profissionais especializados.</p>
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/clinica_elevation" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="https://api.whatsapp.com/message/67PXANH2XQKSN1?autoload=1&app_absent=0" class="social-icon"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    </div>
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Clínica Elevation</h4>
+                <p style="color: var(--text-muted); margin-bottom: 25px;">
+                    Eleve sua beleza ao próximo nível com nossos tratamentos exclusivos e profissionais especializados.
+                </p>
+                <div class="social-box">
+                    <a href="https://www.instagram.com/clinica_elevation" class="social-link" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://api.whatsapp.com/message/67PXANH2XQKSN1" class="social-link" target="_blank"><i
+                            class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
                 </div>
-                
-                <div class="footer-col">
-                    <h3 class="footer-title">Serviços</h3>
-                    <ul class="footer-links">
-                        <li><a href="valores.html">Cortes e Colorimetria</a></li>
-                        <li><a href="maquiagem.html">Maquiagem Profissional</a></li>
-                        <li><a href="cuidados.html">Tratamentos Capilares</a></li>
-                        <li><a href="#cuidados.html">Terapias Relaxantes</a></li>
-                        <li><a href="#valores.html">Design de Sobrancelhas</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h3 class="footer-title">Horário</h3>
-                    <ul class="footer-hours">
-                        <li>Segunda - Sexta: <span>9h às 20h</span></li>
-                        <li>Sábado: <span>9h às 18h</span></li>
-                        <li>Domingo: <span>Fechado</span></li>
-                    </ul>
-                    
-                    <h3 class="footer-title contact-title">Contato</h3>
-                    <ul class="footer-contact">
-                        <li><i class="fas fa-phone"></i> (11) 98027-2343</li>
-                        <li><i class="fas fa-envelope"></i> contato@salaoelevation.com</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Rua Aldeia dos Machalis, 126a - São Paulo</li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
+            </div>
+
+            <div class="footer-col">
+                <h4>Serviços</h4>
+                <ul class="footer-links">
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Cortes e Colorimetria</a></li>
+                    <li><a href="maquiagem.html"><i class="fas fa-chevron-right"></i> Maquiagem Profissional</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Tratamentos Capilares</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Terapias Relaxantes</a></li>
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Design de Sobrancelhas</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Atendimento</h4>
+                <ul class="footer-contact">
+                    <li><i class="fas fa-clock"></i> <span>Seg-Sex: 9h às 20h<br>Sáb: 9h às 18h</span></li>
+                    <li><i class="fas fa-phone-alt"></i> (11) 98027-2343</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Rua Aldeia dos Machalis, 126a<br>São Paulo - SP</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Pagamento</h4>
+                <div class="payment-section">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Aceitamos as principais bandeiras:</p>
                     <div class="payment-methods">
-                        <h3 class="footer-title">Formas de Pagamento</h3>
-                        <div class="payment-icons">
-                            <i class="fab fa-cc-visa" title="Visa"></i>
-                            <i class="fab fa-cc-mastercard" title="Mastercard"></i>
-                            <i class="fab fa-cc-amex" title="American Express"></i>
-                            <i class="fab fa-cc-paypal" title="PayPal"></i>
-                            <i class="fas fa-pix" title="PIX"></i>
-                        </div>
+                        <i class="fab fa-cc-visa" title="Visa"></i>
+                        <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+                        <i class="fab fa-cc-amex" title="American Express"></i>
+                        <i class="fab fa-cc-paypal" title="PayPal"></i>
+                        <i class="fa-brands fa-pix" title="PIX"></i> <!-- Atualizado p/ FontAwesome 6 -->
                     </div>
-                    
                 </div>
             </div>
         </div>
-        <style>
-.footer-link {
-  color: var(--primary);
-  text-decoration: none;
-  transition: text-shadow 0.3s ease, transform 0.3s ease;
-}
-.footer-link:hover {
-  text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
-  transform: scale(1.05);
-}
-</style>
+
         <div class="footer-bottom">
-            <div class="footer-container">
-                <p class="copyright">&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
-                <div class="legal-links">
-                    <a href="#">Política de Privacidade</a>
-                    <a href="#">Termos de Serviço</a>
-                    <a href="#">Agendamento Online</a>
-                </div>
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <div class="legal-links">
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Termos de Uso</a>
+                <a href="https://chrisdev-mauve.vercel.app/" target="_blank">Desenvolvido por ChrisDev</a>
             </div>
-            <p style="color: rgba(255, 255, 255, 0.6); text-align: center; margin-top: 10px;">Criado por Chris - Visite meu <a href="https://chrisdev-mauve.vercel.app/" class="footer-link" target="_blank">site pessoal</a>.</p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const handleReveal = () => {
+                reveals.forEach(el => {
+                    const top = el.getBoundingClientRect().top;
+                    if (top < window.innerHeight - 100) {
+                        el.classList.add('visible');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', handleReveal);
+            handleReveal();
+        });
+    </script>
 </body>
+
 </html>
