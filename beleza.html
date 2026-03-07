@@ -61,10 +61,10 @@
         }
 
         .logo-home img {
-            height: 40px;
+            height: 45px;
             width: auto;
-            filter: brightness(0) invert(1);
-            /* Garante visibilidade no fundo escuro */
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            transition: var(--transition);
         }
 
         .logo-home span {
@@ -86,8 +86,9 @@
         }
 
         .logo-home:hover img {
+            transform: scale(1.1);
             filter: brightness(0);
-            /* Fica preto quando o fundo vira dourado */
+            /* Fica preto para contrastar com o fundo dourado no hover */
         }
 
         /* Hero Section */
