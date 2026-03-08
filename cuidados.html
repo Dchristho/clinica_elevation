@@ -380,6 +380,51 @@
             box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
         }
 
+        /* Gallery/Carousel Styles for specific cards */
+        .gallery-viewport {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .gallery-track {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+        }
+
+        .gallery-track img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+
+        .service-info {
+            padding: 40px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-info h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+
+        .service-info p {
+            color: var(--muted-text);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
         /* CTA Section Light */
         .cta-section {
             padding: 150px 20px;
@@ -605,6 +650,23 @@
             </div>
 
             <div class="service-grid">
+                <!-- 1. Criolipolise -->
+                <div class="service-card reveal">
+                    <div class="gallery-viewport">
+                        <div class="gallery-track">
+                            <img src="criolipolise-1.jpeg" alt="Criolipolise">
+                            <img src="antesedepoiscripo.jpg" alt="Antes e Depois">
+                        </div>
+                    </div>
+                    <div class="service-info">
+                        <h2>Criolipolise</h2>
+                        <p>Tecnologia avançada de congelamento para eliminação definitiva de gordura localizada com
+                            segurança e precisão.</p>
+                        <a href="https://wa.me/5511980272343?text=Olá!%20Quero%20agendar%20Criolipolise"
+                            class="btn-schedule" target="_blank">Agendar via WhatsApp</a>
+                    </div>
+                </div>
+
                 <!-- Facial -->
                 <div class="service-card reveal">
                     <div class="card-image">
@@ -658,21 +720,6 @@
                             class="btn-schedule" target="_blank">Reservar Experiência</a>
                     </div>
                 </div>
-
-                <!-- Harmonização -->
-                <div class="service-card reveal">
-                    <div class="card-image">
-                        <img src="harmfacial.jpg" alt="Harmonização Facial">
-                    </div>
-                    <div class="card-body">
-                        <h3>Harmonização Facial</h3>
-                        <p>Redefinição de contornos e suavização de linhas para uma expressão mais harmônica e radiante.
-                        </p>
-                        <a href="https://wa.me/5511980272343?text=Olá,%20tenho%20interesse%20na%20Harmonização%20Facial"
-                            class="btn-schedule" target="_blank">Reservar Experiência</a>
-                    </div>
-                </div>
-
                 <!-- Laser -->
                 <div class="service-card reveal">
                     <div class="card-image">
@@ -704,9 +751,13 @@
 
     <section class="cta-section">
         <h2 class="reveal">Pronta para viver esse momento?</h2>
-        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Vim%20pelo%20site%2C%20como%20posso%20marcar%20uma%20avalia%C3%A7%C3%A3o%3F"
-            class="btn-main-cta reveal" target="_blank">Falar com nossa
-            Consultora</a>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;" class="reveal">
+            <a href="beleza.html" class="btn-main-cta" style="background: var(--dark-text); color: var(--gold);">Conheça
+                Harmonização Facial</a>
+            <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Vim%20pelo%20site%2C%20como%20posso%20marcar%20uma%20avalia%C3%A7%C3%A3o%3F"
+                class="btn-main-cta" target="_blank">Falar com nossa
+                Consultora</a>
+        </div>
     </section>
 
     <footer>
@@ -767,6 +818,48 @@
 
             window.addEventListener('scroll', handleReveal);
             handleReveal();
+
+            // Carousel Gallery Logic
+            document.querySelectorAll('.service-card').forEach(card => {
+                const track = card.querySelector('.gallery-track');
+                if (!track) return;
+
+                const imgs = track.querySelectorAll('img');
+                let index = 0;
+                const total = imgs.length;
+
+                const updateSlide = () => {
+                    track.style.transform = `translateX(-${index * 100}%)`;
+                };
+
+                const nextSlide = () => {
+                    index = (index + 1) % total;
+                    updateSlide();
+                };
+
+                let interval = setInterval(nextSlide, 2800);
+
+                card.addEventListener('mouseenter', () => clearInterval(interval));
+                card.addEventListener('mouseleave', () => interval = setInterval(nextSlide, 2800));
+
+                let startX = 0;
+                card.addEventListener('touchstart', e => {
+                    startX = e.touches[0].clientX;
+                    clearInterval(interval);
+                }, { passive: true });
+
+                card.addEventListener('touchend', e => {
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+
+                    if (Math.abs(diff) > 40) {
+                        if (diff > 0) index = (index + 1) % total;
+                        else index = (index - 1 + total) % total;
+                        updateSlide();
+                    }
+                    interval = setInterval(nextSlide, 2800);
+                }, { passive: true });
+            });
         });
     </script>
 </body>
