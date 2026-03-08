@@ -67,6 +67,45 @@
             border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
+        /* Glare Logo Style for Header */
+        .glare-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .glare-image {
+            height: 45px;
+            transition: var(--transition);
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .glare {
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(212, 175, 55, 0.5) 52%, rgba(255, 255, 255, 0.2) 55%, transparent 70%);
+            transform: rotate(30deg);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .glare-container:hover .glare {
+            top: -70%;
+            left: -70%;
+            opacity: 1;
+        }
+
+        .glare-container:hover .glare-image {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
         .back-link:hover {
             background: var(--gold);
             color: var(--white);
@@ -88,12 +127,42 @@
             position: relative;
         }
 
+        .hero-logo-box {
+            background: var(--white);
+            padding: 30px 50px;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero-logo-box:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 70px rgba(212, 175, 55, 0.25);
+            border-color: var(--gold);
+        }
+
         .hero-logo {
-            max-height: 120px;
+            max-height: 180px;
             width: auto;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
-            animation: fadeIn 1s ease-out;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.05));
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero h1 {
@@ -483,13 +552,21 @@
 <body>
 
     <nav class="nav-header">
+        <div class="logo">
+            <div class="glare-container" onclick="window.location.href='index.html'">
+                <img src="logonovosalao.png" alt="Elevation Logo" class="glare-image">
+                <div class="glare"></div>
+            </div>
+        </div>
         <a href="beleza.html" class="back-link">
             <i class="fas fa-chevron-left"></i> Menu
         </a>
     </nav>
 
     <div class="hero">
-        <img src="logonovosalao.png" alt="Elevation Logo" class="hero-logo">
+        <div class="hero-logo-box">
+            <img src="logonovosalao.png" alt="Elevation Logo" class="hero-logo">
+        </div>
         <h1>Cuidados Especiais</h1>
         <p>A arte do bem-estar e da revitalização</p>
     </div>
@@ -627,7 +704,8 @@
 
     <section class="cta-section">
         <h2 class="reveal">Pronta para viver esse momento?</h2>
-        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Vim%20pelo%20site%2C%20como%20posso%20marcar%20uma%20avalia%C3%A7%C3%A3o%3F" class="btn-main-cta reveal" target="_blank">Falar com nossa
+        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Vim%20pelo%20site%2C%20como%20posso%20marcar%20uma%20avalia%C3%A7%C3%A3o%3F"
+            class="btn-main-cta reveal" target="_blank">Falar com nossa
             Consultora</a>
     </section>
 
@@ -639,8 +717,8 @@
                 <div class="social-links">
                     <a href="https://www.instagram.com/clinica_elevation" class="social-link" target="_blank"><i
                             class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Vim%20pelo%20site%2C%20como%20posso%20marcar%20uma%20avalia%C3%A7%C3%A3o%3F" class="social-link" target="_blank"><i
-                            class="fab fa-whatsapp"></i></a>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Vim%20pelo%20site%2C%20como%20posso%20marcar%20uma%20avalia%C3%A7%C3%A3o%3F"
+                        class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://www.tiktok.com/@salao_elevation" class="social-link" target="_blank"><i
                             class="fab fa-tiktok"></i></a>
                     <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
