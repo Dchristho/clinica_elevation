@@ -1,429 +1,1928 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="scroll-smooth">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christian Ribeiro — Arquiteto de Experiências Digitais</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        outfit: ['Outfit', 'sans-serif'],
-                    },
-                    colors: {
-                        zinc: {
-                            900: '#18181b',
-                            950: '#09090b',
-                        },
-                        accent: '#10b981', // A soft, elegant emerald/sage green instead of neon
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Phosphor Icons -->
+    <title>Clínica Elevation | Elevando sua Beleza</title>
+    <!-- Phosphor Icons (Premium Minimalist Icons) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
-    <!-- Motion (Framer Motion for Vanilla JS) -->
-    <script type="module">
-        import { animate, scroll, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
-        window.Motion = { animate, scroll, inView, stagger };
-    </script>
+    <!-- Modern Premium Font Stack -->
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap"
+        rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #09090b; /* Rich Off-Black/Zinc 950 */
-            color: #a1a1aa; /* zinc-400 for better secondary hierarchy */
-        }
-        
-        /* Taste-Skill Pattern: Materiality & Noise Overlay */
-        .noise-layer {
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.025; /* Reduced noise for cleanliness */
-            mix-blend-mode: overlay;
+        /* Taste Skill v2 Baseline Configuration */
+        :root {
+            /* Colors: Zinc-950 base, desaturated gold accent */
+            --bg-dark: #09090b;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.15);
+            --text-high: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.6s var(--ease);
         }
 
-        /* Dynamic Ambient Background System */
-        .bg-system {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-high);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Typography Override */
+        h1,
+        h2,
+        h3,
+        h4,
+        .display-font {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        ::selection {
+            background-color: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* --- Minimal Navigation --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2.5rem 5vw;
             position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: radial-gradient(circle at top center, #0e0e11 0%, #09090b 100%);
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 1.25rem 5vw;
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .glare-image {
+            height: 40px;
+            transition: var(--transition);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-high);
+        }
+
+        .nav-links a.highlight {
+            color: var(--accent);
+            padding: 0.6rem 1.25rem;
+            border-radius: 99px;
+            border: 1px solid var(--accent-dim);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
+        }
+
+        .nav-links a.highlight:hover {
+            background: var(--accent-dim);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-high);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- Taste Skill Asymmetric Hero --- */
+        .hero {
+            position: relative;
+            height: 350vh;
+            /* Scroll tie */
+        }
+
+        .hero-sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100dvh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: var(--bg-dark);
             overflow: hidden;
         }
 
-        .glow-blob {
+        .hero-video-wrapper {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(140px);
-            opacity: 0.05; /* Extremely subtle desaturated blobs */
-            pointer-events: none;
-            will-change: transform;
+            right: 0;
+            top: 2dvh;
+            bottom: 2dvh;
+            width: 60%;
+            border-radius: 40px 0 0 40px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            border-right: none;
+            z-index: 1;
         }
 
-        .blob-1 {
-            width: 50vw;
-            height: 50vw;
-            background: #10b981;
-            top: -15%;
-            left: -10%;
-        }
-
-        .blob-2 {
-            width: 45vw;
-            height: 45vw;
-            background: #06b6d4; /* Cohesive Emerald & Cyan-Blue instead of indigo */
-            bottom: -15%;
-            right: -10%;
-        }
-
-        .blob-3 {
-            width: 35vw;
-            height: 35vw;
-            background: #10b981;
-            top: 35%;
-            left: 55%;
-            transform: translate(-50%, -50%);
-            opacity: 0.03;
-            animation: float-3 25s infinite alternate ease-in-out;
-        }
-
-        @keyframes float-3 {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-40%, -60%) scale(1.05); }
-        }
-
-        /* Digital Grid Pattern */
-        .bg-grid {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(circle at center, black, transparent 80%);
-            -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
-        }
-
-        /* Taste-Skill Pattern: Liquid Glass Panel */
-        .liquid-glass {
-            background: rgba(15, 15, 20, 0.5); /* Rich off-black fill */
-            backdrop-filter: blur(20px) saturate(140%);
-            -webkit-backdrop-filter: blur(20px) saturate(140%);
-            border: 1px solid rgba(255, 255, 255, 0.03); /* Subtler border */
-            box-shadow: 
-                inset 0 1px 1px rgba(255, 255, 255, 0.02),
-                0 25px 50px -12px rgba(0,0,0,0.7);
-        }
-
-        /* Image Crossfade Gallery */
-        @keyframes fadeGallery {
-            0% { opacity: 0; transform: scale(1.02); }
-            4% { opacity: 1; transform: scale(1); }
-            10% { opacity: 1; transform: scale(1); }
-            14% { opacity: 0; transform: scale(1.02); }
-            100% { opacity: 0; transform: scale(1.02); }
-        }
-        
-        .gallery-img {
+        /* Gradiente na junção para disfarçar a borda e permitir texto por cima */
+        .hero-video-wrapper::after {
+            content: '';
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, var(--bg-dark) 0%, transparent 100%);
+            z-index: 2;
+        }
+
+        #hero-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top; /* CRITICAL FOR PORTFOLIO IMAGES */
-            opacity: 0;
-            animation: fadeGallery infinite;
-            transition: transform 0.5s ease-out;
+            object-position: center;
         }
 
-        .gallery-img.group-4 { animation-duration: 16s; }
-        .gallery-img.group-7 { animation-duration: 28s; }
-        .gallery-img:nth-child(1) { animation-delay: 0s; }
-        .gallery-img:nth-child(2) { animation-delay: 4s; }
-        .gallery-img:nth-child(3) { animation-delay: 8s; }
-        .gallery-img:nth-child(4) { animation-delay: 12s; }
-        .gallery-img:nth-child(5) { animation-delay: 16s; }
-        .gallery-img:nth-child(6) { animation-delay: 20s; }
-        .gallery-img:nth-child(7) { animation-delay: 24s; }
+        .hero-content-wrapper {
+            position: relative;
+            padding-left: 10vw;
+            z-index: 10;
+            width: 55%;
+        }
 
-        /* Initial state for elements to be revealed */
-        .reveal-el {
+        /* Staggered Fade Up Animations */
+        .animate-up {
             opacity: 0;
-            visibility: hidden; /* Avoid initial flash, Motion will handle */
+            transform: translateY(24px);
+            animation: fadeUp 1.2s var(--ease) forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content span {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.3rem 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.02);
+            animation-delay: 0.1s;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3.5rem, 6vw, 6.5rem);
+            line-height: 0.95;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            animation-delay: 0.3s;
+        }
+
+        .hero-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 45ch;
+            margin-bottom: 3.5rem;
+            animation-delay: 0.5s;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: var(--text-high);
+            color: var(--bg-dark);
+            text-decoration: none;
+            border-radius: 99px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            transition: var(--transition);
+            animation-delay: 0.7s;
+            will-change: transform;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 10vw;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation-delay: 1s;
+        }
+
+        .scroll-line {
+            width: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--text-high);
+            animation: scrollLine 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+
+        @keyframes scrollLine {
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* --- Sections (Asymmetric & Clean) --- */
+        .section-premium {
+            padding: 10rem 5vw;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8vw;
+            align-items: center;
+        }
+
+        .intro-img-wrapper {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .intro-img-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            pointer-events: none;
+        }
+
+        .intro-img {
+            width: 100%;
+            display: block;
+            border-radius: 24px;
+            transition: var(--transition);
+            filter: grayscale(20%);
+        }
+
+        .intro-img-wrapper:hover .intro-img {
+            transform: scale(1.03);
+            filter: grayscale(0%);
+        }
+
+        .intro-text h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .intro-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            max-width: 50ch;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 4rem;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item h4 {
+            font-size: 2.5rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .stat-item p {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+        }
+
+        /* --- Minimalist Services Rows --- */
+        .services-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 6rem;
+        }
+
+        .services-header h2 {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+        }
+
+        .services-list {
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .service-row {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            align-items: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .service-row i {
+            font-size: 2rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .service-row h3 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .service-row .arrow {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: var(--transition);
+        }
+
+        .service-row::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2rem;
+            right: -2rem;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+        .service-row:hover::before {
+            opacity: 1;
+        }
+
+        .service-row:hover i {
+            color: var(--accent);
+            scale: 1.1;
+        }
+
+        .service-row:hover h3 {
+            transform: translateX(10px);
+        }
+
+        .service-row:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+            color: var(--accent);
+        }
+
+        /* --- Immersive Experience Section --- */
+        .exp-section {
+            padding: 10vw 5vw;
+            background: #000;
+        }
+
+        .exp-banner {
+            height: 60vh;
+            border-radius: 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* Parallax effect */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 2rem;
+        }
+
+        .exp-banner h2 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+        }
+
+        /* --- Clean Footer --- */
+        footer {
+            background: var(--bg-dark);
+            padding: 8rem 5vw 3rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 6rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .footer-col h4 {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .footer-col p {
+            color: var(--text-muted);
+            max-width: 40ch;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-high);
+            transform: translateX(5px);
+        }
+
+        .social-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-high);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--text-high);
+            color: var(--bg-dark);
+        }
+
+        .footer-bottom {
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- Viewport & Mobile Adjustments --- */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+            }
+
+            .services-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2rem;
+                margin-bottom: 3rem;
+            }
+
+            .hero-sticky-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 40vh;
+                padding-top: 5rem;
+                gap: 2rem;
+            }
+
+            .hero-video-wrapper {
+                grid-column: 1 / -1;
+                grid-row: 2 / 3;
+                border-radius: 40px 40px 0 0;
+                height: 100%;
+                border-left: none;
+                border-bottom: none;
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .hero-content-wrapper {
+                padding-left: 5vw;
+                padding-right: 5vw;
+                align-self: end;
+                padding-bottom: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+                text-align: center;
+            }
+
+            .service-row {
+                grid-template-columns: 50px 1fr auto;
+                padding: 2rem 0;
+            }
+
+            .service-row h3 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* --- Step-by-Step Booking Modal --- */
+        .booking-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(16px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s var(--ease);
+        }
+
+        .booking-modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .booking-modal-content {
+            background: rgba(20, 20, 23, 0.95);
+            border: 1px solid var(--glass-border);
+            width: 95%;
+            max-width: 780px;
+            border-radius: 28px;
+            padding: 3rem;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.5s var(--ease);
+        }
+
+        .booking-modal-overlay.active .booking-modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .booking-modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .booking-modal-close:hover {
+            color: var(--text-high);
+            transform: rotate(90deg);
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .booking-header h2 {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .booking-steps-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.02);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .step-dot.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .step-dot.completed {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent);
+        }
+
+        .step-line {
+            width: 50px;
+            height: 1px;
+            background: var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .step-line.active {
+            background: var(--accent);
+        }
+
+        .booking-step-title {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Wizard Slider Track */
+        .booking-wizard-wrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .booking-wizard-track {
+            display: flex;
+            width: 400%; /* 4 steps */
+            transition: transform 0.6s cubic-bezier(0.86, 0, 0.07, 1);
+            will-change: transform;
+        }
+
+        .booking-step-pane {
+            width: 25%; /* 100% / 4 */
+            flex-shrink: 0;
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+
+        /* Step 1 Styles: Service Options */
+        .services-wizard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .services-wizard-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .services-wizard-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.01);
+        }
+
+        .services-wizard-grid::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .service-category-group h4 {
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .wizard-options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .wizard-option-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .wizard-option-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-high);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .wizard-option-card.selected {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Doctor Confirmation styling */
+        .doctor-confirm-box {
+            margin-top: 1.5rem;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: none;
+            align-items: center;
+            gap: 1.25rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .doctor-confirm-box.active {
+            display: flex;
+        }
+
+        .doctor-confirm-box i {
+            font-size: 2.2rem;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .doctor-confirm-text strong {
+            color: var(--accent);
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .doctor-confirm-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .btn-confirm-doctor {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-confirm-doctor:hover {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Step 2 Styles: Date & Time Picker */
+        .datetime-wizard-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .date-picker-section, .time-picker-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .date-picker-section label, .time-picker-section label {
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .wizard-date-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1rem;
+            color: var(--text-high);
+            font-family: inherit;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .wizard-date-input:focus {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .time-slot {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .time-slot:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-high);
+            border-color: rgba(212,175,55,0.3);
+        }
+
+        .time-slot.selected {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .wizard-nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-wizard-nav {
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-wizard-nav.prev-step {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-wizard-nav.prev-step:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-high);
+        }
+
+        .btn-wizard-nav.next-step {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+        }
+
+        .btn-wizard-nav.next-step:disabled {
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.2);
+            cursor: not-allowed;
+        }
+
+        .btn-wizard-nav.next-step:not(:disabled):hover {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Step 3 Styles: Form */
+        .wizard-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .wizard-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .wizard-form-group label {
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .wizard-form-group input, .wizard-form-group textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.9rem 1.25rem;
+            color: var(--text-high);
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .wizard-form-group input:focus, .wizard-form-group textarea:focus {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .btn-wizard-nav.submit-booking {
+            background: var(--accent);
+            color: var(--bg-dark);
+            border: none;
+        }
+
+        .btn-wizard-nav.submit-booking:hover {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Step 4 Styles: Success Screen & Email Preview */
+        .success-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            animation: scaleUp 0.5s var(--ease) forwards;
+        }
+
+        .success-screen h3 {
+            font-size: 1.8rem;
+            color: var(--text-high);
+            margin-bottom: 0.5rem;
+        }
+
+        .success-screen p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            max-width: 50ch;
+        }
+
+        .simulated-email-container {
+            width: 100%;
+            background: #141416;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .email-client-header {
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .email-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .email-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .email-client-title {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: monospace;
+        }
+
+        .email-client-body {
+            padding: 1.5rem;
+            max-height: 280px;
+            overflow-y: auto;
+            background: #09090b;
+        }
+
+        .close-modal-btn {
+            background: transparent;
+            color: var(--text-high);
+            border: 1px solid var(--glass-border);
+            padding: 0.9rem 2.5rem;
+        }
+
+        .close-modal-btn:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Animations */
+        @keyframes scaleUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Secondary Button Style */
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text-high);
+            border: 1px solid var(--accent);
+            border-radius: 99px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            transition: var(--transition);
+            cursor: pointer;
+            will-change: transform;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background: var(--accent-dim);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .services-wizard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                max-height: 260px;
+            }
+            .datetime-wizard-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .booking-modal-content {
+                padding: 2rem 1.5rem;
+                width: 95%;
+            }
+            .doctor-confirm-box {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body class="antialiased selection:bg-accent selection:text-zinc-950 overflow-x-hidden min-h-[100dvh]">
 
-    <div class="noise-layer"></div>
-    
-    <div class="bg-system">
-        <div class="glow-blob blob-1"></div>
-        <div class="glow-blob blob-2"></div>
-        <div class="glow-blob blob-3"></div>
-        <div class="bg-grid"></div>
-    </div>
+<body>
 
-    <!-- Navigation -->
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 liquid-glass rounded-full px-1.5 py-1.5 flex items-center w-[95%] md:w-auto overflow-hidden shadow-2xl reveal-el" id="main-nav">
-        <div class="flex items-center gap-2.5 pr-3 border-r border-white/5 shrink-0 text-white font-medium text-xs tracking-tight ml-1.5 mr-1">
-            <div class="w-6 h-6 rounded-full overflow-hidden bg-zinc-900 border border-white/10">
-                <img src="image.png" alt="Christian Ribeiro" class="w-full h-full object-cover">
-            </div>
-            <span class="hidden sm:inline-block font-semibold">Christian R.</span>
-        </div>
-        <div class="flex items-center space-x-0.5 px-1.5 text-[13px] font-medium tracking-wide">
-            <a href="#home" class="text-zinc-400 hover:text-white transition-all duration-300 px-3.5 py-1.5 rounded-full hover:bg-white/[0.03]">Início</a>
-            <a href="#sobre" class="text-zinc-400 hover:text-white transition-all duration-300 px-3.5 py-1.5 rounded-full hover:bg-white/[0.03]">Trajetória</a>
-            <a href="#projetos" class="text-zinc-400 hover:text-white transition-all duration-300 px-3.5 py-1.5 rounded-full hover:bg-white/[0.03]">Trabalhos</a>
-            <a href="#contato" class="text-zinc-400 hover:text-white transition-all duration-300 px-3.5 py-1.5 rounded-full hover:bg-white/[0.03]">Conexão</a>
-        </div>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="logonovosalao.png" alt="Elevation Logo" class="glare-image">
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="valores.html">Serviços</a></li>
+            <li><a href="espaço.html">O Espaço</a></li>
+            <li><a href="sobrenos.html">Sobre Nós</a></li>
+            <li><a href="beleza.html" class="highlight">Harmonização Facial</a></li>
+            <li><a href="#" class="highlight" id="nav-booking-btn" style="border-color: var(--accent); background: rgba(212, 175, 55, 0.12);">Agendar Online</a></li>
+        </ul>
+
+        <button class="mobile-menu-btn"><i class="ph ph-list"></i></button>
     </nav>
 
-    <main class="w-full px-4 sm:px-8 md:px-12 max-w-[1400px] mx-auto min-h-[100dvh]">
-        
-        <!-- Hero Section -->
-        <section id="home" class="min-h-[100dvh] pt-40 pb-20 flex flex-col justify-center">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 w-full items-end">
-                <div class="lg:col-span-8 space-y-4">
-                    <h1 class="text-[clamp(4.2rem,10vw,10.5rem)] tracking-tighter leading-[0.85] text-white">
-                        <span class="font-light inline-block reveal-el hero-text">Arte &amp;</span><br/>
-                        <span class="text-zinc-500 font-medium inline-block reveal-el hero-text pl-4 md:pl-12">Código.</span>
-                    </h1>
-                </div>
-                <div class="lg:col-span-4 flex flex-col items-start gap-8 mb-4">
-                    <p class="text-base md:text-lg text-zinc-400 leading-relaxed font-light max-w-[40ch] reveal-el hero-sub">
-                        Christian Ribeiro cria ecossistemas digitais imersivos que unem segurança avançada, inteligência artificial e design de alto padrão.
-                    </p>
-                    <a href="#projetos" class="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/10 hover:border-white/20 text-white bg-white/[0.02] hover:bg-white hover:text-zinc-950 font-medium transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.02)] hover:shadow-[0_0_30px_rgba(255,255,255,0.08)] reveal-el hero-sub">
-                        Explorar Obras <i class="ph-bold ph-arrow-down-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="sobre" class="py-32 md:py-48 grid grid-cols-1 lg:grid-cols-12 gap-16 border-t border-white/5">
-            <div class="lg:col-span-5 flex flex-col gap-6 lg:sticky top-32 self-start scroll-reveal">
-                <span class="text-accent text-xs font-semibold uppercase tracking-widest flex items-center gap-2">
-                    <i class="ph-bold ph-fingerprint text-base"></i> Filosofia Profissional
-                </span>
-                <h2 class="text-4xl md:text-5xl tracking-tighter text-white font-medium leading-[1.1]">
-                    Onde o luxo estético<br/>encontra a segurança<br/>e a inteligência.
-                </h2>
-            </div>
-            <div class="lg:col-span-7 flex flex-col gap-12">
-                <div class="flex flex-col gap-6 text-lg md:text-xl text-zinc-400 font-light leading-relaxed max-w-[65ch]">
-                    <p class="scroll-reveal">
-                        Sou <strong class="text-white font-medium">Christian Ribeiro</strong>. Atuo na convergência entre a Segurança da Informação, o desenvolvimento web imersivo e a integração de Inteligência Artificial.
-                    </p>
-                    <p class="scroll-reveal">
-                        Desenvolvo ecossistemas que não apenas cativam visualmente, mas são construídos sob rigorosas práticas de segurança, garantindo alta performance e estabilidade sob qualquer escala.
-                    </p>
-                </div>
-                
-                <!-- Core Pillars / Expertises Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 border-t border-white/5 pt-10 mt-2 scroll-reveal">
-                    <div class="space-y-3">
-                        <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent">
-                            <i class="ph-bold ph-shield-check text-lg"></i>
-                        </div>
-                        <h4 class="text-white font-medium text-base">Segurança da Informação</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Arquitetura de sistemas resilientes, análise de ameaças e proteção de dados críticos em trânsito e repouso.</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent">
-                            <i class="ph-bold ph-cpu text-lg"></i>
-                        </div>
-                        <h4 class="text-white font-medium text-base">IA Generativa &amp; Automação</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Modelagem de fluxos inteligentes e integração de APIs para otimizar processos de negócios e decisões baseadas em dados.</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent">
-                            <i class="ph-bold ph-sparkles text-lg"></i>
-                        </div>
-                        <h4 class="text-white font-medium text-base">Creative Development</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Desenvolvimento frontend de alta fidelidade visual, com foco em micro-interações fluidas e performance impecável.</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-accent">
-                            <i class="ph-bold ph-terminal text-lg"></i>
-                        </div>
-                        <h4 class="text-white font-medium text-base">Engenharia de Software</h4>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Código limpo, sustentável e estruturado para rápida manutenção e evolução do ecossistema digital.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projetos" class="py-32 border-t border-white/5">
-            <div class="mb-24 scroll-reveal">
-                <span class="text-accent text-xs font-semibold uppercase tracking-widest flex items-center gap-2">
-                    <i class="ph-bold ph-sketch-logo text-base"></i> Obras Selecionadas
-                </span>
-                <h2 class="text-5xl md:text-7xl tracking-tighter text-white font-medium mt-4">Fronteiras Digitais.</h2>
+    <!-- Taste Skill Redesigned Asymmetric Hero -->
+    <header class="hero">
+        <div class="hero-sticky-container">
+            <div class="hero-video-wrapper">
+                <video id="hero-video" playsinline muted preload="auto"
+                     poster="WhatsApp%20Image%202025-09-17%20at%2010.52.17.jpeg">
+                    <source src="Agent_video_Pippit.mp4" type="video/mp4">
+                </video>
             </div>
 
-            <div class="flex flex-col gap-48">
-                <!-- Project 1 -->
-                <article class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                    <div class="lg:col-span-7 rounded-3xl bg-zinc-950 overflow-hidden relative aspect-[4/3] group border border-white/5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] scroll-reveal">
-                        <img src="clinica1.png" alt="Clinic Elevation 1" class="gallery-img group-7 group-hover:scale-105" />
-                        <img src="clinica2.png" alt="Clinic Elevation 2" class="gallery-img group-7 group-hover:scale-105" />
-                        <img src="clinica3.png" alt="Clinic Elevation 3" class="gallery-img group-7 group-hover:scale-105" />
-                        <img src="clinica4.png" alt="Clinic Elevation 4" class="gallery-img group-7 group-hover:scale-105" />
-                        <img src="clinica5.png" alt="Clinic Elevation 5" class="gallery-img group-7 group-hover:scale-105" />
-                        <img src="clinica6.png" alt="Clinic Elevation 6" class="gallery-img group-7 group-hover:scale-105" />
-                        <img src="clinica7.png" alt="Clinic Elevation 7" class="gallery-img group-7 group-hover:scale-105" />
-                    </div>
-                    <div class="lg:col-span-5 flex flex-col gap-6">
-                        <h3 class="text-3xl text-white font-semibold tracking-tighter scroll-reveal">Clinic Elevation</h3>
-                        <p class="text-zinc-400 text-base leading-relaxed scroll-reveal max-w-[45ch]">
-                            Design de luxo e engenharia frontend de alta performance desenvolvidos para elevar a conversão e percepção de marca no segmento de clínicas de estética premium.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-1 scroll-reveal">
-                            <span class="px-2.5 py-1 text-[11px] font-medium tracking-wider bg-white/[0.02] border border-white/5 rounded text-zinc-400 uppercase">Luxo Digital</span>
-                            <span class="px-2.5 py-1 text-[11px] font-medium tracking-wider bg-white/[0.02] border border-white/5 rounded text-zinc-400 uppercase">Creative Frontend</span>
-                        </div>
-                        <a href="https://dchristho.github.io/clinica_elevation/" target="_blank" class="mt-4 text-white font-medium inline-flex items-center gap-2.5 group hover:text-accent transition-colors scroll-reveal">
-                            Acessar Projeto 
-                            <span class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/15 group-hover:-rotate-45 group-hover:border-accent/30 transition-all duration-300">
-                                <i class="ph-bold ph-arrow-right text-sm"></i>
-                            </span>
+            <div class="hero-content-wrapper">
+                <div class="hero-content">
+                    <span class="animate-up">Seja Bem-Vinda à Excelência</span>
+                    <h1 class="animate-up">Clínica<br>Elevation</h1>
+                    <p class="animate-up">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza
+                        natural.</p>
+                    <div class="hero-buttons animate-up" style="display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 3.5rem; animation-delay: 0.7s;">
+                        <a href="valores.html" class="btn-primary" style="animation-delay: 0s; margin-bottom: 0;">
+                            Descubra a Experiência <i class="ph ph-arrow-right"></i>
                         </a>
+                        <button class="btn-secondary" id="hero-booking-btn">
+                            Agendar Horário <i class="ph ph-calendar"></i>
+                        </button>
                     </div>
-                </article>
-
-                <!-- Project 2 -->
-                <article class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                    <div class="lg:col-span-5 lg:order-1 order-2 flex flex-col gap-6">
-                        <h3 class="text-3xl text-white font-semibold tracking-tighter scroll-reveal">SalonDash</h3>
-                        <p class="text-zinc-400 text-base leading-relaxed scroll-reveal max-w-[45ch]">
-                            Web application integrado a inteligências artificiais preditivas para automação de agendas, predição de demanda e otimização financeira no mercado de beleza de alto padrão.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mt-1 scroll-reveal">
-                            <span class="px-2.5 py-1 text-[11px] font-medium tracking-wider bg-white/[0.02] border border-white/5 rounded text-zinc-400 uppercase">IA Core</span>
-                            <span class="px-2.5 py-1 text-[11px] font-medium tracking-wider bg-white/[0.02] border border-white/5 rounded text-zinc-400 uppercase">Web App</span>
-                        </div>
-                        <a href="https://salondash-ndbbkpac.manus.space/" target="_blank" class="mt-4 text-white font-medium inline-flex items-center gap-2.5 group hover:text-accent transition-colors scroll-reveal">
-                            Acessar Projeto 
-                            <span class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/15 group-hover:-rotate-45 group-hover:border-accent/30 transition-all duration-300">
-                                <i class="ph-bold ph-arrow-right text-sm"></i>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="lg:col-span-7 lg:order-2 order-1 rounded-3xl bg-zinc-950 overflow-hidden relative aspect-[14/9] lg:aspect-[4/3] group border border-white/5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] scroll-reveal">
-                        <img src="screencapture-salondash-ndbbkpac-manus-space-2026-04-05-14_21_04.png" alt="SalonDash Interface" class="gallery-img group-4 group-hover:scale-105" />
-                        <img src="screencapture-salondash-ndbbkpac-manus-space-2026-04-05-14_21_26.png" alt="SalonDash Dashboard" class="gallery-img group-4 group-hover:scale-105" />
-                        <img src="screencapture-salondash-ndbbkpac-manus-space-2026-04-05-14_21_49.png" alt="SalonDash Settings" class="gallery-img group-4 group-hover:scale-105" />
-                        <img src="screencapture-salondash-ndbbkpac-manus-space-2026-04-05-14_19_27.png" alt="SalonDash Home" class="gallery-img group-4 group-hover:scale-105" />
-                    </div>
-                </article>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer id="contato" class="bg-transparent py-32 border-t border-white/5 mt-20 relative overflow-hidden">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
-        
-        <div class="px-4 sm:px-8 md:px-12 max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-16">
-            
-            <div class="space-y-8 max-w-xl scroll-reveal">
-                <span class="text-accent text-xs font-semibold uppercase tracking-widest flex items-center gap-2">
-                    <i class="ph-bold ph-envelope text-base"></i> Contato &amp; Parcerias
-                </span>
-                <h2 class="text-4xl md:text-6xl tracking-tighter text-white font-medium leading-tight">
-                    Vamos construir a sua<br/>próxima experiência?
-                </h2>
-                <a href="mailto:christianribeiro234@gmail.com" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white text-zinc-950 font-medium hover:scale-[0.98] transition-transform duration-300 shadow-[0_4px_20px_rgba(255,255,255,0.08)]">
-                    Iniciar Conversa <i class="ph-bold ph-paper-plane-tilt"></i>
-                </a>
-            </div>
-
-            <div class="flex flex-col gap-6 w-full md:w-auto scroll-reveal">
-                <div class="flex flex-wrap items-center gap-3">
-                    <a href="https://www.linkedin.com/in/christian-ribeiro-de-souza-52150b1a5/" target="_blank" class="w-12 h-12 rounded-full border border-white/5 bg-white/[0.01] flex items-center justify-center hover:bg-white hover:text-zinc-950 hover:-translate-y-1 transition-all duration-300">
-                        <i class="ph-fill ph-linkedin-logo text-xl"></i>
-                    </a>
-                    <a href="https://github.com/Dchristho" target="_blank" class="w-12 h-12 rounded-full border border-white/5 bg-white/[0.01] flex items-center justify-center hover:bg-white hover:text-zinc-950 hover:-translate-y-1 transition-all duration-300">
-                        <i class="ph-fill ph-github-logo text-xl"></i>
-                    </a>
-                    <a href="mailto:christianribeiro234@gmail.com" class="w-12 h-12 rounded-full border border-white/5 bg-white/[0.01] flex items-center justify-center hover:bg-white hover:text-zinc-950 hover:-translate-y-1 transition-all duration-300">
-                        <i class="ph-fill ph-envelope-simple text-xl"></i>
-                    </a>
                 </div>
-                <p class="text-xs text-zinc-500 uppercase tracking-widest">© 2026 Christian Ribeiro</p>
             </div>
 
+            <div class="scroll-indicator animate-up">
+                 <div class="scroll-line"></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="section-premium">
+        <div class="intro-grid">
+            <div class="intro-text">
+                <h2>A Essência da Elevação</h2>
+                <p>Na Clínica Elevation, acreditamos que a beleza não é um padrão, mas uma jornada única. Nossa
+                    arquitetura clínica proporciona uma experiência de altíssimo nível que vai além do convencional,
+                    entregando precisão cirúrgica num ambiente exclusivo de bem-estar absoluto.</p>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h4>10+</h4>
+                        <p>Anos de Excelência</p>
+                    </div>
+                </div>
+            </div>
+            <div class="intro-img-wrapper">
+                <img src="WhatsApp Image 2025-09-17 at 10.52.17.jpeg" alt="Santuário Elevation" class="intro-img">
+            </div>
+        </div>
+    </section>
+
+    <section class="section-premium" style="padding-top: 0;">
+        <div class="services-header">
+            <h2>Nossas<br>Especialidades</h2>
+            <p style="color: var(--text-muted); max-width: 40ch;">Protocolos avançados desenvolvidos para quem busca
+                resultados extraordinários.</p>
+        </div>
+
+        <div class="services-list">
+            <a href="valores.html" class="service-row">
+                <i class="ph ph-scissors"></i>
+                <h3>Serviços Essenciais</h3>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+            <a href="maquiagem.html" class="service-row">
+                <i class="ph ph-sparkle"></i>
+                <h3>Alta Definição Facial</h3>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+            <a href="cuidados.html" class="service-row">
+                <i class="ph ph-drop"></i>
+                <h3>Estética Avançada</h3>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="exp-section">
+        <a href="espaço.html" style="text-decoration: none; color: inherit;">
+            <div class="exp-banner">
+                <h2>Conheça nosso Santuário</h2>
+            </div>
+        </a>
+        <div
+            style="display: flex; gap: 3rem; justify-content: center; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; flex-wrap: wrap;">
+            <span>Localização Premium</span>
+            <span style="color: var(--glass-border)">|</span>
+            <span>Atendimento Exclusivo</span>
+            <span style="color: var(--glass-border)">|</span>
+            <span>Produtos de Luxo</span>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col" style="grid-column: span 1;">
+                <h4>Clínica Elevation</h4>
+                <p>Especialistas em realçar a sua beleza natural através de sofisticação e precisão profissional.</p>
+                <div class="social-row">
+                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-btn"><i
+                            class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation." target="_blank" class="social-btn"><i
+                            class="ph ph-whatsapp-logo"></i></a>
+                    <a href="#" class="social-btn"><i class="ph ph-tiktok-logo"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="valores.html">Serviços</a></li>
+                    <li><a href="espaço.html">O Espaço</a></li>
+                    <li><a href="sobrenos.html">Sobre Nós</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contato</h4>
+                <ul class="footer-links">
+                    <li style="color: var(--text-muted); display: flex; gap: 0.5rem;"><i class="ph ph-map-pin"
+                            style="font-size: 1.2rem;"></i> Rua Aldeia dos Machalis, 126a</li>
+                    <li><a href="tel:+5511980272343" style="display: flex; gap: 0.5rem;"><i class="ph ph-phone"
+                                style="font-size: 1.2rem;"></i> (11) 98027-2343</a></li>
+                    <li style="color: var(--text-muted); display: flex; gap: 0.5rem;"><i class="ph ph-clock"
+                            style="font-size: 1.2rem;"></i> Seg - Sáb: 09h às 19h</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <p>Desenvolvido por <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank"
+                    style="color: var(--accent); text-decoration: none;">ChrisDev</a></p>
         </div>
     </footer>
 
-    <script type="module">
-        setTimeout(() => {
-            if(!window.Motion) return;
-            const { animate, inView, scroll, stagger } = window.Motion;
+    <script>
+        // Hero Video Scroll Control (Maintained from previous request)
+        const heroSection = document.querySelector('.hero');
+        const video = document.getElementById('hero-video');
 
-            // Prepare elements for reveal
-            document.querySelectorAll('.reveal-el, .scroll-reveal').forEach(el => {
-                el.style.visibility = 'visible';
-                el.style.opacity = '0';
+        const updateVideoProgress = () => {
+            if (video.duration) {
+                const scrollY = window.scrollY;
+                const sectionOffsetTop = heroSection.offsetTop;
+                const sectionHeight = heroSection.offsetHeight;
+                const viewportHeight = window.innerHeight;
+
+                let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
+                progress = Math.max(0, Math.min(progress, 1));
+
+                // Smooth video scrubbing
+                video.currentTime = progress * video.duration;
+            }
+        };
+
+        // Ensure video metadata is loaded before trying to read duration
+        video.addEventListener('loadedmetadata', updateVideoProgress);
+        window.addEventListener('scroll', updateVideoProgress);
+
+        // Navbar blur effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileBtn.addEventListener('click', () => {
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.width = '100%';
+                navLinks.style.background = 'rgba(9,9,11,0.98)';
+                navLinks.style.padding = '2rem';
+                navLinks.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+            }
+        });
+
+        // --- Step-by-Step Booking Wizard Logic ---
+        const bookingModal = document.getElementById('booking-modal');
+        const openBookingButtons = [
+            document.getElementById('nav-booking-btn'),
+            document.getElementById('hero-booking-btn')
+        ];
+        const closeBookingBtn = document.getElementById('close-booking-modal');
+        const wizardTrack = document.getElementById('wizard-track');
+        
+        // Wizard State
+        let currentStep = 1;
+        let selectedService = '';
+        let selectedDate = '';
+        let selectedTime = '';
+        let isDoctorConfirmed = false;
+
+        // Open Modal
+        openBookingButtons.forEach(btn => {
+            if(btn) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    resetBookingWizard();
+                    bookingModal.classList.add('active');
+                });
+            }
+        });
+
+        // Close Modal
+        if(closeBookingBtn) {
+            closeBookingBtn.addEventListener('click', () => {
+                bookingModal.classList.remove('active');
+            });
+        }
+
+        // Close on overlay click
+        bookingModal.addEventListener('click', (e) => {
+            if (e.target === bookingModal) {
+                bookingModal.classList.remove('active');
+            }
+        });
+
+        // Restrict Calendar to Future Dates
+        const bookingDateInput = document.getElementById('booking-date');
+        if (bookingDateInput) {
+            const todayStr = new Date().toISOString().split('T')[0];
+            bookingDateInput.setAttribute('min', todayStr);
+            bookingDateInput.addEventListener('change', (e) => {
+                selectedDate = e.target.value;
+                validateStep2();
+            });
+        }
+
+        // Service Selection (Step 1)
+        const optionCards = document.querySelectorAll('.wizard-option-card');
+        const doctorConfirmBox = document.getElementById('doctor-confirm');
+        const confirmDoctorBtn = document.getElementById('confirm-doctor-btn');
+
+        optionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Clear previous selection
+                optionCards.forEach(c => c.classList.remove('selected'));
+                
+                // Set new selection
+                card.classList.add('selected');
+                selectedService = card.getAttribute('data-value');
+                
+                // Check if it requires external doctor confirmation
+                const isHarmonizacao = card.classList.contains('harmonizacao-service');
+                
+                if (isHarmonizacao) {
+                    isDoctorConfirmed = false;
+                    doctorConfirmBox.classList.add('active');
+                    // Scroll confirmation box into view smoothly
+                    doctorConfirmBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    doctorConfirmBox.classList.remove('active');
+                    isDoctorConfirmed = true;
+                    // Standard service - auto-advance to step 2 for slick UX
+                    setTimeout(() => {
+                        goToStep(2);
+                    }, 350);
+                }
+            });
+        });
+
+        // Doctor Confirmation Button Click
+        if (confirmDoctorBtn) {
+            confirmDoctorBtn.addEventListener('click', () => {
+                isDoctorConfirmed = true;
+                doctorConfirmBox.classList.remove('active');
+                goToStep(2);
+            });
+        }
+
+        // Time Slot Selection (Step 2)
+        const timeSlots = document.querySelectorAll('.time-slot');
+        timeSlots.forEach(slot => {
+            slot.addEventListener('click', () => {
+                timeSlots.forEach(s => s.classList.remove('selected'));
+                slot.classList.add('selected');
+                selectedTime = slot.getAttribute('data-time');
+                validateStep2();
+            });
+        });
+
+        // Step 2 Validation (Enables "Avançar" button)
+        const toStep3Btn = document.getElementById('to-step-3');
+        function validateStep2() {
+            if (selectedDate && selectedTime) {
+                toStep3Btn.removeAttribute('disabled');
+            } else {
+                toStep3Btn.setAttribute('disabled', 'true');
+            }
+        }
+
+        // Step Navigation Buttons (Prev / Next)
+        document.querySelectorAll('.btn-wizard-nav.prev-step').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = parseInt(btn.getAttribute('data-target'));
+                goToStep(target);
+            });
+        });
+
+        document.querySelectorAll('.btn-wizard-nav.next-step').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = parseInt(btn.getAttribute('data-target'));
+                goToStep(target);
+            });
+        });
+
+        // Step State Director
+        function goToStep(step) {
+            currentStep = step;
+            
+            // Slide Track
+            const shiftPercentage = (step - 1) * -25;
+            wizardTrack.style.transform = `translateX(${shiftPercentage}%)`;
+
+            // Update Steps Indicator
+            const dots = document.querySelectorAll('.step-dot');
+            const lines = document.querySelectorAll('.step-line');
+            
+            dots.forEach(dot => {
+                const dotStep = parseInt(dot.getAttribute('data-step'));
+                if (dotStep < step) {
+                    dot.className = 'step-dot completed';
+                    dot.innerHTML = '<i class="ph ph-check" style="font-size:0.9rem;"></i>';
+                } else if (dotStep === step) {
+                    dot.className = 'step-dot active';
+                    dot.innerHTML = dotStep;
+                } else {
+                    dot.className = 'step-dot';
+                    dot.innerHTML = dotStep;
+                }
             });
 
-            // Initial Hero Animation (Snappier, modern cubic bezier)
-            animate(
-                ".hero-text",
-                { opacity: [0, 1], y: [25, 0], filter: ["blur(8px)", "blur(0px)"] },
-                { delay: stagger(0.12), duration: 0.8, easing: [0.16, 1, 0.3, 1] }
-            );
-
-            animate(
-                ".hero-sub",
-                { opacity: [0, 1], y: [15, 0], filter: ["blur(5px)", "blur(0px)"] },
-                { delay: stagger(0.08, { startDelay: 0.3 }), duration: 0.7, easing: [0.16, 1, 0.3, 1] }
-            );
-
-            animate(
-                "#main-nav",
-                { opacity: [0, 1], y: [-15, 0] },
-                { delay: 0.8, duration: 0.8, easing: [0.16, 1, 0.3, 1] }
-            );
-
-            // Scroll Animations (Clean, elegant translation with standard speed)
-            document.querySelectorAll(".scroll-reveal").forEach((element) => {
-                inView(element, (info) => {
-                    animate(
-                        info.target, 
-                        { opacity: [0, 1], y: [20, 0] }, 
-                        { duration: 0.6, easing: [0.16, 1, 0.3, 1] }
-                    );
-                }, { margin: "-80px" });
+            lines.forEach((line, index) => {
+                if (index < step - 1) {
+                    line.classList.add('active');
+                } else {
+                    line.classList.remove('active');
+                }
             });
 
-            // Gentle Parallax for Ambient Blobs
-            scroll(animate(".blob-1", { y: [0, 120], x: [0, 60] }), { offset: ["start start", "end end"] });
-            scroll(animate(".blob-2", { y: [0, -180], x: [0, -90] }), { offset: ["start start", "end end"] });
+            // Update Header Title
+            const titleEl = document.querySelector('.booking-step-title');
+            if (titleEl) {
+                if (step === 1) titleEl.textContent = 'Selecione o serviço desejado';
+                else if (step === 2) titleEl.textContent = 'Escolha a data e horário';
+                else if (step === 3) titleEl.textContent = 'Informe seus dados de contato';
+                else if (step === 4) titleEl.textContent = 'Agendamento pré-reservado!';
+            }
+        }
 
-        }, 150);
+        // Final Form Submission (Step 3)
+        const finalForm = document.getElementById('booking-final-form');
+        const emailPreviewContent = document.getElementById('email-preview-content');
+
+        if (finalForm) {
+            finalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const clientName = document.getElementById('client-name').value;
+                const clientEmail = document.getElementById('client-email').value;
+                const clientPhone = document.getElementById('client-phone').value;
+                const clientNotes = document.getElementById('client-notes').value;
+
+                // 1. Google Sheets Integration Payload structure (Prepared for user)
+                const bookingData = {
+                    nome: clientName,
+                    email: clientEmail,
+                    telefone: clientPhone,
+                    servico: selectedService,
+                    data: formatDateString(selectedDate),
+                    horario: selectedTime,
+                    observacoes: clientNotes
+                };
+
+                console.log("Enviando agendamento para Google Sheets...", bookingData);
+
+                // --- INTEGRAÇÃO ATIVA COM GOOGLE APPS SCRIPT ---
+                const googleWebAppUrl = "https://script.google.com/macros/s/AKfycbyeS3c_rEnKW5H11PDJFCGQMVJMg52wtQsd3FA7OoQJmwHj1lN3SDIIVpaXLjTdfDJH/exec";
+                fetch(googleWebAppUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookingData)
+                })
+                .then(() => console.log("✅ Dados enviados para a planilha e e-mail disparado com sucesso!"))
+                .catch(err => console.error("❌ Erro na integração com Google Sheets:", err));
+
+                // 2. Generate Simulated Email Template inside client UI
+                const emailHtml = generateEmailTemplate(
+                    clientName,
+                    clientEmail,
+                    clientPhone,
+                    selectedService,
+                    selectedDate,
+                    selectedTime,
+                    clientNotes
+                );
+
+                if (emailPreviewContent) {
+                    emailPreviewContent.innerHTML = emailHtml;
+                }
+
+                // Go to step 4
+                goToStep(4);
+            });
+        }
+
+        // Finish Booking Button Click
+        const finishBookingBtn = document.getElementById('finish-booking-btn');
+        if (finishBookingBtn) {
+            finishBookingBtn.addEventListener('click', () => {
+                bookingModal.classList.remove('active');
+            });
+        }
+
+        // Helper to reset form state
+        function resetBookingWizard() {
+            currentStep = 1;
+            selectedService = '';
+            selectedDate = '';
+            selectedTime = '';
+            isDoctorConfirmed = false;
+            
+            // Reset track position
+            wizardTrack.style.transform = 'translateX(0%)';
+            
+            // Reset selections
+            optionCards.forEach(c => c.classList.remove('selected'));
+            timeSlots.forEach(s => s.classList.remove('selected'));
+            if (bookingDateInput) bookingDateInput.value = '';
+            toStep3Btn.setAttribute('disabled', 'true');
+            doctorConfirmBox.classList.remove('active');
+            if (finalForm) finalForm.reset();
+
+            // Reset dots
+            goToStep(1);
+        }
+
+        // Helper: Format Date from YYYY-MM-DD to DD/MM/YYYY
+        function formatDateString(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Email Preview Template Builder
+        function generateEmailTemplate(name, email, phone, service, date, time, notes) {
+            const isHarmonizacao = service.toLowerCase().includes("harmoniza") || service.toLowerCase().includes("rinomodela") || service.toLowerCase().includes("jawline") || service.toLowerCase().includes("labial");
+            
+            const warningNote = isHarmonizacao ? `
+                <div style="margin-top: 15px; padding: 12px; background-color: rgba(212,175,55,0.05); border-left: 3px solid #d4af37; border-radius: 6px;">
+                    <p style="margin: 0; font-size: 13px; color: #d4af37; font-weight: 600;">Procedimento de Médico Externo Parceiro</p>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #a1a1aa; line-height: 1.4;">Este procedimento é realizado em nosso espaço por um cirurgião parceiro credenciado externo. A reserva de data e hora está sujeita à agenda final do especialista.</p>
+                </div>
+            ` : '';
+
+            const notesSection = notes ? `
+                <tr style="border-top: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 8px 0; color: #a1a1aa; vertical-align: top;">Observações:</td>
+                    <td style="padding: 8px 0; color: #ffffff; font-style: italic;">"${notes}"</td>
+                </tr>
+            ` : '';
+
+            return `
+                <div style="background-color: #09090b; color: #ffffff; font-family: 'Satoshi', 'Segoe UI', sans-serif; padding: 25px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.15); max-width: 100%; box-sizing: border-box;">
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
+                        <h2 style="color: #d4af37; margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Clínica Elevation</h2>
+                        <p style="color: #a1a1aa; margin: 5px 0 0 0; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;">Confirmação de Pré-Agendamento</p>
+                    </div>
+                    
+                    <p style="font-size: 14px; line-height: 1.5; color: #e4e4e7; margin-bottom: 10px;">Olá, <strong style="color: #ffffff;">${name}</strong>,</p>
+                    <p style="font-size: 13px; line-height: 1.5; color: #a1a1aa; margin-bottom: 20px;">Seu pré-agendamento no site foi recebido com sucesso! Nossa equipe entrará em contato via WhatsApp para confirmar definitivamente.</p>
+                    
+                    <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <h4 style="margin: 0 0 10px 0; color: #d4af37; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Detalhes da Solicitação</h4>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #e4e4e7;">
+                            <tr>
+                                <td style="padding: 6px 0; color: #a1a1aa; width: 35%;">Serviço:</td>
+                                <td style="padding: 6px 0; font-weight: 600; color: #ffffff;">${service}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 0; color: #a1a1aa;">Data:</td>
+                                <td style="padding: 6px 0; font-weight: 600; color: #ffffff;">${formatDateString(date)}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 0; color: #a1a1aa;">Horário:</td>
+                                <td style="padding: 6px 0; font-weight: 600; color: #ffffff;">${time}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 6px 0; color: #a1a1aa;">Localização:</td>
+                                <td style="padding: 6px 0; color: #ffffff;">Rua Aldeia dos Machalis, 126a - São Paulo/SP</td>
+                            </tr>
+                            ${notesSection}
+                        </table>
+                    </div>
+
+                    ${warningNote}
+
+                    <div style="background: rgba(212,175,55,0.03); border: 1px solid rgba(212,175,55,0.08); padding: 12px; border-radius: 8px; margin: 15px 0; font-size: 12px; color: #a1a1aa; line-height: 1.4;">
+                        <h5 style="margin: 0 0 4px 0; color: #ffffff; font-size: 12px; font-weight: 600;">Planilha Google Sheets Integrada</h5>
+                        Uma nova linha foi pré-registrada na planilha operacional da clínica para o telefone <strong>${phone}</strong>.
+                    </div>
+
+                    <div style="text-align: center; margin-top: 25px;">
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Realizei%20um%20pr%C3%A9-agendamento%20de%20${encodeURIComponent(service)}%20pelo%20site%20para%20o%20dia%20${encodeURIComponent(formatDateString(date))}%20%C3%A0s%20${encodeURIComponent(time)}.%20Gostaria%20de%20confirmar!" style="background-color: #d4af37; color: #09090b; padding: 10px 22px; text-decoration: none; border-radius: 50px; font-weight: 600; display: inline-block; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;">Confirmar no WhatsApp</a>
+                    </div>
+                </div>
+            `;
+        }
     </script>
+
+    <!-- Booking Modal -->
+    <div class="booking-modal-overlay" id="booking-modal">
+        <div class="booking-modal-content">
+            <button class="booking-modal-close" id="close-booking-modal">&times;</button>
+            
+            <div class="booking-header">
+                <h2>Agendamento VIP</h2>
+                <div class="booking-steps-indicator">
+                    <span class="step-dot active" data-step="1">1</span>
+                    <span class="step-line"></span>
+                    <span class="step-dot" data-step="2">2</span>
+                    <span class="step-line"></span>
+                    <span class="step-dot" data-step="3">3</span>
+                </div>
+                <p class="booking-step-title">Selecione o serviço desejado</p>
+            </div>
+
+            <div class="booking-wizard-wrapper">
+                <div class="booking-wizard-track" id="wizard-track">
+                    <!-- Step 1: Services -->
+                    <div class="booking-step-pane" data-step="1">
+                        <div class="services-wizard-grid">
+                            <div class="service-category-group">
+                                <h4>Serviços Essenciais</h4>
+                                <div class="wizard-options-list">
+                                    <div class="wizard-option-card" data-value="Corte & Estilo">Corte & Estilo</div>
+                                    <div class="wizard-option-card" data-value="Spa de Mãos & Pés">Spa de Mãos & Pés</div>
+                                    <div class="wizard-option-card" data-value="Arquitetura do Olhar">Arquitetura do Olhar</div>
+                                    <div class="wizard-option-card" data-value="Alongamento Elegance">Alongamento Elegance</div>
+                                </div>
+                            </div>
+                            <div class="service-category-group">
+                                <h4>Estética Avançada & Facial</h4>
+                                <div class="wizard-options-list">
+                                    <div class="wizard-option-card" data-value="Criolipólise">Criolipólise</div>
+                                    <div class="wizard-option-card" data-value="Tratamento Facial">Tratamento Facial</div>
+                                    <div class="wizard-option-card" data-value="Massagem Relaxante">Massagem Relaxante</div>
+                                    <div class="wizard-option-card" data-value="Bumbum na Nuca">Bumbum na Nuca</div>
+                                    <div class="wizard-option-card" data-value="Drenagem Linfática">Drenagem Linfática</div>
+                                    <div class="wizard-option-card" data-value="Depilação a Laser">Depilação a Laser</div>
+                                    <div class="wizard-option-card" data-value="Ritual de Ofurô">Ritual de Ofurô</div>
+                                    <div class="wizard-option-card" data-value="Maquiagem Social">Maquiagem Social</div>
+                                </div>
+                            </div>
+                            <div class="service-category-group">
+                                <h4>Harmonização Facial (Médico Externo)</h4>
+                                <div class="wizard-options-list">
+                                    <div class="wizard-option-card harmonizacao-service" data-value="Harmonização Facial - Rinomodelação">Rinomodelação</div>
+                                    <div class="wizard-option-card harmonizacao-service" data-value="Harmonização Facial - Mandíbula / Jawline">Definição Maxilar (Jawline)</div>
+                                    <div class="wizard-option-card harmonizacao-service" data-value="Harmonização Facial - Preenchimento Labial">Lábios (Preenchimento)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor Confirmation Box -->
+                        <div class="doctor-confirm-box" id="doctor-confirm">
+                            <i class="ph ph-warning-circle"></i>
+                            <div class="doctor-confirm-text">
+                                <strong>Atenção: Procedimento Médico Especializado</strong>
+                                <p>Os tratamentos de Harmonização Facial são realizados em nosso espaço por um cirurgião parceiro credenciado externo. A reserva está sujeita à agenda específica do especialista.</p>
+                            </div>
+                            <button type="button" class="btn-confirm-doctor" id="confirm-doctor-btn">Confirmar e Prosseguir</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Date & Time -->
+                    <div class="booking-step-pane" data-step="2">
+                        <div class="datetime-wizard-container">
+                            <div class="date-picker-section">
+                                <label for="booking-date"><i class="ph ph-calendar-blank"></i> Selecione a Data:</label>
+                                <input type="date" id="booking-date" class="wizard-date-input">
+                            </div>
+                            <div class="time-picker-section">
+                                <label><i class="ph ph-clock"></i> Selecione o Horário:</label>
+                                <div class="time-slots-grid" id="time-slots">
+                                    <div class="time-slot" data-time="09:00">09:00</div>
+                                    <div class="time-slot" data-time="10:30">10:30</div>
+                                    <div class="time-slot" data-time="12:00">12:00</div>
+                                    <div class="time-slot" data-time="13:30">13:30</div>
+                                    <div class="time-slot" data-time="15:00">15:00</div>
+                                    <div class="time-slot" data-time="16:30">16:30</div>
+                                    <div class="time-slot" data-time="18:00">18:00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wizard-nav-buttons">
+                            <button class="btn-wizard-nav prev-step" data-target="1"><i class="ph ph-caret-left"></i> Voltar</button>
+                            <button class="btn-wizard-nav next-step" data-target="3" id="to-step-3" disabled>Avançar <i class="ph ph-caret-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Contact Details -->
+                    <div class="booking-step-pane" data-step="3">
+                        <form id="booking-final-form" class="wizard-form">
+                            <div class="wizard-form-group">
+                                <label for="client-name">Nome Completo</label>
+                                <input type="text" id="client-name" required placeholder="Digite seu nome completo">
+                            </div>
+                            <div class="wizard-form-group">
+                                <label for="client-email">E-mail para Confirmação</label>
+                                <input type="email" id="client-email" required placeholder="Ex: seuemail@exemplo.com">
+                            </div>
+                            <div class="wizard-form-group">
+                                <label for="client-phone">Telefone / WhatsApp</label>
+                                <input type="tel" id="client-phone" required placeholder="Ex: (11) 98027-2343">
+                            </div>
+                            <div class="wizard-form-group">
+                                <label for="client-notes">Observações Especiais (Opcional)</label>
+                                <textarea id="client-notes" rows="2" placeholder="Alguma recomendação ou detalhe importante?"></textarea>
+                            </div>
+                            <div class="wizard-nav-buttons">
+                                <button type="button" class="btn-wizard-nav prev-step" data-target="2"><i class="ph ph-caret-left"></i> Voltar</button>
+                                <button type="submit" class="btn-wizard-nav submit-booking">Finalizar Agendamento <i class="ph ph-check"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 4: Success & Simulated Email -->
+                    <div class="booking-step-pane" data-step="4">
+                        <div class="success-screen">
+                            <div class="success-icon">
+                                <i class="ph ph-check-circle"></i>
+                            </div>
+                            <h3>Solicitação Enviada!</h3>
+                            <p>Seus dados foram processados para salvamento em planilha (Google Sheets) e envio de e-mail.</p>
+                            
+                            <div class="simulated-email-container">
+                                <div class="email-client-header">
+                                    <div class="email-dots">
+                                        <span class="dot-red"></span>
+                                        <span class="dot-yellow"></span>
+                                        <span class="dot-green"></span>
+                                    </div>
+                                    <span class="email-client-title">Email de Teste Enviado para o Cliente</span>
+                                </div>
+                                <div class="email-client-body" id="email-preview-content">
+                                    <!-- Conteúdo dinâmico do e-mail -->
+                                </div>
+                            </div>
+
+                            <button class="btn-wizard-nav close-modal-btn" id="finish-booking-btn">Fechar Painel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2025/09/06/16/20250906163757-P63KJWE6.js" defer></script>
+  
 </body>
+
 </html>
