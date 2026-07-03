@@ -813,6 +813,43 @@
                 gap: 1.5rem;
             }
         }
+        .date-slider {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .date-slider::-webkit-scrollbar {
+            display: none;
+        }
+        .date-card {
+            flex: 0 0 calc(25% - 10px);
+            min-width: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            scroll-snap-align: start;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .date-card .day-name { font-size: 0.8rem; color: #a1a1aa; text-transform: uppercase; }
+        .date-card .day-number { font-size: 1.5rem; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700; color: #fff; }
+        .date-card .month-name { font-size: 0.75rem; color: #a1a1aa; }
+        .date-card:hover { transform: translateY(-5px); border-color: rgba(212, 175, 55, 0.3); }
+        .date-card.selected {
+            background: var(--gold);
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        .date-card.selected span { color: #09090b !important; font-weight: 700; }
     </style>
 </head>
 
@@ -975,9 +1012,12 @@
                     </div>
                     
                     <div class="form-row split">
-                        <div class="form-group">
-                            <label for="booking-date"><i class="ph ph-calendar-blank"></i> Data Desejada</label>
-                            <input type="date" id="booking-date" required>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label><i class="ph ph-calendar-blank"></i> Escolha a Data</label>
+                            <div class="date-slider" id="date-slider">
+                                <!-- Os dias serão gerados aqui via JavaScript -->
+                            </div>
+                            <input type="hidden" id="booking-date" required>
                         </div>
                         
                         <div class="form-group">
@@ -1151,51 +1191,76 @@
                 return { available: true };
             }
 
-            if (dateInput) {
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                dateInput.min = `${yyyy}-${mm}-${dd}`;
+            function generateDateSlider() {
+                const slider = document.getElementById('date-slider');
+                const hiddenInput = document.getElementById('booking-date');
+                if (!slider || !hiddenInput) return;
+                
+                slider.innerHTML = '';
+                let daysAdded = 0;
+                let i = 0;
+                
+                while(daysAdded < 14) {
+                    let d = new Date();
+                    d.setDate(d.getDate() + i);
+                    i++;
+                    
+                    if(d.getDay() === 0) continue;
 
-                dateInput.addEventListener('change', () => {
-                    const selectedDate = new Date(dateInput.value + 'T00:00:00');
-                    const dayOfWeek = selectedDate.getDay(); 
+                    const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                    
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    const firebaseDate = `${yyyy}-${mm}-${dd}`;
 
-                    statusMessage.style.display = 'none';
-                    statusMessage.className = 'booking-status-info';
-                    timeSelect.innerHTML = '';
-                    timeSelect.disabled = true;
+                    const card = document.createElement('div');
+                    card.className = 'date-card';
+                    card.dataset.date = firebaseDate;
+                    card.innerHTML = `
+                        <span class="day-name">${diasSemana[d.getDay()]}</span>
+                        <span class="day-number">${d.getDate()}</span>
+                        <span class="month-name">${meses[d.getMonth()]}</span>
+                    `;
 
-                    if (dayOfWeek === 0) {
-                        statusMessage.style.display = 'flex';
-                        statusMessage.className = 'booking-status-info error';
-                        statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> A clínica não funciona aos domingos. Por favor, escolha outro dia.';
-                        dateInput.value = '';
-                        return;
-                    }
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        hiddenInput.value = this.dataset.date;
+                        
+                        const selectedDate = new Date(this.dataset.date + 'T00:00:00');
+                        const dayOfWeek = selectedDate.getDay();
+                        
+                        statusMessage.style.display = 'none';
+                        statusMessage.className = 'booking-status-info';
+                        
+                        timeSelect.disabled = false;
+                        timeSelect.innerHTML = '<option value="" disabled selected>Selecione um horário...</option>';
 
-                    timeSelect.disabled = false;
-                    timeSelect.innerHTML = '<option value="" disabled selected>Selecione um horário...</option>';
+                        let slots = [];
+                        if (dayOfWeek === 1) {
+                            slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"];
+                        } else {
+                            slots = [
+                                "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+                                "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
+                            ];
+                        }
 
-                    let slots = [];
-                    if (dayOfWeek === 1) {
-                        slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"];
-                    } else {
-                        slots = [
-                            "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
-                            "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
-                        ];
-                    }
-
-                    slots.forEach(slot => {
-                        const opt = document.createElement('option');
-                        opt.value = slot;
-                        opt.textContent = slot;
-                        timeSelect.appendChild(opt);
+                        slots.forEach(slot => {
+                            const opt = document.createElement('option');
+                            opt.value = slot;
+                            opt.textContent = slot;
+                            timeSelect.appendChild(opt);
+                        });
                     });
-                });
+
+                    slider.appendChild(card);
+                    daysAdded++;
+                }
             }
+            generateDateSlider();
 
             window.handleBookingSubmit = function(event) {
                 event.preventDefault();
@@ -1240,6 +1305,8 @@
                     statusMessage.innerHTML = '<i class="ph ph-check-circle"></i> Seu agendamento foi recebido com sucesso! A clínica entrará em contato em breve.';
                     
                     document.getElementById('pre-booking-form').reset();
+                    document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
+                    if(document.getElementById('booking-date')) document.getElementById('booking-date').value = '';
                     timeSelect.disabled = true;
                     timeSelect.innerHTML = '<option value="" disabled selected>Selecione a data primeiro...</option>';
 

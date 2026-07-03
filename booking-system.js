@@ -1,24 +1,4 @@
-/*
- * ===================================================
- *  Booking System — Firebase Cloud Sync
- *  Clínica Elevation
- * ===================================================
- *
- *  INSTRUÇÕES DE CONFIGURAÇÃO:
- *
- *  1. Acesse https://console.firebase.google.com
- *  2. Clique em "Adicionar projeto" e crie um novo projeto
- *  3. No menu lateral, vá em "Build" → "Realtime Database"
- *  4. Clique em "Criar banco de dados"
- *  5. Escolha a região e selecione "Iniciar no modo de teste"
- *  6. Volte para a página inicial do projeto
- *  7. Clique no ícone "</>" (Web) para registrar um app web
- *  8. Dê um nome (ex: "Clinica Elevation") e clique em "Registrar"
- *  9. Copie o objeto firebaseConfig que aparece
- * 10. Cole os valores abaixo substituindo os "SEU_..." 
- *
- * ===================================================
- */
+
 
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyBorH5wyzvgokCQph6mWBnRMSWsoGQ_kao",
