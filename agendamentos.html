@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Agendamentos | Clínica Elevation</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Font Stack -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #09090b;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.15);
+            --text-high: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-high);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .dashboard-header h1 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .dashboard-header p {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass-border);
+            color: var(--text-high);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s var(--ease);
+            border: 1px solid transparent;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--glass-border);
+        }
+
+        .appointments-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .appointment-card {
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            align-items: center;
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.05);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-high);
+        }
+
+        .info-value.accent {
+            color: var(--accent);
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.25rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px dashed var(--glass-border);
+            border-radius: 16px;
+        }
+
+        .btn-delete {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s var(--ease);
+            font-family: 'Satoshi', sans-serif;
+            font-size: 0.9rem;
+            justify-content: center;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 59, 48, 0.2);
+            border-color: rgba(255, 59, 48, 0.4);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            .appointment-card {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1>Painel de Agendamentos</h1>
+                <p>Gerenciamento de horários e clientes da Clínica Elevation.</p>
+            </div>
+            <a href="index.html" class="btn-back">
+                <i class="ph ph-arrow-left"></i> Voltar ao Site
+            </a>
+        </div>
+
+        <div id="appointments-container" class="appointments-grid">
+            <!-- Loading or empty state -->
+        </div>
+    </div>
+
+    <script>
+        function formatDateBR(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        function loadAppointments() {
+            const container = document.getElementById('appointments-container');
+            const appointments = JSON.parse(localStorage.getItem('confirmed_appointments') || '[]');
+
+            if (appointments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ph ph-calendar-blank"></i>
+                        <h3>Nenhum agendamento encontrado</h3>
+                        <p>Os agendamentos confirmados aparecerão aqui.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort appointments by date and time
+            appointments.sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time}:00`);
+                const dateB = new Date(`${b.date}T${b.time}:00`);
+                return dateA - dateB;
+            });
+
+            container.innerHTML = '';
+
+            appointments.forEach((app, index) => {
+                const card = document.createElement('div');
+                card.className = 'appointment-card';
+
+                card.innerHTML = `
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-calendar"></i> Data e Hora</span>
+                        <span class="info-value">${formatDateBR(app.date)} às ${app.time}</span>
+                    </div>
+                    
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-user"></i> Cliente</span>
+                        <span class="info-value">${app.name}</span>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-whatsapp-logo"></i> WhatsApp</span>
+                        <span class="info-value">${app.whatsapp}</span>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-sparkle"></i> Procedimento</span>
+                        <span class="info-value accent">${app.procedure}</span>
+                    </div>
+
+                    <button class="btn-delete" onclick="deleteAppointment(${index})" title="Remover agendamento (Já contatado)">
+                        <i class="ph ph-trash"></i> Remover
+                    </button>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function deleteAppointment(index) {
+            if(confirm("Tem certeza que deseja remover este agendamento? (Ex: Já entrou em contato com o cliente)")) {
+                let appointments = JSON.parse(localStorage.getItem('confirmed_appointments') || '[]');
+                // Sort exactly as in loadAppointments to match the index
+                appointments.sort((a, b) => {
+                    const dateA = new Date(`${a.date}T${a.time}:00`);
+                    const dateB = new Date(`${b.date}T${b.time}:00`);
+                    return dateA - dateB;
+                });
+                appointments.splice(index, 1);
+                localStorage.setItem('confirmed_appointments', JSON.stringify(appointments));
+                loadAppointments();
+            }
+        }
+
+        // Add some default data if empty to showcase the layout
+        const defaultConfirmed = [
+            {
+                name: "Maria Silva",
+                whatsapp: "(11) 99999-8888",
+                procedure: "Corte & Estilo",
+                date: "2026-07-15",
+                time: "10:00"
+            },
+            {
+                name: "Ana Oliveira",
+                whatsapp: "(11) 98888-7777",
+                procedure: "Preenchimento Labial",
+                date: "2026-07-15",
+                time: "14:00"
+            }
+        ];
+        if (!localStorage.getItem('confirmed_appointments')) {
+            localStorage.setItem('confirmed_appointments', JSON.stringify(defaultConfirmed));
+        }
+
+        // Initialize dashboard
+        loadAppointments();
+    </script>
+</body>
+
+</html>
