@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Agendamentos | Clínica Elevation</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Font Stack -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <!-- Booking System (Firebase Sync) -->
+    <script src="booking-system.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #09090b;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.15);
+            --text-high: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-high);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .dashboard-header h1 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .dashboard-header p {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .sync-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.35rem 0.9rem;
+            border-radius: 99px;
+            margin-top: 0.75rem;
+        }
+
+        .sync-badge.cloud {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            color: #22c55e;
+        }
+
+        .sync-badge.local {
+            background: rgba(250, 204, 21, 0.1);
+            border: 1px solid rgba(250, 204, 21, 0.25);
+            color: #facc15;
+        }
+
+        .sync-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        .sync-badge.cloud .dot { background: #22c55e; }
+        .sync-badge.local .dot { background: #facc15; }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass-border);
+            color: var(--text-high);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s var(--ease);
+            border: 1px solid transparent;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--glass-border);
+        }
+
+        .appointments-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .appointment-card {
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            align-items: center;
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+            animation: card-in 0.4s var(--ease) backwards;
+        }
+
+        @keyframes card-in {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.05);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-high);
+        }
+
+        .info-value.accent {
+            color: var(--accent);
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.25rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px dashed var(--glass-border);
+            border-radius: 16px;
+        }
+
+        .btn-delete {
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s var(--ease);
+            font-family: 'Satoshi', sans-serif;
+            font-size: 0.9rem;
+            justify-content: center;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 59, 48, 0.2);
+            border-color: rgba(255, 59, 48, 0.4);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-state p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            .appointment-card {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1>Painel de Agendamentos</h1>
+                <p>Gerenciamento de horários e clientes da Clínica Elevation.</p>
+                <div id="sync-status"></div>
+            </div>
+            <a href="index.html" class="btn-back">
+                <i class="ph ph-arrow-left"></i> Voltar ao Site
+            </a>
+        </div>
+
+        <div id="appointments-container" class="appointments-grid">
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Carregando agendamentos...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show sync status badge
+        function updateSyncBadge() {
+            const el = document.getElementById('sync-status');
+            if (window._firebaseReady) {
+                el.innerHTML = '<span class="sync-badge cloud"><span class="dot"></span> Sincronizado na nuvem — atualiza em tempo real</span>';
+            } else {
+                el.innerHTML = '<span class="sync-badge local"><span class="dot"></span> Modo local — dados apenas neste dispositivo</span>';
+            }
+        }
+
+        function formatDateBR(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        function renderAppointments(appointments) {
+            const container = document.getElementById('appointments-container');
+
+            if (!appointments || appointments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ph ph-calendar-blank"></i>
+                        <h3>Nenhum agendamento encontrado</h3>
+                        <p>Os agendamentos confirmados aparecerão aqui automaticamente.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date and time
+            const sorted = [...appointments].sort((a, b) => {
+                const dateA = new Date(`${a.date}T${a.time}:00`);
+                const dateB = new Date(`${b.date}T${b.time}:00`);
+                return dateA - dateB;
+            });
+
+            container.innerHTML = '';
+
+            sorted.forEach((app, index) => {
+                const card = document.createElement('div');
+                card.className = 'appointment-card';
+                card.style.animationDelay = `${index * 0.06}s`;
+
+                // Use Firebase key if available, otherwise use index
+                const deleteIdentifier = app._key
+                    ? `'${app._key}'`
+                    : index;
+
+                card.innerHTML = `
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-calendar"></i> Data e Hora</span>
+                        <span class="info-value">${formatDateBR(app.date)} às ${app.time}</span>
+                    </div>
+                    
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-user"></i> Cliente</span>
+                        <span class="info-value">${app.name}</span>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-whatsapp-logo"></i> WhatsApp</span>
+                        <span class="info-value">${app.whatsapp}</span>
+                    </div>
+
+                    <div class="info-group">
+                        <span class="info-label"><i class="ph ph-sparkle"></i> Procedimento</span>
+                        <span class="info-value accent">${app.procedure}</span>
+                    </div>
+
+                    <button class="btn-delete" onclick="handleDelete(${deleteIdentifier})" title="Remover agendamento">
+                        <i class="ph ph-trash"></i> Remover
+                    </button>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function handleDelete(keyOrIndex) {
+            if (confirm("Tem certeza que deseja remover este agendamento?")) {
+                window.removeAppointment(keyOrIndex);
+            }
+        }
+
+        // Listen for real-time appointment updates (from Firebase or localStorage)
+        window.addEventListener('appointments-updated', (e) => {
+            renderAppointments(e.detail);
+            updateSyncBadge();
+        });
+
+        // Initial sync badge update (after a short delay for Firebase init)
+        setTimeout(updateSyncBadge, 500);
+    </script>
+</body>
+
+</html>

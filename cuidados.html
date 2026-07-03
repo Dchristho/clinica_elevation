@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuidados Especiais - Clínica Elevation</title>
+    <!-- Phosphor Icons for Form -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <!-- Booking System (Firebase Sync) -->
+    <script src="booking-system.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #b5942f;
+            --beige-light: #FDFBF7;
+            --beige-accent: #f5ece0;
+            --dark-text: #2c2c2c;
+            --muted-text: #666;
+            --white: #ffffff;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--beige-light);
+            color: var(--dark-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Botão Home/Voltar Premium */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(253, 251, 247, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            background: var(--white);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Glare Logo Style for Header */
+        .glare-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .glare-image {
+            height: 45px;
+            transition: var(--transition);
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .glare {
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 300%;
+            height: 300%;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(212, 175, 55, 0.5) 52%, rgba(255, 255, 255, 0.2) 55%, transparent 70%);
+            transform: rotate(30deg);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .glare-container:hover .glare {
+            top: -70%;
+            left: -70%;
+            opacity: 1;
+        }
+
+        .glare-container:hover .glare-image {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .back-link:hover {
+            background: var(--gold);
+            color: var(--white);
+            transform: translateX(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Hero clean beige - Resolvendo problema do fundo preto */
+        .hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--beige-accent), var(--beige-light));
+            padding: 20px;
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .hero-logo-box {
+            background: var(--white);
+            padding: 30px 50px;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero-logo-box:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 70px rgba(212, 175, 55, 0.25);
+            border-color: var(--gold);
+        }
+
+        .hero-logo {
+            max-height: 180px;
+            width: auto;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.05));
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            background: linear-gradient(to right, #d4af37, #b5942f, #d4af37);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            position: relative;
+            font-weight: 700;
+        }
+
+        .hero h1::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--gold);
+            margin: 20px auto 0;
+        }
+
+        /* Section Intro */
+        .intro-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .intro-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .intro-section p {
+            font-size: 1.2rem;
+            color: var(--muted-text);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* Feature Layout */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 0 20px 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-img {
+            position: relative;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: var(--transition);
+        }
+
+        .feature-img.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feature-img img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: 20px 20px 0 var(--beige-accent);
+        }
+
+        .feature-content {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: var(--transition);
+        }
+
+        .feature-content.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feature-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--dark-text);
+        }
+
+        .benefits-list {
+            list-style: none;
+        }
+
+        .benefits-list li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            font-size: 1.1rem;
+            color: var(--muted-text);
+        }
+
+        .benefits-list i {
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin-top: 3px;
+        }
+
+        /* Service Cards Light */
+        .services-wrapper {
+            background: var(--white);
+            padding: 120px 20px;
+        }
+
+        .services-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .services-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .service-card {
+            background: var(--beige-light);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05);
+            border-color: var(--gold);
+        }
+
+        .card-image {
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .service-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-body {
+            padding: 40px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        .card-body p {
+            color: var(--muted-text);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .btn-schedule {
+            margin-top: auto;
+            display: block;
+            padding: 16px 30px;
+            background: var(--white);
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .btn-schedule:hover {
+            background: var(--gold);
+            color: var(--white);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Gallery/Carousel Styles for specific cards */
+        .gallery-viewport {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .gallery-track {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+        }
+
+        .gallery-track img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+
+        .service-info {
+            padding: 40px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-info h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+
+        .service-info p {
+            color: var(--muted-text);
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        /* CTA Section Light */
+        .cta-section {
+            padding: 150px 20px;
+            text-align: center;
+            background: var(--beige-accent);
+        }
+
+        .cta-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 40px;
+        }
+
+        .btn-main-cta {
+            display: inline-block;
+            padding: 20px 50px;
+            background: var(--gold);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 100px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: var(--transition);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-main-cta:hover {
+            background: var(--gold-dark);
+            transform: scale(1.05);
+            box-shadow: 0 20px 45px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Footer Light/Gold Unificado */
+        footer {
+            background: #111;
+            color: var(--white);
+            padding: 100px 20px 40px;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 60px;
+        }
+
+        .footer-col h4 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .footer-list {
+            list-style: none;
+        }
+
+        .footer-list li {
+            margin-bottom: 18px;
+        }
+
+        .footer-list a,
+        .contact-info li {
+            color: #bbb;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .footer-list a:hover {
+            color: var(--white);
+            transform: translateX(8px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background: var(--gold);
+            color: #000;
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 968px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-img img {
+                box-shadow: 15px 15px 0 var(--beige-accent);
+            }
+
+            .hero {
+                height: 50vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-header {
+                padding: 15px 20px;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                text-align: center;
+            }
+
+            .footer-col h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-list a,
+            .contact-info li {
+                justify-content: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        /* --- Internal Booking Section --- */
+        .booking-section {
+            padding: 6rem 5vw 8rem;
+            background: #111;
+            position: relative;
+        }
+
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+
+        .booking-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.03);
+            padding: 3rem 4rem;
+            color: #ffffff;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .booking-header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.4rem 1.25rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 99px;
+            background: rgba(212, 175, 55, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-header h2 {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+            font-family: 'Playfair Display', serif;
+            color: #ffffff;
+        }
+
+        .booking-header p {
+            color: #a1a1aa;
+            font-size: 1.05rem;
+            max-width: 60ch;
+            margin: 0 auto;
+        }
+
+        .booking-form-wrapper {
+            margin-top: 2rem;
+        }
+
+        .form-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #a1a1aa;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .form-group select option {
+            background: #121214;
+            color: #ffffff;
+        }
+
+        .form-group select optgroup {
+            background: #121214;
+            color: #d4af37;
+            font-weight: 600;
+            font-style: normal;
+            margin-top: 0.5rem;
+        }
+
+        .booking-status-info {
+            padding: 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .booking-status-info.success {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #e5c158;
+        }
+
+        .booking-status-info.error {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .btn-submit-form {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: #ffffff;
+            color: #09090b;
+            text-decoration: none;
+            border: none;
+            border-radius: 99px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-submit-form:hover {
+            transform: translateY(-2px);
+            background: #d4af37;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .booking-section {
+                padding: 4rem 3vw 5rem;
+            }
+
+            .booking-container {
+                border-radius: 20px;
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row.split {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        .date-slider {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .date-slider::-webkit-scrollbar {
+            display: none;
+        }
+        .date-card {
+            flex: 0 0 calc(25% - 10px);
+            min-width: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            scroll-snap-align: start;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .date-card .day-name { font-size: 0.8rem; color: #a1a1aa; text-transform: uppercase; }
+        .date-card .day-number { font-size: 1.5rem; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700; color: #fff; }
+        .date-card .month-name { font-size: 0.75rem; color: #a1a1aa; }
+        .date-card:hover { transform: translateY(-5px); border-color: rgba(212, 175, 55, 0.3); }
+        .date-card.selected {
+            background: var(--gold);
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        .date-card.selected span { color: #09090b !important; font-weight: 700; }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-header">
+        <div class="logo">
+            <div class="glare-container" onclick="window.location.href='index.html'">
+                <img src="logonovosalao.png" alt="Elevation Logo" class="glare-image">
+                <div class="glare"></div>
+            </div>
+        </div>
+        <a href="beleza.html" class="back-link">
+            <i class="fas fa-chevron-left"></i> Menu
+        </a>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-logo-box">
+            <img src="logonovosalao.png" alt="Elevation Logo" class="hero-logo">
+        </div>
+        <h1>Cuidados Especiais</h1>
+        <p>A arte do bem-estar e da revitalização</p>
+    </div>
+
+    <section class="intro-section">
+        <div class="reveal">
+            <h2>Tratamentos Exclusivos</h2>
+            <p>Nossos tratamentos especiais são cuidadosamente desenvolvidos para promover relaxamento, rejuvenescimento
+                e o equilíbrio perfeito entre corpo e mente.</p>
+        </div>
+    </section>
+
+    <section class="feature-grid">
+        <div class="feature-img reveal-left">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=800"
+                alt="Ambiente de Cuidado">
+        </div>
+        <div class="feature-content reveal-right">
+            <h3>Pura Revitalização</h3>
+            <ul class="benefits-list">
+                <li><i class="fas fa-check-circle"></i> Relaxamento profundo e alívio do estresse cotidiano.</li>
+                <li><i class="fas fa-check-circle"></i> Estímulo vital da circulação sanguínea e linfática.</li>
+                <li><i class="fas fa-check-circle"></i> Redução efetiva de tensões musculares.</li>
+                <li><i class="fas fa-check-circle"></i> Melhora visível na textura e saúde da pele.</li>
+                <li><i class="fas fa-check-circle"></i> Momentos de autocuidado em um ambiente exclusivo.</li>
+                <li><i class="fas fa-check-circle"></i> Uso de produtos de alta performance e origem natural.</li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="services-wrapper">
+        <div class="services-container">
+            <div class="services-header reveal">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold);">Nosso Menu
+                    Especial</h2>
+            </div>
+
+            <div class="service-grid">
+                <!-- 1. Criolipolise -->
+                <div class="service-card reveal">
+                    <div class="gallery-viewport">
+                        <div class="gallery-track">
+                            <img src="criolipolise-1.jpeg" alt="Criolipolise">
+                            <img src="antesedepoiscripo.jpg" alt="Antes e Depois">
+                        </div>
+                    </div>
+                    <div class="service-info">
+                        <h2>Criolipolise</h2>
+                        <p>Tecnologia avançada de congelamento para eliminação definitiva de gordura localizada com
+                            segurança e precisão.</p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20para%20o%20tratamento%20de%20Criolip%C3%B3lise%20na%20Cl%C3%ADnica%20Elevation%20e%20eliminar%20gordura%20localizada%20com%20tecnologia%20avan%C3%A7ada."
+                            class="btn-schedule" target="_blank">Agendar via WhatsApp</a>
+                    </div>
+                </div>
+
+                <!-- Facial -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="facialtrat.jpeg" alt="Tratamento Facial">
+                    </div>
+                    <div class="card-body">
+                        <h3>Tratamento Facial</h3>
+                        <p>Ciência estética para reduzir sinais de envelhecimento, devolvendo o viço e a juventude à sua
+                            pele.</p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20reservar%20uma%20experi%C3%AAncia%20de%20Tratamento%20Facial%20na%20Cl%C3%ADnica%20Elevation%20para%20revitalizar%20e%20rejuvenescer%20minha%20pele."
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+
+                <!-- Massagem -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="massagem-relaxante.jpg" alt="Massagem Relaxante">
+                    </div>
+                    <div class="card-body">
+                        <h3>Massagem Relaxante</h3>
+                        <p>Toque terapêutico para alívio imediato de tensões, promovendo uma profunda sensação de paz.
+                        </p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20de%20Massagem%20Relaxante%20na%20Cl%C3%ADnica%20Elevation%20para%20aliviar%20as%20tens%C3%B5es%20e%20vivenciar%20um%20momento%20de%20bem-estar."
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+
+                <!-- Glúteos -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="bubum na nuca.jpg" alt="Bumbum na Nuca">
+                    </div>
+                    <div class="card-body">
+                        <h3>Bumbum na Nuca</h3>
+                        <p>Protocolos focados em tonicidade e firmeza, melhorando o contorno corporal com eficácia.</p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20o%20protocolo%20Bumbum%20na%20Nuca%20na%20Cl%C3%ADnica%20Elevation%20para%20melhorar%20a%20tonicidade%20e%20o%20contorno%20corporal."
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+
+                <!-- Drenagem -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="drenagem.jpg" alt="Drenagem Linfática">
+                    </div>
+                    <div class="card-body">
+                        <h3>Drenagem Linfática</h3>
+                        <p>Eliminação de toxinas e redução de líquidos para um corpo leve e revigorado.</p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20de%20Drenagem%20Linf%C3%A1tica%20na%20Cl%C3%ADnica%20Elevation%20para%20desintoxica%C3%A7%C3%A3o%20e%20leveza%20corporal."
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+                <!-- Laser -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="img1-depilacao-laser-1024x1024.webp" alt="Depilação a Laser">
+                    </div>
+                    <div class="card-body">
+                        <h3>Depilação a Laser</h3>
+                        <p>Liberdade duradoura com a tecnologia laser mais segura e eficaz do mercado.</p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20sess%C3%A3o%20ou%20avalia%C3%A7%C3%A3o%20de%20Depila%C3%A7%C3%A3o%20a%20Laser%20na%20Cl%C3%ADnica%20Elevation%20para%20uma%20pele%20lisa%20e%20livre%20de%20pelos."
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+
+                <!-- Ofurô -->
+                <div class="service-card reveal">
+                    <div class="card-image">
+                        <img src="img2site.jpeg" alt="Ofurô">
+                    </div>
+                    <div class="card-body">
+                        <h3>Ritual de Ofurô</h3>
+                        <p>Imersão relaxante em águas aquecidas, um verdadeiro banho de harmonia e silêncio.</p>
+                        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20a%20experi%C3%AAncia%20exclusiva%20de%20Ritual%20de%20Ofur%C3%B4%20na%20Cl%C3%ADnica%20Elevation%20e%20desfrutar%20de%20um%20banho%20relaxante%20de%20harmonia."
+                            class="btn-schedule" target="_blank">Reservar Experiência</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="cta-section">
+        <h2 class="reveal">Pronta para viver esse momento?</h2>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;" class="reveal">
+            <a href="beleza.html" class="btn-main-cta" style="background: var(--dark-text); color: var(--gold);">Conheça
+                Harmonização Facial</a>
+            <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
+                class="btn-main-cta" target="_blank">Falar com nossa
+                Consultora</a>
+        </div>
+    </section>
+
+    <!-- Internal Booking Section -->
+    <section class="booking-section" id="agendamento">
+        <div class="booking-container">
+            <div class="booking-header">
+                <span class="booking-header-badge"><i class="ph ph-calendar-check"></i> Agenda Online</span>
+                <h2>Escolha seu Horário</h2>
+                <p>Selecione o procedimento desejado, a data e o horário de sua preferência. Em seguida, siga as instruções para concluir.</p>
+            </div>
+            
+            <div class="booking-form-wrapper">
+                <form id="pre-booking-form" onsubmit="window.handleBookingSubmit(event);">
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="booking-name"><i class="ph ph-user"></i> Nome Completo</label>
+                            <input type="text" id="booking-name" placeholder="Seu nome" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-whatsapp"><i class="ph ph-whatsapp-logo"></i> WhatsApp</label>
+                            <input type="tel" id="booking-whatsapp" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="booking-procedure"><i class="ph ph-sparkle"></i> Procedimento</label>
+                            <select id="booking-procedure" required>
+                                <option value="" disabled selected>Selecione um serviço...</option>
+                                <optgroup label="Serviços Essenciais">
+                                    <option value="Corte & Estilo">Corte & Estilo (45 min)</option>
+                                    <option value="Spa de Mãos & Pés">Spa de Mãos & Pés (60 min)</option>
+                                    <option value="Arquitetura do Olhar">Arquitetura do Olhar (30 min)</option>
+                                    <option value="Alongamento Elegance">Alongamento Elegance (90 min)</option>
+                                </optgroup>
+                                <optgroup label="Harmonização Facial">
+                                    <option value="Preenchimento Labial">Preenchimento Labial (45 min)</option>
+                                    <option value="Rinomodelação">Rinomodelação (45 min)</option>
+                                    <option value="Preenchimento de Mandíbula (Jawline)">Preenchimento de Mandíbula (Jawline) (60 min)</option>
+                                    <option value="Harmonização Facial Completa">Harmonização Facial Completa (90 min)</option>
+                                </optgroup>
+                                <optgroup label="Maquiagem Profissional">
+                                    <option value="Maquiagem Social Premium">Maquiagem Social Premium (45 min)</option>
+                                    <option value="Maquiagem Noiva Elevation">Maquiagem Noiva Elevation (90 min)</option>
+                                    <option value="Maquiagem para Eventos VIP">Maquiagem para Eventos VIP (60 min)</option>
+                                    <option value="Maquiagem Artística / Editorial">Maquiagem Artística / Editorial (120 min)</option>
+                                </optgroup>
+                                <optgroup label="Cuidados Especiais & Estética">
+                                    <option value="Criolipólise">Criolipólise (60 min)</option>
+                                    <option value="Tratamento Facial">Tratamento Facial (60 min)</option>
+                                    <option value="Massagem Relaxante">Massagem Relaxante (60 min)</option>
+                                    <option value="Bumbum na Nuca">Bumbum na Nuca (45 min)</option>
+                                    <option value="Drenagem Linfática">Drenagem Linfática (60 min)</option>
+                                    <option value="Depilação a Laser">Depilação a Laser (30 min)</option>
+                                    <option value="Ritual de Ofurô">Ritual de Ofurô (90 min)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row split">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label><i class="ph ph-calendar-blank"></i> Escolha a Data</label>
+                            <div class="date-slider" id="date-slider">
+                                <!-- Os dias serão gerados aqui via JavaScript -->
+                            </div>
+                            <input type="hidden" id="booking-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="booking-time"><i class="ph ph-clock"></i> Horário Disponível</label>
+                            <select id="booking-time" required disabled>
+                                <option value="" disabled selected>Selecione a data primeiro...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="booking-status-message" class="booking-status-info" style="display: none;">
+                        <!-- Status message goes here -->
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn-submit-form">
+                            Continuar Agendamento <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Clínica Elevation</h4>
+                <p>Onde a beleza e o bem-estar transcendem o comum através da exclusividade.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/clinica_elevation" class="social-link" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
+                        class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.tiktok.com/@salao_elevation" class="social-link" target="_blank"><i
+                            class="fab fa-tiktok"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Privilégios</h4>
+                <ul class="footer-list">
+                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Conhecer o Espaço</a></li>
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Menu de Serviços</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Protocolos Especiais</a></li>
+                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Nossa História</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Atendimento VIP</h4>
+                <ul class="footer-list">
+                    <li><i class="fas fa-phone-alt"></i> (11) 98027-2343</li>
+                    <li><a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank" style="color: inherit; text-decoration: none;"><i class="fas fa-map-marker-alt"></i> Rua Aldeia dos Machacalis, 126 A</a></li>
+                    <li><i class="fas fa-clock"></i> Seg: 09h às 14h | Ter - Sáb: 09h às 18h</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <p>Criado com sofisticação por <a href="https://sweet-jalebi-b98578.netlify.app/"
+                    style="color: var(--gold); text-decoration: none;" target="_blank">ChrisDev</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+
+            const handleReveal = () => {
+                reveals.forEach(el => {
+                    const top = el.getBoundingClientRect().top;
+                    if (top < window.innerHeight - 80) {
+                        el.classList.add('visible');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', handleReveal);
+            handleReveal();
+
+            // Carousel Gallery Logic
+            document.querySelectorAll('.service-card').forEach(card => {
+                const track = card.querySelector('.gallery-track');
+                if (!track) return;
+
+                const imgs = track.querySelectorAll('img');
+                let index = 0;
+                const total = imgs.length;
+
+                const updateSlide = () => {
+                    track.style.transform = `translateX(-${index * 100}%)`;
+                };
+
+                const nextSlide = () => {
+                    index = (index + 1) % total;
+                    updateSlide();
+                };
+
+                let interval = setInterval(nextSlide, 2800);
+
+                card.addEventListener('mouseenter', () => clearInterval(interval));
+                card.addEventListener('mouseleave', () => interval = setInterval(nextSlide, 2800));
+
+                let startX = 0;
+                card.addEventListener('touchstart', e => {
+                    startX = e.touches[0].clientX;
+                    clearInterval(interval);
+                }, { passive: true });
+
+                card.addEventListener('touchend', e => {
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+
+                    if (Math.abs(diff) > 40) {
+                        if (diff > 0) index = (index + 1) % total;
+                        else index = (index - 1 + total) % total;
+                        updateSlide();
+                    }
+                    interval = setInterval(nextSlide, 2800);
+                }, { passive: true });
+            });
+
+            // Date / Time Slot Logic for Internal Booking Form
+            const nameInput = document.getElementById('booking-name');
+            const whatsappInput = document.getElementById('booking-whatsapp');
+            const dateInput = document.getElementById('booking-date');
+            const timeSelect = document.getElementById('booking-time');
+            const procedureSelect = document.getElementById('booking-procedure');
+            const statusMessage = document.getElementById('booking-status-message');
+
+            // WhatsApp Mask
+            if (whatsappInput) {
+                whatsappInput.addEventListener('input', (e) => {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 11) {
+                        val = val.substring(0, 11);
+                    }
+                    if (val.length > 10) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2, 7)}-${val.substring(7)}`;
+                    } else if (val.length > 6) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2, 6)}-${val.substring(6)}`;
+                    } else if (val.length > 2) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2)}`;
+                    } else if (val.length > 0) {
+                        e.target.value = `(${val}`;
+                    } else {
+                        e.target.value = '';
+                    }
+                });
+            }
+
+            // Procedure Durations Map in Minutes
+            const durations = {
+                "Corte & Estilo": 45,
+                "Spa de Mãos & Pés": 60,
+                "Arquitetura do Olhar": 30,
+                "Alongamento Elegance": 90,
+                "Preenchimento Labial": 45,
+                "Rinomodelação": 45,
+                "Preenchimento de Mandíbula (Jawline)": 60,
+                "Harmonização Facial Completa": 90,
+                "Maquiagem Social Premium": 45,
+                "Maquiagem Noiva Elevation": 90,
+                "Maquiagem para Eventos VIP": 60,
+                "Maquiagem Artística / Editorial": 120,
+                "Criolipólise": 60,
+                "Tratamento Facial": 60,
+                "Massagem Relaxante": 60,
+                "Bumbum na Nuca": 45,
+                "Drenagem Linfática": 60,
+                "Depilação a Laser": 30,
+                "Ritual de Ofurô": 90
+            };
+
+            function timeToMinutes(timeStr) {
+                const [hrs, mins] = timeStr.split(':').map(Number);
+                return hrs * 60 + mins;
+            }
+
+            function minutesToTime(mins) {
+                const hrs = Math.floor(mins / 60);
+                const m = mins % 60;
+                return `${String(hrs).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            }
+
+            function checkAvailability(proposedDate, proposedTime, proposedProcedure) {
+                const duration = durations[proposedProcedure] || 60;
+                const startMins = timeToMinutes(proposedTime);
+                const endMins = startMins + duration;
+
+                const appointments = window.getAppointments();
+                const sameDayAppointments = appointments.filter(app => app.date === proposedDate);
+
+                for (const app of sameDayAppointments) {
+                    const appDuration = durations[app.procedure] || 60;
+                    const appStart = timeToMinutes(app.time);
+                    const appEnd = appStart + appDuration;
+
+                    const proposedEndsBeforeExistingStarts = (endMins + 20 <= appStart);
+                    const proposedStartsAfterExistingEnds = (startMins >= appEnd + 20);
+
+                    if (!proposedEndsBeforeExistingStarts && !proposedStartsAfterExistingEnds) {
+                        return {
+                            available: false,
+                            reason: `Conflito com o horário das ${app.time} às ${minutesToTime(appEnd)} (${app.procedure}). É necessário folga de 20 minutos.`
+                        };
+                    }
+                }
+                return { available: true };
+            }
+
+            function generateDateSlider() {
+                const slider = document.getElementById('date-slider');
+                const hiddenInput = document.getElementById('booking-date');
+                if (!slider || !hiddenInput) return;
+                
+                slider.innerHTML = '';
+                let daysAdded = 0;
+                let i = 0;
+                
+                while(daysAdded < 14) {
+                    let d = new Date();
+                    d.setDate(d.getDate() + i);
+                    i++;
+                    
+                    if(d.getDay() === 0) continue;
+
+                    const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                    
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    const firebaseDate = `${yyyy}-${mm}-${dd}`;
+
+                    const card = document.createElement('div');
+                    card.className = 'date-card';
+                    card.dataset.date = firebaseDate;
+                    card.innerHTML = `
+                        <span class="day-name">${diasSemana[d.getDay()]}</span>
+                        <span class="day-number">${d.getDate()}</span>
+                        <span class="month-name">${meses[d.getMonth()]}</span>
+                    `;
+
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        hiddenInput.value = this.dataset.date;
+                        
+                        const selectedDate = new Date(this.dataset.date + 'T00:00:00');
+                        const dayOfWeek = selectedDate.getDay();
+                        
+                        statusMessage.style.display = 'none';
+                        statusMessage.className = 'booking-status-info';
+                        
+                        timeSelect.disabled = false;
+                        timeSelect.innerHTML = '<option value="" disabled selected>Selecione um horário...</option>';
+
+                        let slots = [];
+                        if (dayOfWeek === 1) {
+                            slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"];
+                        } else {
+                            slots = [
+                                "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+                                "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
+                            ];
+                        }
+
+                        slots.forEach(slot => {
+                            const opt = document.createElement('option');
+                            opt.value = slot;
+                            opt.textContent = slot;
+                            timeSelect.appendChild(opt);
+                        });
+                    });
+
+                    slider.appendChild(card);
+                    daysAdded++;
+                }
+            }
+            generateDateSlider();
+
+            window.handleBookingSubmit = function(event) {
+                event.preventDefault();
+                
+                const nameVal = nameInput ? nameInput.value.trim() : '';
+                const whatsappVal = whatsappInput ? whatsappInput.value.trim() : '';
+                const whatsappRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+                
+                if (!nameVal || nameVal.length < 3) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, insira seu nome completo.';
+                    return;
+                }
+
+                if (!whatsappRegex.test(whatsappVal)) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> O WhatsApp deve estar no formato (XX) XXXXX-XXXX.';
+                    return;
+                }
+
+                if (dateInput && timeSelect && procedureSelect && dateInput.value && timeSelect.value && procedureSelect.value) {
+                    const validation = checkAvailability(dateInput.value, timeSelect.value, procedureSelect.value);
+                    if (!validation.available) {
+                        statusMessage.style.display = 'flex';
+                        statusMessage.className = 'booking-status-info error';
+                        statusMessage.innerHTML = `<i class="ph ph-warning-circle"></i> Horário indisponível: ${validation.reason}`;
+                        return;
+                    }
+
+                    window.saveAppointment({
+                        name: nameVal,
+                        whatsapp: whatsappVal,
+                        procedure: procedureSelect.value,
+                        date: dateInput.value,
+                        time: timeSelect.value
+                    });
+
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info success';
+                    statusMessage.innerHTML = '<i class="ph ph-check-circle"></i> Seu agendamento foi recebido com sucesso! A clínica entrará em contato em breve.';
+                    
+                    document.getElementById('pre-booking-form').reset();
+                    document.querySelectorAll('.date-card').forEach(c => c.classList.remove('selected'));
+                    if(document.getElementById('booking-date')) document.getElementById('booking-date').value = '';
+                    timeSelect.disabled = true;
+                    timeSelect.innerHTML = '<option value="" disabled selected>Selecione a data primeiro...</option>';
+
+                } else {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, preencha todos os campos.';
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>

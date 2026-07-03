@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Espaço - Clínica Elevation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #111;
+            --light: #f9f9f9;
+            --text-muted: #bbb;
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Botão Voltar Premium */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-button:hover {
+            background: var(--gold);
+            color: var(--dark);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Hero Section Dinâmica */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('img1site.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, var(--dark), transparent);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.8s;
+        }
+
+        /* Seções de Texto com Animação Scroll */
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--gold);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 50px;
+            border-radius: 20px;
+            margin: 40px auto;
+            max-width: 900px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--transition);
+        }
+
+        .glass-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card p {
+            font-size: 1.2rem;
+            color: #ccc;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        /* Galeria Imersiva */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            aspect-ratio: 1/1;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .gallery-item.video-item {
+            grid-column: span 1;
+        }
+
+        .gallery-item img,
+        .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover img,
+        .gallery-item:hover video {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay span {
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Seção Explore Premium */
+        .explore {
+            padding: 100px 20px;
+            background: #0a0a0a;
+            text-align: center;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .btn-premium {
+            padding: 18px 40px;
+            border: 2px solid var(--gold);
+            border-radius: 50px;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn-premium:hover {
+            color: var(--dark);
+        }
+
+        .btn-premium:hover::before {
+            left: 0;
+        }
+
+        /* Footer Moderno (Mesmo padrão das outras páginas) */
+        footer {
+            background-color: #111;
+            color: #fff;
+            padding: 80px 20px 20px;
+            border-top: 1px solid #222;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
+        }
+
+        .footer-column h4 {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--gold);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-column ul li a:hover {
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .footer-socials a {
+            width: 45px;
+            height: 45px;
+            background: #222;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        .footer-socials a:hover {
+            background: var(--gold);
+            color: var(--dark);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+            text-align: center;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .credit-link {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Animações Keyframes */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .back-button {
+                top: 20px;
+                left: 20px;
+                padding: 10px 15px;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .glass-card {
+                padding: 30px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .footer-container {
+                text-align: center;
+            }
+
+            .footer-column h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-column ul li a {
+                justify-content: center;
+            }
+
+            .footer-socials {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </button>
+
+    <div class="hero">
+        <p>Experiência Elevation</p>
+        <h1>Nosso Espaço</h1>
+    </div>
+
+    <section id="sobre">
+        <div class="section-header">
+            <h2>Luxo & Conforto</h2>
+        </div>
+        <div class="glass-card reveal">
+            <p>
+                Temos um espaço amplo e criteriosamente localizado para oferecer o máximo em conveniência.
+                A <strong>Clínica Elevation</strong> é um centro multidisciplinar de referência, onde tratamentos
+                inovadores se encontram com a ciência da beleza, saúde e autoestima.
+                Cada detalhe foi projetado para elevar sua experiência.
+            </p>
+        </div>
+    </section>
+
+    <div class="gallery-grid">
+        <div class="gallery-item reveal">
+            <img src="img2site.jpeg" alt="Ambiente Estética">
+            <div class="gallery-overlay"><span>Estética Avançada</span></div>
+        </div>
+        <div class="gallery-item reveal">
+            <img src="img1site.jpeg" alt="Recepção">
+            <div class="gallery-overlay"><span>Recepção Premium</span></div>
+        </div>
+        <div class="gallery-item reveal video-item">
+            <video src="video2.mp4" autoplay muted loop></video>
+            <div class="gallery-overlay"><span>Movimento & Vida</span></div>
+        </div>
+        <div class="gallery-item reveal">
+            <img src="fotooptimus,mesa.jpeg" alt="Equipamentos">
+            <div class="gallery-overlay"><span>Tecnologia de Ponta</span></div>
+        </div>
+    </div>
+
+    <section id="detalhes">
+        <div class="section-header">
+            <h2>Diferenciais</h2>
+        </div>
+        <div class="glass-card reveal">
+            <p>
+                Nosso ambiente combina o moderno e o contemporâneo em perfeita harmonia.
+                Dispomos de salas exclusivas de estética, um pavilhão relaxante com <strong>Ofurô</strong>, espaço
+                dedicado para manicure e hairstyling, além de uma sala de maquiagem iluminada profissionalmente e área
+                de bronze artificial.
+                <strong>Convidamos você a degustar um excelente café enquanto cuidamos do seu brilho.</strong>
+            </p>
+        </div>
+    </section>
+
+    <div class="explore">
+        <div class="section-header">
+            <h2>Continue sua Jornada</h2>
+        </div>
+        <div class="btn-group">
+            <a href="beleza.html" class="btn-premium" style="background: var(--gold); color: #000;">Harmonização
+                Facial</a>
+            <a href="valores.html" class="btn-premium">Ver Serviços</a>
+            <a href="maquiagem.html" class="btn-premium">Maquiagem Profissional</a>
+            <a href="cuidados.html" class="btn-premium">Dicas de Cuidados</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>Clínica Elevation</h4>
+                <p style="color: #bbb; margin-bottom: 20px;">
+                    Onde a tecnologia e a sofisticação se encontram para transformar sua beleza.
+                </p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/clinica_elevation" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100064480581505" target="_blank"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Links Rápidos</h4>
+                <ul>
+                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Nosso Espaço</a></li>
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Serviços e Preços</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Dicas de Cuidados</a></li>
+                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Sobre a Clínica</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank"><i class="fas fa-phone-alt"></i>
+                            WhatsApp Oficial</a></li>
+                    <li><a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank"><i class="fas fa-map-marker-alt"></i> Localização Premium</a></li>
+                    <li><a><i class="fas fa-clock"></i> Seg: 09h às 14h | Ter - Sáb: 09h às 18h</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <p>Desenvolvido com sofisticação por <a href="https://sweet-jalebi-b98578.netlify.app/" class="credit-link"
+                    target="_blank">ChrisDev</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const revealOnScroll = () => {
+                for (let i = 0; i < reveals.length; i++) {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveals[i].getBoundingClientRect().top;
+                    const elementVisible = 150;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveals[i].classList.add('visible');
+                    }
+                }
+            };
+
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Inicial
+        });
+    </script>
+</body>
+
+</html>

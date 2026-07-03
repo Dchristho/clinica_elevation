@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Elevation | Elevando sua Beleza</title>
+    <!-- Phosphor Icons (Premium Minimalist Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <!-- Booking System (Firebase Sync) -->
+    <script src="booking-system.js"></script>
+    <!-- Modern Premium Font Stack -->
+    <link
+        href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Taste Skill v2 Baseline Configuration */
+        :root {
+            /* Colors: Zinc-950 base, desaturated gold accent */
+            --bg-dark: #09090b;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.15);
+            --text-high: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.6s var(--ease);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-high);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Typography Override */
+        h1,
+        h2,
+        h3,
+        h4,
+        .display-font {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        ::selection {
+            background-color: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* --- Minimal Navigation --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2.5rem 5vw;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 1.25rem 5vw;
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .glare-image {
+            height: 40px;
+            transition: var(--transition);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-high);
+        }
+
+        .nav-links a.highlight {
+            color: var(--accent);
+            padding: 0.6rem 1.25rem;
+            border-radius: 99px;
+            border: 1px solid var(--accent-dim);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
+        }
+
+        .nav-links a.highlight:hover {
+            background: var(--accent-dim);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-high);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- Taste Skill Asymmetric Hero --- */
+        .hero {
+            position: relative;
+            height: 350vh;
+            /* Scroll tie */
+        }
+
+        .hero-sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100dvh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .hero-video-wrapper {
+            position: absolute;
+            right: 0;
+            top: 2dvh;
+            bottom: 2dvh;
+            width: 60%;
+            border-radius: 40px 0 0 40px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            border-right: none;
+            z-index: 1;
+        }
+
+        /* Gradiente na junção para disfarçar a borda e permitir texto por cima */
+        .hero-video-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, var(--bg-dark) 0%, transparent 100%);
+            z-index: 2;
+        }
+
+        #hero-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .hero-content-wrapper {
+            position: relative;
+            padding-left: 10vw;
+            z-index: 10;
+            width: 55%;
+        }
+
+        /* Staggered Fade Up Animations */
+        .animate-up {
+            opacity: 0;
+            transform: translateY(24px);
+            animation: fadeUp 1.2s var(--ease) forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content span {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.3rem 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.02);
+            animation-delay: 0.1s;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3.5rem, 6vw, 6.5rem);
+            line-height: 0.95;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            animation-delay: 0.3s;
+        }
+
+        .hero-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 45ch;
+            margin-bottom: 3.5rem;
+            animation-delay: 0.5s;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: var(--text-high);
+            color: var(--bg-dark);
+            text-decoration: none;
+            border-radius: 99px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            transition: var(--transition);
+            animation-delay: 0.7s;
+            will-change: transform;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text-high);
+            border: 1px solid var(--accent);
+            border-radius: 99px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: var(--transition);
+            will-change: transform;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+            color: var(--bg-dark);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.97);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 10vw;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation-delay: 1s;
+        }
+
+        .scroll-line {
+            width: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--text-high);
+            animation: scrollLine 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+
+        @keyframes scrollLine {
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* --- Sections (Asymmetric & Clean) --- */
+        .section-premium {
+            padding: 10rem 5vw;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8vw;
+            align-items: center;
+        }
+
+        .intro-img-wrapper {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .intro-img-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            pointer-events: none;
+        }
+
+        .intro-img {
+            width: 100%;
+            display: block;
+            border-radius: 24px;
+            transition: var(--transition);
+            filter: grayscale(20%);
+        }
+
+        .intro-img-wrapper:hover .intro-img {
+            transform: scale(1.03);
+            filter: grayscale(0%);
+        }
+
+        .intro-text h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .intro-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            max-width: 50ch;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 4rem;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item h4 {
+            font-size: 2.5rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .stat-item p {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+        }
+
+        /* --- Minimalist Services Rows --- */
+        .services-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 6rem;
+        }
+
+        .services-header h2 {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+        }
+
+        .services-list {
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .service-row {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            align-items: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .service-row i {
+            font-size: 2rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .service-row h3 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .service-row .arrow {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: var(--transition);
+        }
+
+        .service-row::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2rem;
+            right: -2rem;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+        .service-row:hover::before {
+            opacity: 1;
+        }
+
+        .service-row:hover i {
+            color: var(--accent);
+            scale: 1.1;
+        }
+
+        .service-row:hover h3 {
+            transform: translateX(10px);
+        }
+
+        .service-row:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+            color: var(--accent);
+        }
+
+        /* --- Immersive Experience Section --- */
+        .exp-section {
+            padding: 10vw 5vw;
+            background: #000;
+        }
+
+        .exp-banner {
+            height: 60vh;
+            border-radius: 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* Parallax effect */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 2rem;
+        }
+
+        .exp-banner h2 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+        }
+
+        /* --- Clean Footer --- */
+        footer {
+            background: var(--bg-dark);
+            padding: 8rem 5vw 3rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 6rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .footer-col h4 {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .footer-col p {
+            color: var(--text-muted);
+            max-width: 40ch;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-high);
+            transform: translateX(5px);
+        }
+
+        .social-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-high);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--text-high);
+            color: var(--bg-dark);
+        }
+
+        .footer-bottom {
+            margin-top: 6rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- Viewport & Mobile Adjustments --- */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+            }
+
+            .services-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2rem;
+                margin-bottom: 3rem;
+            }
+
+            .hero-sticky-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 40vh;
+                padding-top: 5rem;
+                gap: 2rem;
+            }
+
+            .hero-video-wrapper {
+                grid-column: 1 / -1;
+                grid-row: 2 / 3;
+                border-radius: 40px 40px 0 0;
+                height: 100%;
+                border-left: none;
+                border-bottom: none;
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .hero-content-wrapper {
+                padding-left: 5vw;
+                padding-right: 5vw;
+                align-self: end;
+                padding-bottom: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+                text-align: center;
+            }
+
+            .service-row {
+                grid-template-columns: 50px 1fr auto;
+                padding: 2rem 0;
+            }
+
+            .service-row h3 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* --- Internal Booking Section --- */
+        .booking-section {
+            padding: 6rem 5vw 8rem;
+            background: #000;
+            position: relative;
+        }
+
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .booking-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.03);
+            padding: 3rem 4rem;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .booking-header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.4rem 1.25rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 99px;
+            background: rgba(212, 175, 55, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-header h2 {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+        }
+
+        .booking-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 60ch;
+            margin: 0 auto;
+        }
+
+        .booking-form-wrapper {
+            margin-top: 2rem;
+        }
+
+        .form-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-high);
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .form-group select option {
+            background: #121214;
+            color: var(--text-high);
+        }
+
+        .form-group select optgroup {
+            background: #121214;
+            color: var(--accent);
+            font-weight: 600;
+            font-style: normal;
+            margin-top: 0.5rem;
+        }
+
+        .booking-status-info {
+            padding: 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .booking-status-info.success {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #e5c158;
+        }
+
+        .booking-status-info.error {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .booking-section {
+                padding: 4rem 3vw 5rem;
+            }
+
+            .booking-container {
+                border-radius: 20px;
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row.split {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .calendar-header h4 {
+            color: #fff;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .calendar-header button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s var(--transition);
+        }
+        .calendar-header button:hover {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+        }
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            color: #a1a1aa;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .calendar-day:hover:not(.disabled) {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+        .calendar-day.selected {
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+        .calendar-day.disabled {
+            color: #555;
+            background: transparent;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="logonovosalao.png" alt="Elevation Logo" class="glare-image">
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="valores.html">Serviços</a></li>
+            <li><a href="espaço.html">O Espaço</a></li>
+            <li><a href="sobrenos.html">Sobre Nós</a></li>
+            <li><a href="beleza.html" class="highlight">Harmonização Facial</a></li>
+            <li><a href="#agendamento" class="highlight"
+                    style="border-color: var(--accent); background: rgba(212, 175, 55, 0.12);">Agendar Online</a></li>
+        </ul>
+
+        <button class="mobile-menu-btn"><i class="ph ph-list"></i></button>
+    </nav>
+
+    <!-- Taste Skill Redesigned Asymmetric Hero -->
+    <header class="hero">
+        <div class="hero-sticky-container">
+            <div class="hero-video-wrapper">
+                <video id="hero-video" playsinline muted preload="auto"
+                    poster="WhatsApp%20Image%202025-09-17%20at%2010.52.17.jpeg">
+                    <source src="Agent_video_Pippit.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="hero-content-wrapper">
+                <div class="hero-content">
+                    <span class="animate-up">Seja Bem-Vinda à Excelência</span>
+                    <h1 class="animate-up">Clínica<br>Elevation</h1>
+                    <p class="animate-up">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza
+                        natural.</p>
+                    <div class="hero-buttons animate-up"
+                        style="display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 3.5rem; animation-delay: 0.7s;">
+                        <a href="cuidados.html" class="btn-primary" style="animation-delay: 0s; margin-bottom: 0;">
+                            Descubra a Experiência <i class="ph ph-arrow-right"></i>
+                        </a>
+                        <a href="#agendamento" class="btn-secondary" style="text-decoration:none;">
+                            Agendar Horário <i class="ph ph-calendar"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator animate-up">
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="section-premium">
+        <div class="intro-grid">
+            <div class="intro-text">
+                <h2>A Essência da Elevação</h2>
+                <p>Na Clínica Elevation, acreditamos que a beleza não é um padrão, mas uma jornada única. Nossa
+                    arquitetura clínica proporciona uma experiência de altíssimo nível que vai além do convencional,
+                    entregando precisão cirúrgica num ambiente exclusivo de bem-estar absoluto.</p>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h4>10+</h4>
+                        <p>Anos de Excelência</p>
+                    </div>
+                </div>
+            </div>
+            <div class="intro-img-wrapper">
+                <img src="WhatsApp Image 2025-09-17 at 10.52.17.jpeg" alt="Santuário Elevation" class="intro-img">
+            </div>
+        </div>
+    </section>
+
+    <section class="section-premium" style="padding-top: 0;">
+        <div class="services-header">
+            <h2>Nossas<br>Especialidades</h2>
+            <p style="color: var(--text-muted); max-width: 40ch;">Protocolos avançados desenvolvidos para quem busca
+                resultados extraordinários.</p>
+        </div>
+
+        <div class="services-list">
+            <a href="valores.html" class="service-row">
+                <i class="ph ph-scissors"></i>
+                <h3>Serviços Essenciais</h3>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+            <a href="maquiagem.html" class="service-row">
+                <i class="ph ph-sparkle"></i>
+                <h3>Alta Definição Facial</h3>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+            <a href="cuidados.html" class="service-row">
+                <i class="ph ph-drop"></i>
+                <h3>Estética Avançada</h3>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="exp-section">
+        <a href="espaço.html" style="text-decoration: none; color: inherit;">
+            <div class="exp-banner">
+                <h2>Conheça nosso Santuário</h2>
+            </div>
+        </a>
+        <div
+            style="display: flex; gap: 3rem; justify-content: center; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; flex-wrap: wrap;">
+            <span>Localização Premium</span>
+            <span style="color: var(--glass-border)">|</span>
+            <span id="easter-egg-trigger" style="cursor: default; user-select: none;">Atendimento Exclusivo</span>
+            <span style="color: var(--glass-border)">|</span>
+            <span>Produtos de Luxo</span>
+        </div>
+    </section>
+
+    <!-- Internal Booking Section -->
+    <section class="booking-section" id="agendamento">
+        <div class="booking-container">
+            <div class="booking-header">
+                <span class="booking-header-badge"><i class="ph ph-calendar-check"></i> Agenda Online</span>
+                <h2>Escolha seu Horário</h2>
+                <p>Selecione o procedimento desejado, a data e o horário de sua preferência. Em seguida, siga as instruções para concluir.</p>
+            </div>
+            
+            <div class="booking-form-wrapper">
+                <form id="pre-booking-form" onsubmit="window.handleBookingSubmit(event);">
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="booking-name"><i class="ph ph-user"></i> Nome Completo</label>
+                            <input type="text" id="booking-name" placeholder="Seu nome" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-whatsapp"><i class="ph ph-whatsapp-logo"></i> WhatsApp</label>
+                            <input type="tel" id="booking-whatsapp" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="booking-procedure"><i class="ph ph-sparkle"></i> Procedimento</label>
+                            <select id="booking-procedure" required>
+                                <option value="" disabled selected>Selecione um serviço...</option>
+                                <optgroup label="Serviços Essenciais">
+                                    <option value="Corte & Estilo">Corte & Estilo (45 min)</option>
+                                    <option value="Spa de Mãos & Pés">Spa de Mãos & Pés (60 min)</option>
+                                    <option value="Arquitetura do Olhar">Arquitetura do Olhar (30 min)</option>
+                                    <option value="Alongamento Elegance">Alongamento Elegance (90 min)</option>
+                                </optgroup>
+                                <optgroup label="Harmonização Facial">
+                                    <option value="Preenchimento Labial">Preenchimento Labial (45 min)</option>
+                                    <option value="Rinomodelação">Rinomodelação (45 min)</option>
+                                    <option value="Preenchimento de Mandíbula (Jawline)">Preenchimento de Mandíbula (Jawline) (60 min)</option>
+                                    <option value="Harmonização Facial Completa">Harmonização Facial Completa (90 min)</option>
+                                </optgroup>
+                                <optgroup label="Maquiagem Profissional">
+                                    <option value="Maquiagem Social Premium">Maquiagem Social Premium (45 min)</option>
+                                    <option value="Maquiagem Noiva Elevation">Maquiagem Noiva Elevation (90 min)</option>
+                                    <option value="Maquiagem para Eventos VIP">Maquiagem para Eventos VIP (60 min)</option>
+                                    <option value="Maquiagem Artística / Editorial">Maquiagem Artística / Editorial (120 min)</option>
+                                </optgroup>
+                                <optgroup label="Cuidados Especiais & Estética">
+                                    <option value="Criolipólise">Criolipólise (60 min)</option>
+                                    <option value="Tratamento Facial">Tratamento Facial (60 min)</option>
+                                    <option value="Massagem Relaxante">Massagem Relaxante (60 min)</option>
+                                    <option value="Bumbum na Nuca">Bumbum na Nuca (45 min)</option>
+                                    <option value="Drenagem Linfática">Drenagem Linfática (60 min)</option>
+                                    <option value="Depilação a Laser">Depilação a Laser (30 min)</option>
+                                    <option value="Ritual de Ofurô">Ritual de Ofurô (90 min)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row split">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label><i class="ph ph-calendar-blank"></i> Escolha a Data</label>
+                            <div class="calendar-container">
+                                <div class="calendar-header">
+                                    <button type="button" id="prev-month"><i class="ph ph-caret-left"></i></button>
+                                    <h4 id="calendar-month-year">Mês</h4>
+                                    <button type="button" id="next-month"><i class="ph ph-caret-right"></i></button>
+                                </div>
+                                <div class="calendar-weekdays">
+                                    <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+                                </div>
+                                <div class="calendar-days" id="calendar-days">
+                                    <!-- Os dias serão gerados aqui via JavaScript -->
+                                </div>
+                            </div>
+                            <!-- Input oculto que o Firebase vai ler -->
+                            <input type="hidden" id="booking-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="booking-time"><i class="ph ph-clock"></i> Horário Disponível</label>
+                            <select id="booking-time" required disabled>
+                                <option value="" disabled selected>Selecione a data primeiro...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="booking-status-message" class="booking-status-info" style="display: none;">
+                        <!-- Status message goes here -->
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                            Continuar Agendamento <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col" style="grid-column: span 1;">
+                <h4>Clínica Elevation</h4>
+                <p>Especialistas em realçar a sua beleza natural através de sofisticação e precisão profissional.</p>
+                <div class="social-row">
+                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-btn"><i
+                            class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation."
+                        target="_blank" class="social-btn"><i class="ph ph-whatsapp-logo"></i></a>
+                    <a href="#" class="social-btn"><i class="ph ph-tiktok-logo"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="valores.html">Serviços</a></li>
+                    <li><a href="espaço.html">O Espaço</a></li>
+                    <li><a href="sobrenos.html">Sobre Nós</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contato</h4>
+                <ul class="footer-links">
+                    <li style="color: var(--text-muted); display: flex; gap: 0.5rem;">
+                        <a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352"
+                            target="_blank"
+                            style="color: inherit; text-decoration: none; display: flex; gap: 0.5rem; align-items: center;">
+                            <i class="ph ph-map-pin" style="font-size: 1.2rem;"></i> Rua Aldeia dos Machacalis, 126 A
+                        </a>
+                    </li>
+                    <li><a href="tel:+5511980272343" style="display: flex; gap: 0.5rem;"><i class="ph ph-phone"
+                                style="font-size: 1.2rem;"></i> (11) 98027-2343</a></li>
+                    <li style="color: var(--text-muted); display: flex; gap: 0.5rem;"><i class="ph ph-clock"
+                            style="font-size: 1.2rem;"></i> Seg: 09h às 14h | Ter - Sáb: 09h às 18h</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <p>Desenvolvido por <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank"
+                    style="color: var(--accent); text-decoration: none;">ChrisDev</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hero Video Scroll Control
+            const heroSection = document.querySelector('.hero');
+            const video = document.getElementById('hero-video');
+
+            const updateVideoProgress = () => {
+                if (video.duration) {
+                    const scrollY = window.scrollY;
+                    const sectionOffsetTop = heroSection.offsetTop;
+                    const sectionHeight = heroSection.offsetHeight;
+                    const viewportHeight = window.innerHeight;
+
+                    let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
+                    progress = Math.max(0, Math.min(progress, 1));
+
+                    video.currentTime = progress * video.duration;
+                }
+            };
+
+            video.addEventListener('loadedmetadata', updateVideoProgress);
+            window.addEventListener('scroll', updateVideoProgress);
+
+            // Navbar blur effect on scroll
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('.navbar');
+                if (window.scrollY > 50) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            });
+
+            // Mobile Menu Toggle
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+
+            mobileBtn.addEventListener('click', () => {
+                if (navLinks.style.display === 'flex') {
+                    navLinks.style.display = 'none';
+                } else {
+                    navLinks.style.display = 'flex';
+                    navLinks.style.flexDirection = 'column';
+                    navLinks.style.position = 'absolute';
+                    navLinks.style.top = '100%';
+                    navLinks.style.left = '0';
+                    navLinks.style.width = '100%';
+                    navLinks.style.background = 'rgba(9,9,11,0.98)';
+                    navLinks.style.padding = '2rem';
+                    navLinks.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                }
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href="#agendamento"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.getElementById('agendamento');
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Date / Time Slot Logic for Internal Booking Form
+            const nameInput = document.getElementById('booking-name');
+            const whatsappInput = document.getElementById('booking-whatsapp');
+            const dateInput = document.getElementById('booking-date');
+            const timeSelect = document.getElementById('booking-time');
+            const procedureSelect = document.getElementById('booking-procedure');
+            const statusMessage = document.getElementById('booking-status-message');
+
+            // WhatsApp Mask
+            if (whatsappInput) {
+                whatsappInput.addEventListener('input', (e) => {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 11) {
+                        val = val.substring(0, 11);
+                    }
+                    if (val.length > 10) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2, 7)}-${val.substring(7)}`;
+                    } else if (val.length > 6) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2, 6)}-${val.substring(6)}`;
+                    } else if (val.length > 2) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2)}`;
+                    } else if (val.length > 0) {
+                        e.target.value = `(${val}`;
+                    } else {
+                        e.target.value = '';
+                    }
+                });
+            }
+
+            // Procedure Durations Map in Minutes
+            const durations = {
+                "Corte & Estilo": 45,
+                "Spa de Mãos & Pés": 60,
+                "Arquitetura do Olhar": 30,
+                "Alongamento Elegance": 90,
+                "Preenchimento Labial": 45,
+                "Rinomodelação": 45,
+                "Preenchimento de Mandíbula (Jawline)": 60,
+                "Harmonização Facial Completa": 90,
+                "Maquiagem Social Premium": 45,
+                "Maquiagem Noiva Elevation": 90,
+                "Maquiagem para Eventos VIP": 60,
+                "Maquiagem Artística / Editorial": 120,
+                "Criolipólise": 60,
+                "Tratamento Facial": 60,
+                "Massagem Relaxante": 60,
+                "Bumbum na Nuca": 45,
+                "Drenagem Linfática": 60,
+                "Depilação a Laser": 30,
+                "Ritual de Ofurô": 90
+            };
+
+            // Helper time functions
+            function timeToMinutes(timeStr) {
+                const [hrs, mins] = timeStr.split(':').map(Number);
+                return hrs * 60 + mins;
+            }
+
+            function minutesToTime(mins) {
+                const hrs = Math.floor(mins / 60);
+                const m = mins % 60;
+                return `${String(hrs).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            }
+
+            // Availability validation logic
+            function checkAvailability(proposedDate, proposedTime, proposedProcedure) {
+                const duration = durations[proposedProcedure] || 60;
+                const startMins = timeToMinutes(proposedTime);
+                const endMins = startMins + duration;
+
+                const appointments = window.getAppointments();
+                const sameDayAppointments = appointments.filter(app => app.date === proposedDate);
+
+                for (const app of sameDayAppointments) {
+                    const appDuration = durations[app.procedure] || 60;
+                    const appStart = timeToMinutes(app.time);
+                    const appEnd = appStart + appDuration;
+
+                    // Gap rule: 20 minutes buffer required between bookings
+                    const proposedEndsBeforeExistingStarts = (endMins + 20 <= appStart);
+                    const proposedStartsAfterExistingEnds = (startMins >= appEnd + 20);
+
+                    if (!proposedEndsBeforeExistingStarts && !proposedStartsAfterExistingEnds) {
+                        return {
+                            available: false,
+                            reason: `Conflito com o horário das ${app.time} às ${minutesToTime(appEnd)} (${app.procedure}). É necessário folga de 20 minutos.`
+                        };
+                    }
+                }
+                return { available: true };
+            }
+
+            let currentCalMonth = new Date().getMonth();
+            let currentCalYear = new Date().getFullYear();
+
+            function renderCalendar(month, year) {
+                const daysContainer = document.getElementById('calendar-days');
+                const monthYearText = document.getElementById('calendar-month-year');
+                const hiddenInput = document.getElementById('booking-date');
+                if (!daysContainer || !hiddenInput) return;
+                
+                daysContainer.innerHTML = '';
+                
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+                monthYearText.textContent = `${monthNames[month]} ${year}`;
+                
+                // blanks
+                for(let i=0; i<firstDay; i++) {
+                    const emptyDiv = document.createElement('div');
+                    daysContainer.appendChild(emptyDiv);
+                }
+                
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                
+                for(let i=1; i<=daysInMonth; i++) {
+                    const cellDate = new Date(year, month, i);
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'calendar-day';
+                    dayDiv.textContent = i;
+                    
+                    if(cellDate < today || cellDate.getDay() === 0) {
+                        dayDiv.classList.add('disabled');
+                    } else {
+                        dayDiv.addEventListener('click', () => {
+                            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                            dayDiv.classList.add('selected');
+                            
+                            const yyyy = cellDate.getFullYear();
+                            const mm = String(cellDate.getMonth() + 1).padStart(2, '0');
+                            const dd = String(cellDate.getDate()).padStart(2, '0');
+                            hiddenInput.value = `${yyyy}-${mm}-${dd}`;
+                            
+                            const dayOfWeek = cellDate.getDay();
+                            
+                            statusMessage.style.display = 'none';
+                            statusMessage.className = 'booking-status-info';
+                            
+                            timeSelect.disabled = false;
+                            timeSelect.innerHTML = '<option value="" disabled selected>Selecione um horário...</option>';
+
+                            let slots = [];
+                            if (dayOfWeek === 1) {
+                                slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"];
+                            } else {
+                                slots = [
+                                    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+                                    "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
+                                ];
+                            }
+
+                            slots.forEach(slot => {
+                                const opt = document.createElement('option');
+                                opt.value = slot;
+                                opt.textContent = slot;
+                                timeSelect.appendChild(opt);
+                            });
+                        });
+                    }
+                    daysContainer.appendChild(dayDiv);
+                }
+            }
+            
+            const prevBtn = document.getElementById('prev-month');
+            const nextBtn = document.getElementById('next-month');
+            if(prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    currentCalMonth--;
+                    if(currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
+                    renderCalendar(currentCalMonth, currentCalYear);
+                });
+                nextBtn.addEventListener('click', () => {
+                    currentCalMonth++;
+                    if(currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
+                    renderCalendar(currentCalMonth, currentCalYear);
+                });
+                renderCalendar(currentCalMonth, currentCalYear);
+            }
+
+            window.handleBookingSubmit = function(event) {
+                event.preventDefault();
+                
+                const nameVal = nameInput ? nameInput.value.trim() : '';
+                const whatsappVal = whatsappInput ? whatsappInput.value.trim() : '';
+                const whatsappRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+                
+                if (!nameVal || nameVal.length < 3) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, insira seu nome completo.';
+                    return;
+                }
+
+                if (!whatsappRegex.test(whatsappVal)) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> O WhatsApp deve estar no formato (XX) XXXXX-XXXX.';
+                    return;
+                }
+
+                if (dateInput && timeSelect && procedureSelect && dateInput.value && timeSelect.value && procedureSelect.value) {
+                    // Check availability rule
+                    const validation = checkAvailability(dateInput.value, timeSelect.value, procedureSelect.value);
+                    if (!validation.available) {
+                        statusMessage.style.display = 'flex';
+                        statusMessage.className = 'booking-status-info error';
+                        statusMessage.innerHTML = `<i class="ph ph-warning-circle"></i> Horário indisponível: ${validation.reason}`;
+                        return;
+                    }
+
+                    // Save to cloud (Firebase) or localStorage fallback
+                    window.saveAppointment({
+                        name: nameVal,
+                        whatsapp: whatsappVal,
+                        procedure: procedureSelect.value,
+                        date: dateInput.value,
+                        time: timeSelect.value
+                    });
+
+                    // Success Feedback
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info success';
+                    statusMessage.innerHTML = '<i class="ph ph-check-circle"></i> Seu agendamento foi recebido com sucesso! A clínica entrará em contato em breve.';
+                    
+                    // Reset Form
+                    document.getElementById('pre-booking-form').reset();
+                    document.querySelectorAll('.calendar-day').forEach(c => c.classList.remove('selected'));
+                    if(document.getElementById('booking-date')) document.getElementById('booking-date').value = '';
+                    timeSelect.disabled = true;
+                    timeSelect.innerHTML = '<option value="" disabled selected>Selecione a data primeiro...</option>';
+
+                } else {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, preencha todos os campos.';
+                }
+            };
+
+            // Easter Egg click handler
+            const easterEggTrigger = document.getElementById('easter-egg-trigger');
+            if (easterEggTrigger) {
+                let clicks = 0;
+                let resetTimeout;
+                easterEggTrigger.addEventListener('click', () => {
+                    clicks++;
+                    clearTimeout(resetTimeout);
+                    if (clicks === 3) {
+                        clicks = 0;
+                        window.location.href = 'agendamentos.html';
+                    } else {
+                        resetTimeout = setTimeout(() => {
+                            clicks = 0;
+                        }, 1200);
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
+    <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2025/09/06/16/20250906163757-P63KJWE6.js" defer></script>
+
+</body>
+
+</html>

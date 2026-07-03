@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmonização Facial Natural | Clínica Elevation</title>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Dancing+Script:wght@600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Smooth Scroll (Lenis) -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Tilt effect -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #111;
+            --darkER: #0a0a0a;
+            --light: #f9f9f9;
+            --text-muted: #bbb;
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--darkER);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Header Navigation (Existing Style) --- */
+        .header-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .header-nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 15px 40px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo-home {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: var(--transition);
+        }
+
+        .logo-home img {
+            height: 45px;
+            width: auto;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            transition: var(--transition);
+        }
+
+        .logo-home span {
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+        }
+
+        .logo-home:hover {
+            background: var(--gold);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .logo-home:hover span {
+            color: var(--darkER);
+        }
+
+        .logo-home:hover img {
+            transform: scale(1.1);
+            filter: brightness(0);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 5%;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), var(--darkER)), url('acido.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transform: scale(1.1);
+        }
+
+        .hero-content {
+            z-index: 10;
+            max-width: 1000px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(4rem, 12vw, 8.5rem);
+            color: var(--gold);
+            font-family: 'Dancing Script', cursive;
+            text-transform: none;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(50px);
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        .hero-content p {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            color: #fff;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            font-weight: 300;
+        }
+
+        /* --- Buttons --- */
+        .btn-premium {
+            display: inline-block;
+            padding: 22px 55px;
+            background: var(--gold);
+            color: var(--darkER);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .btn-premium:hover {
+            background: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-floating-cta {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1000;
+            background: #25d366;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .btn-floating-cta:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: #20ba5a;
+        }
+
+        /* --- Sections --- */
+        section {
+            padding: 140px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            color: var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- Diferencial Cards --- */
+        .diferencial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            perspective: 1000px;
+        }
+
+        .card-perspective {
+            transition: var(--transition);
+        }
+
+        .card-3d {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 40px;
+            padding: 80px 50px;
+            text-align: center;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.1s;
+        }
+
+        .card-3d:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .card-3d i {
+            font-size: 4.5rem;
+            color: var(--gold);
+            margin-bottom: 35px;
+            display: block;
+            transform: translateZ(60px);
+        }
+
+        .card-3d h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            transform: translateZ(40px);
+        }
+
+        .card-3d p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            transform: translateZ(20px);
+        }
+
+        /* --- How it Works --- */
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 60px;
+            counter-reset: steps;
+        }
+
+        .how-step {
+            position: relative;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+
+        .how-step::before {
+            counter-increment: steps;
+            content: "0" counter(steps);
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--gold);
+            opacity: 0.2;
+        }
+
+        .how-step:hover {
+            transform: translateY(-10px);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .how-step h3 {
+            margin-top: 20px;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+
+        /* --- Before & After --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            aspect-ratio: 1/1.2;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .gallery-label {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: var(--gold);
+            color: var(--darkER);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Safety --- */
+        .safety-wrapper {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            border-radius: 60px;
+            padding: 80px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .safety-icons {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+            margin-top: 60px;
+        }
+
+        .safety-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .safety-icon i {
+            font-size: 4rem;
+            color: var(--gold);
+        }
+
+        /* --- Testimonials Carousel --- */
+        .testimonial-container {
+            overflow: hidden;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .testimonial-track {
+            display: flex;
+            gap: 30px;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-card {
+            min-width: 450px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 60px;
+            border-radius: 40px;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: "\f10d";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 3rem;
+            color: var(--gold);
+            opacity: 0.1;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .testimonial-author h4 {
+            color: var(--gold);
+        }
+
+        /* --- FAQ Accordion --- */
+        .faq-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            padding: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .faq-question:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+            color: var(--gold);
+        }
+
+        /* --- Final CTA & Form --- */
+        .final-cta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .form-premium {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 60px;
+            border-radius: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px 25px;
+            border-radius: 15px;
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        /* --- Footer (Preserved Style) --- */
+        footer {
+            background: var(--dark);
+            padding: 120px 20px 40px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            position: relative;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 60px;
+        }
+
+        .footer-col h4 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 50px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 18px;
+        }
+
+        .footer-links a,
+        .footer-contact li {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+            transform: translateX(8px);
+        }
+
+        .footer-contact li {
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .footer-contact i {
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .payment-methods i {
+            font-size: 2.5rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .payment-methods i:hover {
+            color: var(--gold);
+            transform: translateY(-5px);
+        }
+
+        .social-box {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: #fff;
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .social-link:hover {
+            background: var(--gold);
+            color: var(--dark);
+            transform: translateY(-5px) rotate(360deg);
+        }
+
+        .footer-bottom {
+            margin-top: 100px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .legal-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .legal-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .legal-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .final-cta {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                padding: 15px 20px;
+            }
+
+            .logo-home span {
+                display: none;
+            }
+
+            section {
+                padding: 80px 5%;
+            }
+
+            .card-3d {
+                padding: 50px 30px;
+            }
+
+            .testimonial-card {
+                min-width: 300px;
+                padding: 40px;
+            }
+
+            .footer-grid {
+                text-align: center;
+            }
+
+            .footer-col h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-links a,
+            .footer-contact li {
+                justify-content: center;
+            }
+
+            .social-box,
+            .payment-methods {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="header-nav">
+        <a href="index.html" class="logo-home">
+            <img src="logonovosalao.png" alt="Elevation Logo">
+            <span>Início</span>
+        </a>
+        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
+            class="logo-home" style="border-color: var(--gold);">
+            <span>Agendar</span>
+        </a>
+    </nav>
+
+    <!-- Floating CTA -->
+    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
+        class="btn-floating-cta" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        <span>Avaliação Gratuita</span>
+    </a>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="gsap-reveal-up">Harmonização Facial Natural</h1>
+            <p class="gsap-reveal-up">Sem lâminas. Sem cirurgias. Apenas preenchimento com ácido hialurônico de última
+                geração.</p>
+            <a href="#agendar" class="btn-premium gsap-reveal-up">Agendar Avaliação Gratuita</a>
+        </div>
+    </header>
+
+    <!-- Diferencial Cards -->
+    <section>
+        <div class="section-header">
+            <h2 class="gsap-reveal">Diferenciais 3D</h2>
+            <p class="gsap-reveal">Resultados precisos e naturais através de técnicas minimamente invasivas.</p>
+        </div>
+
+        <div class="diferencial-grid">
+            <div class="card-perspective">
+                <div class="card-3d gsap-reveal" data-tilt data-tilt-max="15" data-tilt-speed="400"
+                    data-tilt-perspective="1000">
+                    <i class="fas fa-droplet"></i>
+                    <h3>Nariz</h3>
+                    <p>Rinomodelação precisa para corrigir o perfil e elevar a ponta nasal sem cortes ou pós-operatório
+                        longo.</p>
+                </div>
+            </div>
+            <div class="card-perspective">
+                <div class="card-3d gsap-reveal" data-tilt data-tilt-max="15" data-tilt-speed="400"
+                    data-tilt-perspective="1000">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Maxilar</h3>
+                    <p>Definição de mandíbula (Jawline) para um rosto mais estruturado, marcante e rejuvenescido.</p>
+                </div>
+            </div>
+            <div class="card-perspective">
+                <div class="card-3d gsap-reveal" data-tilt data-tilt-max="15" data-tilt-speed="400"
+                    data-tilt-perspective="1000">
+                    <div
+                        style="font-size: 4.5rem; color: var(--gold); margin-bottom: 35px; display: block; transform: translateZ(60px);">
+                        <svg viewBox="0 0 24 24" width="70" height="70" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 14.5c.5.5 1 1 1.5 1.2s1.1.3 1.6.3h9.8c.5 0 1.1-.1 1.6-.3s1-.7 1.5-1.2" />
+                            <path
+                                d="M4 14.5c-.8-.9-1.2-2.1-1.2-3.3 0-2.4 2-4.4 4.4-4.4 1 0 2 .4 2.8 1.1l2 1.4 2-1.4c.8-.7 1.8-1.1 2.8-1.1 2.4 0 4.4 2 4.4 4.4 0 1.2-.4 2.4-1.2 3.3Z" />
+                        </svg>
+                    </div>
+                    <h3>Boca</h3>
+                    <p>Lábios volumosos, contornados e hidratados em harmonia absoluta com seu sorriso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Como Funciona -->
+    <section style="background: rgba(255,255,255,0.01);">
+        <div class="section-header">
+            <h2 class="gsap-reveal">Como Funciona</h2>
+            <p class="gsap-reveal">Um processo seguro do primeiro contato à sua nova versão.</p>
+        </div>
+
+        <div class="how-grid">
+            <div class="how-step gsap-reveal">
+                <h3>Consulta</h3>
+                <p>Análise detalhada das proporções faciais e expectativas pessoais.</p>
+            </div>
+            <div class="how-step gsap-reveal">
+                <h3>Planejamento</h3>
+                <p>Escolha do tipo ideal de ácido hialurônico para cada área específica.</p>
+            </div>
+            <div class="how-step gsap-reveal">
+                <h3>Procedimento</h3>
+                <p>Aplicação rápida (30-60 min) com anestésico local, sem dor.</p>
+            </div>
+            <div class="how-step gsap-reveal">
+                <h3>Resultado</h3>
+                <p>Efeito imediato com finalização perfeita após 15 dias.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Antes e Depois -->
+    <section>
+        <div class="section-header">
+            <h2 class="gsap-reveal">Resultados Reais</h2>
+            <p class="gsap-reveal">Transformações sutis que fazem toda a diferença.</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item gsap-reveal" data-tilt>
+                <img src="fases-do-preenchimento-labial-.webp" alt="Lábios" class="gallery-img">
+                <span class="gallery-label">Preenchimento Labial</span>
+            </div>
+            <div class="gallery-item gsap-reveal" data-tilt>
+                <img src="rinomodelação.webp" alt="Nariz" class="gallery-img">
+                <span class="gallery-label">Rinomodelação</span>
+            </div>
+            <div class="gallery-item gsap-reveal" data-tilt>
+                <img src="defined-jawline.webp" alt="Maxilar" class="gallery-img">
+                <span class="gallery-label">Jawline Definition</span>
+            </div>
+            <div class="gallery-item gsap-reveal" data-tilt>
+                <img src="modeloharmototal.png" alt="Full Face" class="gallery-img">
+                <span class="gallery-label">Harmonização Total</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Segurança -->
+    <section>
+        <div class="safety-wrapper gsap-reveal">
+            <h2>Segurança e Confiança</h2>
+            <p>Utilizamos apenas ácidos hialurônicos 100% confiáveis e aprovados pela Anvisa/FDA.</p>
+            <div class="safety-icons">
+                <div class="safety-icon">
+                    <i class="fas fa-shield-check"></i>
+                    <span>Aprovado FDA/Anvisa</span>
+                </div>
+                <div class="safety-icon">
+                    <i class="fas fa-leaf"></i>
+                    <span>100% Biocompatível</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ -->
+    <section>
+        <div class="section-header">
+            <h2 class="gsap-reveal">Dúvidas Frequentes</h2>
+            <p class="gsap-reveal">Tudo o que você precisa saber sobre nossos tratamentos.</p>
+        </div>
+
+        <div class="faq-list">
+            <div class="faq-item gsap-reveal">
+                <div class="faq-question">
+                    <span>O procedimento é doloroso?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p style="padding: 0 30px 30px;">Não. Utilizamos anestésicos locais e tópicos de alta potência, além
+                        de micro-cânulas que minimizam o desconforto e hematomas.</p>
+                </div>
+            </div>
+            <div class="faq-item gsap-reveal">
+                <div class="faq-question">
+                    <span>Posso voltar ao trabalho imediatamente?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p style="padding: 0 30px 30px;">Sim. A maioria dos pacientes retoma suas atividades no mesmo dia,
+                        apenas com recomendações leves de exposição ao sol e exercícios intensos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA & Form -->
+    <section id="agendar">
+        <div class="final-cta"
+            style="grid-template-columns: 1fr; text-align: center; max-width: 800px; margin: 0 auto;">
+            <div class="gsap-reveal">
+                <h2 style="font-size: 3.5rem; color: var(--gold); margin-bottom: 30px;">Pronta para sua transformação?
+                </h2>
+                <p style="font-size: 1.2rem; margin-bottom: 40px;">Agende agora sua avaliação e receba um plano
+                    personalizado para elevar sua beleza natural.</p>
+                <div
+                    style="display: flex; flex-direction: column; gap: 20px; align-items: center; margin-bottom: 50px;">
+                    <span style="display: flex; align-items: center; gap: 15px;"><i class="fas fa-check-circle"
+                            style="color: var(--gold);"></i> Atendimento VIP em ambiente de luxo</span>
+                    <span style="display: flex; align-items: center; gap: 15px;"><i class="fas fa-check-circle"
+                            style="color: var(--gold);"></i> Profissionais altamente especializados</span>
+                    <span style="display: flex; align-items: center; gap: 15px;"><i class="fas fa-check-circle"
+                            style="color: var(--gold);"></i> Produtos de marcas líderes mundiais</span>
+                </div>
+                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
+                    class="btn-premium" target="_blank" style="opacity: 1; transform: none;">Agendar Avaliação pelo
+                    WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Preserved System) -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Clínica Elevation</h4>
+                <p style="color: var(--text-muted); margin-bottom: 25px;">
+                    Eleve sua beleza ao próximo nível com nossos tratamentos exclusivos e profissionais especializados.
+                </p>
+                <div class="social-box">
+                    <a href="https://www.instagram.com/clinica_elevation" class="social-link" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
+                        class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Serviços</h4>
+                <ul class="footer-links">
+                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Harmonização Facial</a></li>
+                    <li><a href="maquiagem.html"><i class="fas fa-chevron-right"></i> Maquiagem Profissional</a></li>
+                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Cuidado Capilar</a></li>
+                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Nosso Espaço</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Atendimento</h4>
+                <ul class="footer-contact">
+                    <li><i class="fas fa-clock"></i> <span>Seg: 09h às 14h<br>Ter - Sáb: 09h às 18h</span></li>
+                    <li><i class="fas fa-phone-alt"></i> (11) 98027-2343</li>
+                    <li><a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank" style="color: inherit; text-decoration: none;"><i class="fas fa-map-marker-alt"></i> Rua Aldeia dos Machacalis, 126 A<br>São Paulo - SP</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Pagamento</h4>
+                <div class="payment-section">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Aceitamos as principais bandeiras:</p>
+                    <div class="payment-methods">
+                        <i class="fab fa-cc-visa" title="Visa"></i>
+                        <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+                        <i class="fab fa-cc-amex" title="American Express"></i>
+                        <i class="fab fa-cc-paypal" title="PayPal"></i>
+                        <i class="fa-brands fa-pix" title="PIX"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
+            <div class="legal-links">
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Termos de Uso</a>
+                <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank">Desenvolvido por ChrisDev</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Init Lenis
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Init
+        gsap.to(".hero-bg", {
+            scale: 1,
+            duration: 10,
+            ease: "none"
+        });
+
+        // Hero Content Reveal
+        const heroTl = gsap.timeline();
+        heroTl.to(".gsap-reveal-up", {
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            stagger: 0.2,
+            ease: "power4.out"
+        });
+
+        // Global Scroll Reveal
+        gsap.utils.toArray(".gsap-reveal").forEach(item => {
+            gsap.fromTo(item,
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.header-nav');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Carousel Testimonial
+        const track = document.querySelector('.testimonial-track');
+        let index = 0;
+        setInterval(() => {
+            index = (index + 1) % 3;
+            track.style.transform = `translateX(-${index * (track.offsetWidth / 3 + 10)}px)`;
+        }, 5000);
+
+        // Vanilla Tilt handles cards and images via data-tilt
+    </script>
+</body>
+
+</html>
