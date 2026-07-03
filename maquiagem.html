@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maquiagem Profissional - Clínica Elevation</title>
+    <!-- Phosphor Icons for Form -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <!-- Booking System (Firebase Sync) -->
+    <script src="booking-system.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
@@ -610,6 +617,202 @@
                 gap: 50px;
             }
         }
+
+        /* --- Internal Booking Section --- */
+        .booking-section {
+            padding: 6rem 5vw 8rem;
+            background: #0a0a0a;
+            position: relative;
+        }
+
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+
+        .booking-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(14, 14, 16, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.03);
+            padding: 3rem 4rem;
+            color: #ffffff;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .booking-header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.4rem 1.25rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 99px;
+            background: rgba(212, 175, 55, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .booking-header h2 {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+            font-family: 'Playfair Display', serif;
+            color: #ffffff;
+        }
+
+        .booking-header p {
+            color: #a1a1aa;
+            font-size: 1.05rem;
+            max-width: 60ch;
+            margin: 0 auto;
+        }
+
+        .booking-form-wrapper {
+            margin-top: 2rem;
+        }
+
+        .form-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #a1a1aa;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            color: #ffffff;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .form-group select option {
+            background: #121214;
+            color: #ffffff;
+        }
+
+        .form-group select optgroup {
+            background: #121214;
+            color: #d4af37;
+            font-weight: 600;
+            font-style: normal;
+            margin-top: 0.5rem;
+        }
+
+        .booking-status-info {
+            padding: 1.25rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .booking-status-info.success {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: #e5c158;
+        }
+
+        .booking-status-info.error {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .btn-submit-form {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2.5rem;
+            background: #ffffff;
+            color: #09090b;
+            text-decoration: none;
+            border: none;
+            border-radius: 99px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-submit-form:hover {
+            transform: translateY(-2px);
+            background: #d4af37;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .booking-section {
+                padding: 4rem 3vw 5rem;
+            }
+
+            .booking-container {
+                border-radius: 20px;
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row.split {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -713,6 +916,92 @@
         </section>
     </main>
 
+    <!-- Internal Booking Section -->
+    <section class="booking-section" id="agendamento">
+        <div class="booking-container">
+            <div class="booking-header">
+                <span class="booking-header-badge"><i class="ph ph-calendar-check"></i> Agenda Online</span>
+                <h2>Escolha seu Horário</h2>
+                <p>Selecione o procedimento desejado, a data e o horário de sua preferência. Em seguida, siga as instruções para concluir.</p>
+            </div>
+            
+            <div class="booking-form-wrapper">
+                <form id="pre-booking-form" onsubmit="window.handleBookingSubmit(event);">
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="booking-name"><i class="ph ph-user"></i> Nome Completo</label>
+                            <input type="text" id="booking-name" placeholder="Seu nome" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-whatsapp"><i class="ph ph-whatsapp-logo"></i> WhatsApp</label>
+                            <input type="tel" id="booking-whatsapp" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="booking-procedure"><i class="ph ph-sparkle"></i> Procedimento</label>
+                            <select id="booking-procedure" required>
+                                <option value="" disabled selected>Selecione um serviço...</option>
+                                <optgroup label="Serviços Essenciais">
+                                    <option value="Corte & Estilo">Corte & Estilo (45 min)</option>
+                                    <option value="Spa de Mãos & Pés">Spa de Mãos & Pés (60 min)</option>
+                                    <option value="Arquitetura do Olhar">Arquitetura do Olhar (30 min)</option>
+                                    <option value="Alongamento Elegance">Alongamento Elegance (90 min)</option>
+                                </optgroup>
+                                <optgroup label="Harmonização Facial">
+                                    <option value="Preenchimento Labial">Preenchimento Labial (45 min)</option>
+                                    <option value="Rinomodelação">Rinomodelação (45 min)</option>
+                                    <option value="Preenchimento de Mandíbula (Jawline)">Preenchimento de Mandíbula (Jawline) (60 min)</option>
+                                    <option value="Harmonização Facial Completa">Harmonização Facial Completa (90 min)</option>
+                                </optgroup>
+                                <optgroup label="Maquiagem Profissional">
+                                    <option value="Maquiagem Social Premium">Maquiagem Social Premium (45 min)</option>
+                                    <option value="Maquiagem Noiva Elevation">Maquiagem Noiva Elevation (90 min)</option>
+                                    <option value="Maquiagem para Eventos VIP">Maquiagem para Eventos VIP (60 min)</option>
+                                    <option value="Maquiagem Artística / Editorial">Maquiagem Artística / Editorial (120 min)</option>
+                                </optgroup>
+                                <optgroup label="Cuidados Especiais & Estética">
+                                    <option value="Criolipólise">Criolipólise (60 min)</option>
+                                    <option value="Tratamento Facial">Tratamento Facial (60 min)</option>
+                                    <option value="Massagem Relaxante">Massagem Relaxante (60 min)</option>
+                                    <option value="Bumbum na Nuca">Bumbum na Nuca (45 min)</option>
+                                    <option value="Drenagem Linfática">Drenagem Linfática (60 min)</option>
+                                    <option value="Depilação a Laser">Depilação a Laser (30 min)</option>
+                                    <option value="Ritual de Ofurô">Ritual de Ofurô (90 min)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row split">
+                        <div class="form-group">
+                            <label for="booking-date"><i class="ph ph-calendar-blank"></i> Data Desejada</label>
+                            <input type="date" id="booking-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="booking-time"><i class="ph ph-clock"></i> Horário Disponível</label>
+                            <select id="booking-time" required disabled>
+                                <option value="" disabled selected>Selecione a data primeiro...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="booking-status-message" class="booking-status-info" style="display: none;">
+                        <!-- Status message goes here -->
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn-submit-form">
+                            Continuar Agendamento <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -772,6 +1061,194 @@
 
             window.addEventListener('scroll', handleReveal);
             handleReveal();
+
+            // Date / Time Slot Logic for Internal Booking Form
+            const nameInput = document.getElementById('booking-name');
+            const whatsappInput = document.getElementById('booking-whatsapp');
+            const dateInput = document.getElementById('booking-date');
+            const timeSelect = document.getElementById('booking-time');
+            const procedureSelect = document.getElementById('booking-procedure');
+            const statusMessage = document.getElementById('booking-status-message');
+
+            // WhatsApp Mask
+            if (whatsappInput) {
+                whatsappInput.addEventListener('input', (e) => {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 11) {
+                        val = val.substring(0, 11);
+                    }
+                    if (val.length > 10) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2, 7)}-${val.substring(7)}`;
+                    } else if (val.length > 6) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2, 6)}-${val.substring(6)}`;
+                    } else if (val.length > 2) {
+                        e.target.value = `(${val.substring(0, 2)}) ${val.substring(2)}`;
+                    } else if (val.length > 0) {
+                        e.target.value = `(${val}`;
+                    } else {
+                        e.target.value = '';
+                    }
+                });
+            }
+
+            // Procedure Durations Map in Minutes
+            const durations = {
+                "Corte & Estilo": 45,
+                "Spa de Mãos & Pés": 60,
+                "Arquitetura do Olhar": 30,
+                "Alongamento Elegance": 90,
+                "Preenchimento Labial": 45,
+                "Rinomodelação": 45,
+                "Preenchimento de Mandíbula (Jawline)": 60,
+                "Harmonização Facial Completa": 90,
+                "Maquiagem Social Premium": 45,
+                "Maquiagem Noiva Elevation": 90,
+                "Maquiagem para Eventos VIP": 60,
+                "Maquiagem Artística / Editorial": 120,
+                "Criolipólise": 60,
+                "Tratamento Facial": 60,
+                "Massagem Relaxante": 60,
+                "Bumbum na Nuca": 45,
+                "Drenagem Linfática": 60,
+                "Depilação a Laser": 30,
+                "Ritual de Ofurô": 90
+            };
+
+            function timeToMinutes(timeStr) {
+                const [hrs, mins] = timeStr.split(':').map(Number);
+                return hrs * 60 + mins;
+            }
+
+            function minutesToTime(mins) {
+                const hrs = Math.floor(mins / 60);
+                const m = mins % 60;
+                return `${String(hrs).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            }
+
+            function checkAvailability(proposedDate, proposedTime, proposedProcedure) {
+                const duration = durations[proposedProcedure] || 60;
+                const startMins = timeToMinutes(proposedTime);
+                const endMins = startMins + duration;
+
+                const appointments = window.getAppointments();
+                const sameDayAppointments = appointments.filter(app => app.date === proposedDate);
+
+                for (const app of sameDayAppointments) {
+                    const appDuration = durations[app.procedure] || 60;
+                    const appStart = timeToMinutes(app.time);
+                    const appEnd = appStart + appDuration;
+
+                    const proposedEndsBeforeExistingStarts = (endMins + 20 <= appStart);
+                    const proposedStartsAfterExistingEnds = (startMins >= appEnd + 20);
+
+                    if (!proposedEndsBeforeExistingStarts && !proposedStartsAfterExistingEnds) {
+                        return {
+                            available: false,
+                            reason: `Conflito com o horário das ${app.time} às ${minutesToTime(appEnd)} (${app.procedure}). É necessário folga de 20 minutos.`
+                        };
+                    }
+                }
+                return { available: true };
+            }
+
+            if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.min = `${yyyy}-${mm}-${dd}`;
+
+                dateInput.addEventListener('change', () => {
+                    const selectedDate = new Date(dateInput.value + 'T00:00:00');
+                    const dayOfWeek = selectedDate.getDay(); 
+
+                    statusMessage.style.display = 'none';
+                    statusMessage.className = 'booking-status-info';
+                    timeSelect.innerHTML = '';
+                    timeSelect.disabled = true;
+
+                    if (dayOfWeek === 0) {
+                        statusMessage.style.display = 'flex';
+                        statusMessage.className = 'booking-status-info error';
+                        statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> A clínica não funciona aos domingos. Por favor, escolha outro dia.';
+                        dateInput.value = '';
+                        return;
+                    }
+
+                    timeSelect.disabled = false;
+                    timeSelect.innerHTML = '<option value="" disabled selected>Selecione um horário...</option>';
+
+                    let slots = [];
+                    if (dayOfWeek === 1) {
+                        slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"];
+                    } else {
+                        slots = [
+                            "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
+                            "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
+                        ];
+                    }
+
+                    slots.forEach(slot => {
+                        const opt = document.createElement('option');
+                        opt.value = slot;
+                        opt.textContent = slot;
+                        timeSelect.appendChild(opt);
+                    });
+                });
+            }
+
+            window.handleBookingSubmit = function(event) {
+                event.preventDefault();
+                
+                const nameVal = nameInput ? nameInput.value.trim() : '';
+                const whatsappVal = whatsappInput ? whatsappInput.value.trim() : '';
+                const whatsappRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+                
+                if (!nameVal || nameVal.length < 3) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, insira seu nome completo.';
+                    return;
+                }
+
+                if (!whatsappRegex.test(whatsappVal)) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> O WhatsApp deve estar no formato (XX) XXXXX-XXXX.';
+                    return;
+                }
+
+                if (dateInput && timeSelect && procedureSelect && dateInput.value && timeSelect.value && procedureSelect.value) {
+                    const validation = checkAvailability(dateInput.value, timeSelect.value, procedureSelect.value);
+                    if (!validation.available) {
+                        statusMessage.style.display = 'flex';
+                        statusMessage.className = 'booking-status-info error';
+                        statusMessage.innerHTML = `<i class="ph ph-warning-circle"></i> Horário indisponível: ${validation.reason}`;
+                        return;
+                    }
+
+                    window.saveAppointment({
+                        name: nameVal,
+                        whatsapp: whatsappVal,
+                        procedure: procedureSelect.value,
+                        date: dateInput.value,
+                        time: timeSelect.value
+                    });
+
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info success';
+                    statusMessage.innerHTML = '<i class="ph ph-check-circle"></i> Seu agendamento foi recebido com sucesso! A clínica entrará em contato em breve.';
+                    
+                    document.getElementById('pre-booking-form').reset();
+                    timeSelect.disabled = true;
+                    timeSelect.innerHTML = '<option value="" disabled selected>Selecione a data primeiro...</option>';
+
+                } else {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, preencha todos os campos.';
+                }
+            };
         });
     </script>
 </body>
