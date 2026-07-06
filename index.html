@@ -16,6 +16,7 @@
     <link
         href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap"
         rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
 
     <style>
         /* Taste Skill v2 Baseline Configuration */
@@ -944,7 +945,7 @@
             <li><a href="valores.html">Serviços</a></li>
             <li><a href="espaço.html">O Espaço</a></li>
             <li><a href="sobrenos.html">Sobre Nós</a></li>
-            <li><a href="beleza.html" class="highlight">Harmonização Facial</a></li>
+            <li><a href="produtos.html" class="highlight" style="font-family: 'Pinyon Script', cursive; font-size: 1.6rem; text-transform: capitalize; padding: 0.2rem 1.25rem; border-color: var(--accent);">Linha Elevation</a></li>
             <li><a href="#agendamento" class="highlight"
                     style="border-color: var(--accent); background: rgba(212, 175, 55, 0.12);">Agendar Online</a></li>
         </ul>
@@ -1029,6 +1030,16 @@
                 <i class="ph ph-drop"></i>
                 <h3>Estética Avançada</h3>
                 <i class="ph ph-arrow-right arrow"></i>
+            </a>
+            <a href="beleza.html" class="service-row" style="color: var(--accent);">
+                <i class="ph ph-magic-wand" style="color: var(--accent);"></i>
+                <h3 style="color: var(--accent);">Harmonização Facial</h3>
+                <i class="ph ph-arrow-right arrow" style="color: var(--accent);"></i>
+            </a>
+            <a href="produtos.html" class="service-row" style="color: var(--accent);">
+                <i class="ph ph-magic-wand" style="color: var(--accent);"></i>
+                <h3 style="color: var(--accent);">Linha Elevation</h3>
+                <i class="ph ph-arrow-right arrow" style="color: var(--accent);"></i>
             </a>
         </div>
     </section>
@@ -1149,54 +1160,361 @@
         </div>
     </section>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col" style="grid-column: span 1;">
-                <h4>Clínica Elevation</h4>
-                <p>Especialistas em realçar a sua beleza natural através de sofisticação e precisão profissional.</p>
-                <div class="social-row">
-                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-btn"><i
-                            class="ph ph-instagram-logo"></i></a>
-                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation."
-                        target="_blank" class="social-btn"><i class="ph ph-whatsapp-logo"></i></a>
-                    <a href="#" class="social-btn"><i class="ph ph-tiktok-logo"></i></a>
-                </div>
-            </div>
+<!-- O Novo Rodapé Premium Elevation -->
+<style>
+    /* Variáveis exclusivas do Rodapé */
+    :root {
+        --footer-bg: #09090b;
+        --footer-gold: #d4af37;
+        --footer-salmon: #e89b82; /* Toque quente e sofisticado */
+        --footer-text: #ffffff;
+        --footer-muted: #8a8a93;
+        --footer-border: rgba(255, 255, 255, 0.05);
+        --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-            <div class="footer-col">
-                <h4>Navegação</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="valores.html">Serviços</a></li>
-                    <li><a href="espaço.html">O Espaço</a></li>
-                    <li><a href="sobrenos.html">Sobre Nós</a></li>
-                </ul>
-            </div>
+    .footer-premium {
+        background-color: var(--footer-bg);
+        position: relative;
+        overflow: hidden;
+        padding: 6rem 5vw 2rem;
+        border-top: 1px solid var(--footer-border);
+        font-family: 'Satoshi', sans-serif;
+    }
 
-            <div class="footer-col">
-                <h4>Contato</h4>
-                <ul class="footer-links">
-                    <li style="color: var(--text-muted); display: flex; gap: 0.5rem;">
-                        <a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352"
-                            target="_blank"
-                            style="color: inherit; text-decoration: none; display: flex; gap: 0.5rem; align-items: center;">
-                            <i class="ph ph-map-pin" style="font-size: 1.2rem;"></i> Rua Aldeia dos Machacalis, 126 A
-                        </a>
-                    </li>
-                    <li><a href="tel:+5511980272343" style="display: flex; gap: 0.5rem;"><i class="ph ph-phone"
-                                style="font-size: 1.2rem;"></i> (11) 98027-2343</a></li>
-                    <li style="color: var(--text-muted); display: flex; gap: 0.5rem;"><i class="ph ph-clock"
-                            style="font-size: 1.2rem;"></i> Seg: 09h às 14h | Ter - Sáb: 09h às 18h</li>
-                </ul>
+    /* Brilho de fundo (Glow) luxuoso e contido */
+    .footer-premium::before {
+        content: '';
+        position: absolute;
+        top: -150px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(232, 155, 130, 0.05) 40%, transparent 70%);
+        filter: blur(60px);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .footer-wrapper {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.5fr;
+        gap: 4rem;
+    }
+
+    /* Coluna da Marca */
+    .footer-brand h3 {
+        font-family: 'Cabinet Grotesk', sans-serif;
+        font-size: 2.2rem;
+        color: var(--footer-text);
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .footer-brand p {
+        color: var(--footer-muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        max-width: 380px;
+        margin-bottom: 2.5rem;
+    }
+
+    /* Redes Sociais - Estilo Glassmorphism */
+    .footer-socials {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .social-glass-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--footer-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--footer-text);
+        font-size: 1.3rem;
+        text-decoration: none;
+        backdrop-filter: blur(10px);
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .social-glass-btn::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--footer-gold), var(--footer-salmon));
+        opacity: 0;
+        transition: var(--transition-smooth);
+        z-index: -1;
+    }
+
+    .social-glass-btn:hover {
+        transform: translateY(-5px);
+        border-color: transparent;
+        color: var(--footer-bg);
+    }
+
+    .social-glass-btn:hover::after {
+        opacity: 1;
+    }
+
+    /* Colunas de Links */
+    .footer-col h4 {
+        font-family: 'Cabinet Grotesk', sans-serif;
+        font-size: 1.1rem;
+        color: var(--footer-text);
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .footer-nav {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .footer-nav a {
+        color: var(--footer-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: var(--transition-smooth);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        width: fit-content;
+    }
+
+    /* Efeito Pro-Max no Hover do Link */
+    .footer-nav a::before {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0%;
+        height: 1px;
+        background: linear-gradient(90deg, var(--footer-gold), var(--footer-salmon));
+        transition: var(--transition-smooth);
+    }
+
+    .footer-nav a:hover {
+        color: var(--footer-text);
+        transform: translateX(5px);
+    }
+
+    .footer-nav a:hover::before {
+        width: 100%;
+    }
+
+    .footer-nav i {
+        font-size: 1.1rem;
+        color: rgba(212, 175, 55, 0.5);
+        transition: var(--transition-smooth);
+    }
+
+    .footer-nav a:hover i {
+        color: var(--footer-gold);
+    }
+
+    /* Coluna de Contato / Newsletter */
+    .contact-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--footer-border);
+        border-radius: 20px;
+        padding: 2rem;
+    }
+
+    .contact-card p {
+        color: var(--footer-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-contact-glow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 1rem;
+        border-radius: 12px;
+        background: var(--footer-text);
+        color: var(--footer-bg);
+        text-decoration: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.9rem;
+        transition: var(--transition-smooth);
+    }
+
+    .btn-contact-glow:hover {
+        background: linear-gradient(135deg, var(--footer-gold), var(--footer-salmon));
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+        color: var(--footer-text);
+        transform: scale(1.02);
+    }
+
+    /* Linha Final */
+    .footer-bottom-bar {
+        margin-top: 6rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--footer-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--footer-muted);
+        font-size: 0.85rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .dev-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 8px 16px;
+        border-radius: 99px;
+        border: 1px solid var(--footer-border);
+        text-decoration: none;
+        color: var(--footer-muted);
+        transition: var(--transition-smooth);
+    }
+
+    .dev-badge span {
+        color: var(--footer-text);
+        font-weight: 500;
+    }
+
+    .dev-badge:hover {
+        border-color: var(--footer-gold);
+        background: rgba(212, 175, 55, 0.05);
+        color: var(--footer-gold);
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+        .footer-wrapper {
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .footer-wrapper {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .footer-brand p {
+            margin: 0 auto 2rem;
+        }
+
+        .footer-socials {
+            justify-content: center;
+        }
+
+        .footer-nav {
+            align-items: center;
+        }
+
+        .footer-nav a:hover {
+            transform: translateX(0) scale(1.05);
+        }
+
+        .footer-bottom-bar {
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+        }
+    }
+</style>
+
+<footer class="footer-premium">
+    <div class="footer-wrapper">
+        <!-- Brand Section -->
+        <div class="footer-brand">
+            <h3><img src="logonovosalao.png" alt="Icon" style="height: 30px;"> Elevation</h3>
+            <p>Especialistas em realçar a sua beleza natural. A mais alta tecnologia e precisão profissional em um ambiente projetado para a sua elevação.</p>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-glass-btn"><i class="ph ph-instagram-logo"></i></a>
+                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation." target="_blank" class="social-glass-btn"><i class="ph ph-whatsapp-logo"></i></a>
+                <a href="#" class="social-glass-btn"><i class="ph ph-tiktok-logo"></i></a>
             </div>
         </div>
 
-        <div class="footer-bottom">
-            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
-            <p>Desenvolvido por <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank"
-                    style="color: var(--accent); text-decoration: none;">ChrisDev</a></p>
+        <!-- Links Navigation -->
+        <div class="footer-col">
+            <h4>Menu Premium</h4>
+            <ul class="footer-nav">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="valores.html">Nossos Serviços</a></li>
+                <li><a href="produtos.html">Linha de Produtos</a></li>
+                <li><a href="espaço.html">O Santuário</a></li>
+                <li><a href="sobrenos.html">Nossa História</a></li>
+            </ul>
         </div>
-    </footer>
+
+        <!-- Contact Info -->
+        <div class="footer-col">
+            <h4>Atendimento</h4>
+            <ul class="footer-nav">
+                <li>
+                    <a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank">
+                        <i class="ph ph-map-pin"></i> Rua Aldeia dos Machacalis, 126 A
+                    </a>
+                </li>
+                <li>
+                    <a href="tel:+5511980272343">
+                        <i class="ph ph-phone"></i> (11) 98027-2343
+                    </a>
+                </li>
+                <li>
+                    <a style="cursor: default;">
+                        <i class="ph ph-clock"></i> Seg: 09h-14h | Ter-Sáb: 09h-18h
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Action Card -->
+        <div class="footer-col">
+            <div class="contact-card">
+                <h4>Sua Transformação</h4>
+                <p>Pronta para elevar sua autoestima? Agende uma avaliação exclusiva diretamente com nossos especialistas.</p>
+                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" class="btn-contact-glow">
+                    <i class="ph ph-calendar-plus"></i> Agendar Avaliação
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom-bar">
+        <p>&copy; 2026 Clínica Elevation. Todos os direitos reservados à marca.</p>
+        <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank" class="dev-badge">
+            <i class="ph ph-code"></i> Desenvolvido por <span>ChrisDev</span>
+        </a>
+    </div>
+</footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
