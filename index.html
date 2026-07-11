@@ -199,6 +199,7 @@
             object-position: center;
             will-change: transform;
             transform: translateZ(0);
+            pointer-events: none; /* Mitigação de overhead em eventos de toque */
         }
 
         .hero-content-wrapper {
@@ -307,13 +308,36 @@
             transform: scale(0.97);
         }
 
-        /* Novo CTA Terciário - Estética Elegante */
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 3.5rem;
+            animation-delay: 0.7s;
+            position: relative;
+            z-index: 50; /* Garante que os botões fiquem acima de overlays ou iluminações */
+        }
+
+        .hero-buttons .btn-primary {
+            animation-delay: 0s;
+            margin-bottom: 0;
+        }
+
+        .hero-buttons .btn-secondary {
+            text-decoration: none;
+        }
+
+        /* Botão Reposicionado com Fundo Isolante */
         .btn-tertiary {
             display: inline-flex;
             align-items: center;
             gap: 0.8rem;
             padding: 1rem 1.5rem;
-            background: transparent;
+            background: rgba(9, 9, 11, 0.5); /* Isola o botão do glow de fundo */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 99px;
             color: var(--accent);
             text-decoration: none;
             font-family: 'Pinyon Script', cursive;
@@ -324,11 +348,17 @@
 
         .btn-tertiary:hover {
             transform: translateY(-2px) scale(1.05);
+            background: rgba(212, 175, 55, 0.1);
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            border-color: var(--accent);
         }
         
         .btn-tertiary:active {
             transform: scale(0.97);
+        }
+        
+        .btn-tertiary i {
+            font-size: 1.2rem;
         }
 
         .scroll-indicator {
@@ -999,9 +1029,7 @@
 <body>
 
     <nav class="navbar">
-        <a href="index.html" class="logo">
-            <img src="logonovosalao.png" alt="Elevation Logo" class="glare-image">
-        </a>
+        <!-- Logotipo removido permanentemente conforme solicitado para melhoria visual e foco na leitura -->
 
         <ul class="nav-links">
             <li><a href="index.html">Início</a></li>
@@ -1032,18 +1060,18 @@
                     <h1 class="animate-up">Clínica<br>Elevation</h1>
                     <p class="animate-up">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza
                         natural.</p>
-                    <div class="hero-buttons animate-up"
-                        style="display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: center; margin-bottom: 3.5rem; animation-delay: 0.7s;">
-                        <a href="cuidados.html" class="btn-primary" style="animation-delay: 0s; margin-bottom: 0;">
+                    <div class="hero-buttons animate-up">
+                          <!-- Botão Reposicionado e com Contraste Corrigido -->
+                        <a href="beleza.html" class="btn-tertiary">
+                            Harmonização Facial <i class="ph ph-sparkle"></i>
+                        </a>
+                        <a href="cuidados.html" class="btn-primary">
                             Descubra a Experiência <i class="ph ph-arrow-right"></i>
                         </a>
-                        <a href="#agendamento" class="btn-secondary" style="text-decoration:none;">
+                        <a href="#agendamento" class="btn-secondary">
                             Agendar Horário <i class="ph ph-calendar"></i>
                         </a>
-                        <!-- Novo Botão de Destaque -->
-                        <a href="beleza.html" class="btn-tertiary">
-                            Harmonização Facial <i class="ph ph-sparkle" style="font-size: 1.2rem;"></i>
-                        </a>
+                      
                     </div>
                 </div>
             </div>
@@ -1585,53 +1613,58 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Hero Video Scroll Control (Optimized with requestAnimationFrame & Mobile Autoplay)
+            // Hero Video Scroll Control (High Performance LERP)
             const heroSection = document.querySelector('.hero');
             const video = document.getElementById('hero-video');
 
-            let isMobile = window.innerWidth < 992;
+            let targetVideoTime = 0;
+            let currentVideoTime = 0;
+            let isVideoLoaded = false;
             
-            const handleResize = () => {
-                isMobile = window.innerWidth < 992;
-                if (isMobile) {
-                    video.loop = true;
-                    video.play().catch(() => {});
-                } else {
-                    video.pause();
+            // Otimização via RequestAnimationFrame (Render Loop Contínuo)
+            const renderLoop = () => {
+                if (isVideoLoaded && video.duration && !isNaN(video.duration)) {
+                    // Interpolação Linear (LERP): suaviza a transição até o target
+                    currentVideoTime += (targetVideoTime - currentVideoTime) * 0.08;
+                    
+                    // Só atualiza o DOM (video.currentTime) se a diferença for significativa
+                    // Isso evita repaints desnecessários que travam o thread principal no mobile
+                    if (Math.abs(targetVideoTime - currentVideoTime) > 0.01) {
+                        video.currentTime = currentVideoTime;
+                    }
                 }
+                window.requestAnimationFrame(renderLoop);
             };
-            window.addEventListener('resize', handleResize);
-            handleResize(); // Initialize video behavior based on device
+            
+            // Inicia o loop contínuo
+            window.requestAnimationFrame(renderLoop);
 
-            let ticking = false;
-
-            const updateVideoProgress = () => {
-                // Se for mobile, não executa o scrub no scroll (deixa o vídeo fluir normal)
-                if (isMobile || !video.duration || isNaN(video.duration)) return;
+            // Calcula o tempo alvo (targetVideoTime) passivamente
+            const onScroll = () => {
+                if (!isVideoLoaded || !video.duration || isNaN(video.duration)) return;
 
                 const scrollY = window.scrollY;
                 const sectionOffsetTop = heroSection.offsetTop;
                 const sectionHeight = heroSection.offsetHeight;
                 const viewportHeight = window.innerHeight;
 
+                // Clamp progressivo de 0 a 1
                 let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
                 progress = Math.max(0, Math.min(progress, 1));
 
-                video.currentTime = progress * video.duration;
+                targetVideoTime = progress * video.duration;
             };
 
-            const onScroll = () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(() => {
-                        updateVideoProgress();
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            };
+            video.addEventListener('loadedmetadata', () => {
+                isVideoLoaded = true;
+                onScroll();
+                // Define o tempo atual diretamente no primeiro load para não pular do 0
+                currentVideoTime = targetVideoTime;
+                video.currentTime = currentVideoTime;
+            });
 
-            video.addEventListener('loadedmetadata', updateVideoProgress);
-            window.addEventListener('scroll', onScroll);
+            // Event listener passivo para scroll de alta performance (sem bloqueio)
+            window.addEventListener('scroll', onScroll, { passive: true });
 
             // Navbar blur effect on scroll
             window.addEventListener('scroll', () => {
