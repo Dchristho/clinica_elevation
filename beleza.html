@@ -380,6 +380,12 @@
             aspect-ratio: 1/1.2;
             cursor: pointer;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
         }
 
         .gallery-img {
@@ -390,7 +396,7 @@
         }
 
         .gallery-item:hover .gallery-img {
-            transform: scale(1.1) rotate(2deg);
+            transform: scale(1.05); /* Suavizado em relação à versão antiga (1.1) */
         }
 
         .gallery-label {
@@ -899,19 +905,16 @@
 
         <div class="gallery-grid">
             <div class="gallery-item gsap-reveal" data-tilt>
-                <img src="fases-do-preenchimento-labial-.webp" alt="Lábios" class="gallery-img">
-                <span class="gallery-label">Preenchimento Labial</span>
+                <img src="draplicandononariz.jpeg" alt="Procedimento de alta precisão com Ácido Hialurônico na Clínica Elevation" class="gallery-img">
             </div>
             <div class="gallery-item gsap-reveal" data-tilt>
-                <img src="rinomodelação.webp" alt="Nariz" class="gallery-img">
-                <span class="gallery-label">Rinomodelação</span>
+                <img src="rinomodelaçao1.jpeg" alt="Antes e Depois - Preenchimento com Ácido Hialurônico - Dr. Gabriel Tisano" class="gallery-img">
             </div>
             <div class="gallery-item gsap-reveal" data-tilt>
-                <img src="defined-jawline.webp" alt="Maxilar" class="gallery-img">
-                <span class="gallery-label">Jawline Definition</span>
+                <img src="rinomodelacao2.jpeg" alt="Definição de Mandíbula Antes e Depois - Clínica Elevation" class="gallery-img">
             </div>
             <div class="gallery-item gsap-reveal" data-tilt>
-                <img src="modeloharmototal.png" alt="Full Face" class="gallery-img">
+                <img src="modeloharmototal.png" alt="Harmonização Total Full Face" class="gallery-img">
                 <span class="gallery-label">Harmonização Total</span>
             </div>
         </div>

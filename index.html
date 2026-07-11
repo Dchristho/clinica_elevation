@@ -665,42 +665,90 @@
             font-size: 0.85rem;
         }
 
+        .mobile-popover {
+            display: none;
+        }
+
         /* --- Viewport & Mobile Adjustments --- */
         @media (max-width: 992px) {
             #hero-video {
                 pointer-events: none; /* Mitigação de lag em devices touch */
             }
 
-            /* Novo Menu Mobile (Drawer Independente) */
             .nav-links {
-                display: flex;
+                display: none; /* Esconde os links padrões no mobile */
+            }
+
+            /* Menu Mobile Estilo Popover (Shadcn) */
+            .mobile-popover {
                 position: fixed;
-                top: 0;
-                right: -100%;
-                width: 100vw;
-                height: 100dvh;
-                background: rgba(9, 9, 11, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 2.5rem;
-                transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                top: 5rem;
+                right: 5vw;
+                width: calc(100vw - 10vw);
+                max-width: 320px;
+                background: rgba(9, 9, 11, 0.85);
+                backdrop-filter: blur(24px);
+                border: 1px solid rgba(212, 175, 55, 0.15);
+                border-radius: 20px;
+                padding: 1.5rem;
                 z-index: 99;
-                margin: 0;
-                padding: 0;
+                opacity: 0;
+                visibility: hidden;
+                transform: scale(0.95) translateY(-10px);
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                transform-origin: top right;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
-            .nav-links.active {
-                right: 0;
+            .mobile-popover.active {
+                opacity: 1;
+                visibility: visible;
+                transform: scale(1) translateY(0);
             }
 
-            .nav-links a {
-                font-size: 1.5rem;
+            .popover-link {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem;
+                color: var(--text-high);
+                text-decoration: none;
+                border-radius: 12px;
+                transition: var(--transition);
+                font-size: 1.1rem;
+                font-weight: 500;
+            }
+
+            .popover-link i {
+                font-size: 1.4rem;
+                color: var(--text-muted);
+                transition: var(--transition);
+            }
+
+            .popover-link:hover {
+                background: rgba(255, 255, 255, 0.05);
             }
             
-            .nav-links a.highlight {
-                font-size: 1.8rem !important;
+            .popover-link:hover i {
+                color: var(--gold);
+            }
+
+            .popover-link.highlight-link {
+                color: var(--accent);
+                background: rgba(212, 175, 55, 0.05);
+                border: 1px solid rgba(212, 175, 55, 0.1);
+            }
+            
+            .popover-link.highlight-link i {
+                color: var(--accent);
+            }
+
+            /* Reseta o Scroll Locker do Vídeo no Mobile */
+            .hero {
+                height: 100vh !important; /* Libera o scroll nativo */
             }
 
             .mobile-menu-btn {
@@ -727,6 +775,8 @@
             }
 
             .hero-sticky-container {
+                position: relative !important; /* Libera o bloqueio de scroll no container */
+                height: 100% !important;
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr 40vh;
                 padding-top: 5rem;
@@ -1033,16 +1083,21 @@
 
         <ul class="nav-links">
             <li><a href="index.html">Início</a></li>
-            <li><a href="valores.html">Serviços</a></li>
-            <li><a href="espaço.html">O Espaço</a></li>
-            <li><a href="sobrenos.html">Sobre Nós</a></li>
-            <li><a href="produtos.html" class="highlight" style="font-family: 'Pinyon Script', cursive; font-size: 1.6rem; text-transform: capitalize; padding: 0.2rem 1.25rem; border-color: var(--accent);">Linha Elevation</a></li>
-            <li><a href="#agendamento" class="highlight"
-                    style="border-color: var(--accent); background: rgba(212, 175, 55, 0.12);">Agendar Online</a></li>
+            <li><a href="beleza.html">Harmonização Facial</a></li>
+            <li><a href="cuidados.html">Descubra a Experiência</a></li>
+            <li><a href="#agendamento" class="highlight" style="border-color: var(--accent); background: rgba(212, 175, 55, 0.12);">Agendar Horário</a></li>
         </ul>
 
-        <button class="mobile-menu-btn"><i class="ph ph-list"></i></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
     </nav>
+
+    <!-- Mobile Popover Menu -->
+    <div class="mobile-popover" id="mobile-popover">
+        <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
+        <a href="beleza.html" class="popover-link highlight-link"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
+        <a href="cuidados.html" class="popover-link"><i class="ph ph-magic-wand"></i> Descubra a Experiência</a>
+        <a href="#agendamento" class="popover-link" style="color: var(--gold); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.1); justify-content: center; margin-top: 0.5rem;"><i class="ph ph-whatsapp-logo"></i> Agendar Horário</a>
+    </div>
 
     <!-- Taste Skill Redesigned Asymmetric Hero -->
     <header class="hero">
@@ -1613,88 +1668,88 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Hero Video Scroll Control (High Performance LERP)
+            const isMobile = window.matchMedia("(max-width: 767px)").matches;
             const heroSection = document.querySelector('.hero');
             const video = document.getElementById('hero-video');
 
-            let targetVideoTime = 0;
-            let currentVideoTime = 0;
-            let isVideoLoaded = false;
-            
-            // Otimização via RequestAnimationFrame (Render Loop Contínuo)
-            const renderLoop = () => {
-                if (isVideoLoaded && video.duration && !isNaN(video.duration)) {
-                    // Interpolação Linear (LERP): suaviza a transição até o target
-                    currentVideoTime += (targetVideoTime - currentVideoTime) * 0.08;
-                    
-                    // Só atualiza o DOM (video.currentTime) se a diferença for significativa
-                    // Isso evita repaints desnecessários que travam o thread principal no mobile
-                    if (Math.abs(targetVideoTime - currentVideoTime) > 0.01) {
-                        video.currentTime = currentVideoTime;
+            // --- Lógica Híbrida do Vídeo (Scope 3) ---
+            if (isMobile) {
+                // Mobile: Autoplay contínuo, sem block de scroll
+                video.autoplay = true;
+                video.loop = true;
+                video.muted = true;
+                video.playsInline = true;
+                video.play().catch(() => {});
+            } else {
+                // Desktop: Scrub-on-Scroll com LERP
+                let targetVideoTime = 0;
+                let currentVideoTime = 0;
+                let isVideoLoaded = false;
+                let rAFId = null;
+
+                const renderLoop = () => {
+                    if (isVideoLoaded && video.duration && !isNaN(video.duration)) {
+                        currentVideoTime += (targetVideoTime - currentVideoTime) * 0.08;
+                        if (Math.abs(targetVideoTime - currentVideoTime) > 0.01) {
+                            video.currentTime = currentVideoTime;
+                        }
                     }
-                }
-                window.requestAnimationFrame(renderLoop);
-            };
-            
-            // Inicia o loop contínuo
-            window.requestAnimationFrame(renderLoop);
+                    rAFId = window.requestAnimationFrame(renderLoop);
+                };
+                
+                rAFId = window.requestAnimationFrame(renderLoop);
 
-            // Calcula o tempo alvo (targetVideoTime) passivamente
-            const onScroll = () => {
-                if (!isVideoLoaded || !video.duration || isNaN(video.duration)) return;
+                const onScroll = () => {
+                    if (!isVideoLoaded || !video.duration || isNaN(video.duration)) return;
+                    const scrollY = window.scrollY;
+                    const sectionOffsetTop = heroSection.offsetTop;
+                    const sectionHeight = heroSection.offsetHeight;
+                    const viewportHeight = window.innerHeight;
 
-                const scrollY = window.scrollY;
-                const sectionOffsetTop = heroSection.offsetTop;
-                const sectionHeight = heroSection.offsetHeight;
-                const viewportHeight = window.innerHeight;
+                    let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
+                    progress = Math.max(0, Math.min(progress, 1));
+                    targetVideoTime = progress * video.duration;
+                };
 
-                // Clamp progressivo de 0 a 1
-                let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
-                progress = Math.max(0, Math.min(progress, 1));
+                video.addEventListener('loadedmetadata', () => {
+                    isVideoLoaded = true;
+                    onScroll();
+                    currentVideoTime = targetVideoTime;
+                    video.currentTime = currentVideoTime;
+                });
 
-                targetVideoTime = progress * video.duration;
-            };
+                window.addEventListener('scroll', onScroll, { passive: true });
+            }
 
-            video.addEventListener('loadedmetadata', () => {
-                isVideoLoaded = true;
-                onScroll();
-                // Define o tempo atual diretamente no primeiro load para não pular do 0
-                currentVideoTime = targetVideoTime;
-                video.currentTime = currentVideoTime;
-            });
-
-            // Event listener passivo para scroll de alta performance (sem bloqueio)
-            window.addEventListener('scroll', onScroll, { passive: true });
-
-            // Navbar blur effect on scroll
+            // --- Navbar Blur on Scroll (Scope 2) ---
             window.addEventListener('scroll', () => {
                 const nav = document.querySelector('.navbar');
-                if (window.scrollY > 50) nav.classList.add('scrolled');
+                if (window.scrollY > 10) nav.classList.add('scrolled');
                 else nav.classList.remove('scrolled');
-            });
+            }, { passive: true });
 
-            // Mobile Menu Toggle (Refactored for CSS Drawer)
-            const mobileBtn = document.querySelector('.mobile-menu-btn');
-            const navLinks = document.querySelector('.nav-links');
+            // --- Menu Mobile Popover (Scope 2) ---
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const popoverMenu = document.getElementById('mobile-popover');
 
-            mobileBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                if (navLinks.classList.contains('active')) {
-                    mobileBtn.innerHTML = '<i class="ph ph-x"></i>';
-                } else {
-                    mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
-                }
-            });
-
-            // Fechar menu ao clicar num link (mobile)
-            navLinks.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth < 992) {
-                        navLinks.classList.remove('active');
+            if (mobileBtn && popoverMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    popoverMenu.classList.toggle('active');
+                    if (popoverMenu.classList.contains('active')) {
+                        mobileBtn.innerHTML = '<i class="ph ph-x"></i>';
+                    } else {
                         mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
                     }
                 });
-            });
+
+                // Fechar popover ao clicar num link
+                popoverMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        popoverMenu.classList.remove('active');
+                        mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
+                    });
+                });
+            }
 
             // Smooth scroll for anchor links
             document.querySelectorAll('a[href="#agendamento"]').forEach(link => {
