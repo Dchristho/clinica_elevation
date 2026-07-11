@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clínica Elevation | Elevando sua Beleza</title>
+    <title>Clínica Elevation | [Sua Especialidade/Serviço] em São Paulo</title>
+    <meta name="description" content="Conheça a Clínica Elevation. Oferecemos tratamentos especializados em [sua área] com foco no seu bem-estar. Agende sua consulta.">
     <!-- Phosphor Icons (Premium Minimalist Icons) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Firebase SDK -->
@@ -196,11 +197,14 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .hero-content-wrapper {
             position: relative;
             padding-left: 10vw;
+            padding-top: 120px; /* Previne sobreposição com o logotipo/navbar */
             z-index: 10;
             width: 55%;
         }
@@ -300,6 +304,30 @@
         }
 
         .btn-secondary:active {
+            transform: scale(0.97);
+        }
+
+        /* Novo CTA Terciário - Estética Elegante */
+        .btn-tertiary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 1.5rem;
+            background: transparent;
+            color: var(--accent);
+            text-decoration: none;
+            font-family: 'Pinyon Script', cursive;
+            font-size: 1.8rem;
+            transition: var(--transition);
+            will-change: transform;
+        }
+
+        .btn-tertiary:hover {
+            transform: translateY(-2px) scale(1.05);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        .btn-tertiary:active {
             transform: scale(0.97);
         }
 
@@ -609,12 +637,46 @@
 
         /* --- Viewport & Mobile Adjustments --- */
         @media (max-width: 992px) {
+            #hero-video {
+                pointer-events: none; /* Mitigação de lag em devices touch */
+            }
+
+            /* Novo Menu Mobile (Drawer Independente) */
             .nav-links {
-                display: none;
+                display: flex;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100vw;
+                height: 100dvh;
+                background: rgba(9, 9, 11, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2.5rem;
+                transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 99;
+                margin: 0;
+                padding: 0;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+            
+            .nav-links a.highlight {
+                font-size: 1.8rem !important;
             }
 
             .mobile-menu-btn {
                 display: block;
+                z-index: 101; /* Acima do menu overlay */
+                position: relative;
             }
 
             .intro-grid {
@@ -654,7 +716,8 @@
             .hero-content-wrapper {
                 padding-left: 5vw;
                 padding-right: 5vw;
-                align-self: end;
+                align-self: center;
+                padding-top: 130px; /* Previne a logo colidir com o texto no mobile */
                 padding-bottom: 2rem;
             }
 
@@ -970,12 +1033,16 @@
                     <p class="animate-up">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza
                         natural.</p>
                     <div class="hero-buttons animate-up"
-                        style="display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 3.5rem; animation-delay: 0.7s;">
+                        style="display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: center; margin-bottom: 3.5rem; animation-delay: 0.7s;">
                         <a href="cuidados.html" class="btn-primary" style="animation-delay: 0s; margin-bottom: 0;">
                             Descubra a Experiência <i class="ph ph-arrow-right"></i>
                         </a>
                         <a href="#agendamento" class="btn-secondary" style="text-decoration:none;">
                             Agendar Horário <i class="ph ph-calendar"></i>
+                        </a>
+                        <!-- Novo Botão de Destaque -->
+                        <a href="beleza.html" class="btn-tertiary">
+                            Harmonização Facial <i class="ph ph-sparkle" style="font-size: 1.2rem;"></i>
                         </a>
                     </div>
                 </div>
@@ -1518,26 +1585,53 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Hero Video Scroll Control
+            // Hero Video Scroll Control (Optimized with requestAnimationFrame & Mobile Autoplay)
             const heroSection = document.querySelector('.hero');
             const video = document.getElementById('hero-video');
 
+            let isMobile = window.innerWidth < 992;
+            
+            const handleResize = () => {
+                isMobile = window.innerWidth < 992;
+                if (isMobile) {
+                    video.loop = true;
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            };
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initialize video behavior based on device
+
+            let ticking = false;
+
             const updateVideoProgress = () => {
-                if (video.duration) {
-                    const scrollY = window.scrollY;
-                    const sectionOffsetTop = heroSection.offsetTop;
-                    const sectionHeight = heroSection.offsetHeight;
-                    const viewportHeight = window.innerHeight;
+                // Se for mobile, não executa o scrub no scroll (deixa o vídeo fluir normal)
+                if (isMobile || !video.duration || isNaN(video.duration)) return;
 
-                    let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
-                    progress = Math.max(0, Math.min(progress, 1));
+                const scrollY = window.scrollY;
+                const sectionOffsetTop = heroSection.offsetTop;
+                const sectionHeight = heroSection.offsetHeight;
+                const viewportHeight = window.innerHeight;
 
-                    video.currentTime = progress * video.duration;
+                let progress = (scrollY - sectionOffsetTop) / (sectionHeight - viewportHeight);
+                progress = Math.max(0, Math.min(progress, 1));
+
+                video.currentTime = progress * video.duration;
+            };
+
+            const onScroll = () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        updateVideoProgress();
+                        ticking = false;
+                    });
+                    ticking = true;
                 }
             };
 
             video.addEventListener('loadedmetadata', updateVideoProgress);
-            window.addEventListener('scroll', updateVideoProgress);
+            window.addEventListener('scroll', onScroll);
 
             // Navbar blur effect on scroll
             window.addEventListener('scroll', () => {
@@ -1546,24 +1640,27 @@
                 else nav.classList.remove('scrolled');
             });
 
-            // Mobile Menu Toggle
+            // Mobile Menu Toggle (Refactored for CSS Drawer)
             const mobileBtn = document.querySelector('.mobile-menu-btn');
             const navLinks = document.querySelector('.nav-links');
 
             mobileBtn.addEventListener('click', () => {
-                if (navLinks.style.display === 'flex') {
-                    navLinks.style.display = 'none';
+                navLinks.classList.toggle('active');
+                if (navLinks.classList.contains('active')) {
+                    mobileBtn.innerHTML = '<i class="ph ph-x"></i>';
                 } else {
-                    navLinks.style.display = 'flex';
-                    navLinks.style.flexDirection = 'column';
-                    navLinks.style.position = 'absolute';
-                    navLinks.style.top = '100%';
-                    navLinks.style.left = '0';
-                    navLinks.style.width = '100%';
-                    navLinks.style.background = 'rgba(9,9,11,0.98)';
-                    navLinks.style.padding = '2rem';
-                    navLinks.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
                 }
+            });
+
+            // Fechar menu ao clicar num link (mobile)
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 992) {
+                        navLinks.classList.remove('active');
+                        mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
+                    }
+                });
             });
 
             // Smooth scroll for anchor links
