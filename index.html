@@ -242,7 +242,7 @@
         .hero-content h1 {
             font-size: clamp(3.5rem, 6vw, 6.5rem);
             line-height: 0.95;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem; /* Reduzido de 2rem */
             font-weight: 700;
             animation-delay: 0.3s;
         }
@@ -251,15 +251,15 @@
             color: var(--text-muted);
             font-size: 1.1rem;
             max-width: 45ch;
-            margin-bottom: 3.5rem;
+            margin-bottom: 2rem; /* Reduzido de 3.5rem */
             animation-delay: 0.5s;
         }
 
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem 2.5rem;
+            gap: 0.8rem;
+            padding: 0.8rem 1.8rem; /* Reduzido para encaixar melhor */
             background: var(--text-high);
             color: var(--bg-dark);
             text-decoration: none;
@@ -284,8 +284,8 @@
         .btn-secondary {
             display: inline-flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem 2.5rem;
+            gap: 0.8rem;
+            padding: 0.8rem 1.8rem; /* Reduzido para encaixar melhor */
             background: transparent;
             color: var(--text-high);
             border: 1px solid var(--accent);
@@ -312,8 +312,8 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 1.25rem;
-            margin-bottom: 3.5rem;
+            gap: 1rem; /* Reduzido de 1.25rem */
+            margin-bottom: 2rem; /* Reduzido de 3.5rem */
             animation-delay: 0.7s;
             position: relative;
             z-index: 50; /* Garante que os botões fiquem acima de overlays ou iluminações */
@@ -332,8 +332,8 @@
         .btn-tertiary {
             display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            padding: 1rem 1.5rem;
+            gap: 0.6rem;
+            padding: 0.8rem 1.4rem; /* Reduzido */
             background: rgba(9, 9, 11, 0.5); /* Isola o botão do glow de fundo */
             backdrop-filter: blur(10px);
             border: 1px solid rgba(212, 175, 55, 0.2);
@@ -341,7 +341,7 @@
             color: var(--accent);
             text-decoration: none;
             font-family: 'Pinyon Script', cursive;
-            font-size: 1.8rem;
+            font-size: 1.5rem; /* Reduzido de 1.8rem */
             transition: var(--transition);
             will-change: transform;
         }
@@ -748,7 +748,8 @@
 
             /* Reseta o Scroll Locker do Vídeo no Mobile */
             .hero {
-                height: 100vh !important; /* Libera o scroll nativo */
+                height: auto !important; /* Permite expansão vertical */
+                min-height: 100vh !important;
             }
 
             .mobile-menu-btn {
@@ -776,11 +777,14 @@
 
             .hero-sticky-container {
                 position: relative !important; /* Libera o bloqueio de scroll no container */
-                height: 100% !important;
+                height: auto !important;
+                min-height: 100vh !important;
+                display: grid !important; /* Garante que o grid-template abaixo funcione */
                 grid-template-columns: 1fr;
                 grid-template-rows: 1fr 40vh;
                 padding-top: 5rem;
                 gap: 2rem;
+                overflow: visible !important; /* Remove o corte de conteúdo */
             }
 
             .hero-video-wrapper {
@@ -797,7 +801,7 @@
                 padding-left: 5vw;
                 padding-right: 5vw;
                 align-self: center;
-                padding-top: 130px; /* Previne a logo colidir com o texto no mobile */
+                padding-top: 2rem; /* Reduzido de 130px para evitar push excessivo */
                 padding-bottom: 2rem;
             }
 
