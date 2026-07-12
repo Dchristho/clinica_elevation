@@ -792,33 +792,45 @@
             }
 
             .hero-sticky-container {
-                position: relative !important; /* Libera o bloqueio de scroll no container */
-                height: auto !important;
+                position: relative !important;
+                height: 100dvh !important;
                 min-height: 100vh !important;
-                display: grid !important; /* Garante que o grid-template abaixo funcione */
-                grid-template-columns: 1fr;
-                grid-template-rows: 1fr 40vh;
-                padding-top: 5rem;
-                gap: 2rem;
-                overflow: visible !important; /* Remove o corte de conteúdo */
+                display: flex !important;
+                align-items: center;
+                padding-top: 0;
+                overflow: hidden !important;
             }
 
             .hero-video-wrapper {
-                grid-column: 1 / -1;
-                grid-row: 2 / 3;
-                border-radius: 40px 40px 0 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
                 height: 100%;
-                border-left: none;
-                border-bottom: none;
-                border-top: 1px solid var(--glass-border);
+                border-radius: 0;
+                border: none;
+                z-index: 1;
+            }
+
+            .hero-video-wrapper::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to top, var(--bg-dark) 0%, rgba(9, 9, 11, 0.7) 40%, rgba(9, 9, 11, 0.4) 100%);
+                z-index: 2;
             }
 
             .hero-content-wrapper {
                 padding-left: 5vw;
                 padding-right: 5vw;
                 align-self: center;
-                padding-top: 2rem; /* Reduzido de 130px para evitar push excessivo */
+                padding-top: 6rem; /* Espaço para a navbar */
                 padding-bottom: 2rem;
+                position: relative;
+                z-index: 10;
+                width: 100%;
             }
 
             .hero-content h1 {
