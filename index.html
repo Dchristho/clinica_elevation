@@ -140,6 +140,22 @@
             background: var(--accent-dim);
         }
 
+        .nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.6rem !important;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+            color: var(--accent) !important;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: inline-block;
+        }
+
+        .nav-cursive:hover {
+            color: #f7e6a1 !important; /* Dourado mais claro/brilhante */
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4) !important;
+            transform: scale(1.05);
+        }
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -1351,9 +1367,9 @@
 
         <ul class="nav-links">
             <li><a href="index.html">Início</a></li>
-            <li><a href="beleza.html">Harmonização Facial</a></li>
-            <li><a href="cuidados.html">Descubra a Experiência</a></li>
-            <li><a href="#agendamento" class="highlight" style="border-color: var(--accent); background: rgba(212, 175, 55, 0.12);">Agendar Horário</a></li>
+            <li><a href="beleza.html" class="nav-cursive">Harmonização Facial</a></li>
+            <li><a href="produtos.html" class="nav-cursive">Linha Elevation</a></li>
+            
         </ul>
 
         <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
@@ -1362,7 +1378,8 @@
     <!-- Mobile Popover Menu -->
     <div class="mobile-popover" id="mobile-popover">
         <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
-        <a href="beleza.html" class="popover-link highlight-link"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
+        <a href="beleza.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
+        <a href="produtos.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-package"></i> Linha Elevation</a>
         <a href="cuidados.html" class="popover-link"><i class="ph ph-magic-wand"></i> Descubra a Experiência</a>
         <a href="#agendamento" class="popover-link" style="color: var(--gold); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.1); justify-content: center; margin-top: 0.5rem;"><i class="ph ph-whatsapp-logo"></i> Agendar Horário</a>
     </div>
@@ -1371,9 +1388,9 @@
     <header class="hero">
         <div class="hero-sticky-container">
             <div class="hero-video-wrapper">
-                <video id="hero-video" playsinline muted preload="auto"
+                <video id="hero-video" playsinline muted preload="auto" style="will-change: transform;"
                     poster="WhatsApp%20Image%202025-09-17%20at%2010.52.17.jpeg">
-                    <source src="Agent_video_Pippit.mp4" type="video/mp4">
+                    <source src="comercialprof..mp4" type="video/mp4">
                 </video>
             </div>
 
@@ -2007,6 +2024,7 @@
             const isMobile = window.matchMedia("(max-width: 767px)").matches;
             const heroSection = document.querySelector('.hero');
             const video = document.getElementById('hero-video');
+            if (video) video.style.willChange = 'transform';
 
             // --- Lógica Híbrida do Vídeo (Scope 3) ---
             if (isMobile) {
@@ -2017,16 +2035,31 @@
                 video.playsInline = true;
                 video.play().catch(() => {});
             } else {
-                // Desktop: Scrub-on-Scroll com LERP
+                // Desktop: Scrub-on-Scroll com LERP otimizado
+                video.pause();
+                video.autoplay = false;
+                video.loop = false;
+                
                 let targetVideoTime = 0;
                 let currentVideoTime = 0;
                 let isVideoLoaded = false;
                 let rAFId = null;
+                const speedFactor = 0.05; // Reduz a velocidade da interpolação para aliviar o decodificador
 
                 const renderLoop = () => {
-                    if (isVideoLoaded && video.duration && !isNaN(video.duration)) {
-                        currentVideoTime += (targetVideoTime - currentVideoTime) * 0.08;
-                        if (Math.abs(targetVideoTime - currentVideoTime) > 0.01) {
+                    // Só prossegue se o vídeo tiver buffer suficiente (readyState >= 3)
+                    if (isVideoLoaded && video.duration && !isNaN(video.duration) && video.readyState >= 3) {
+                        // Margem de segurança de 0.1s para evitar travar o codec ao bater no limite cravado
+                        let safeDuration = video.duration - 0.1;
+                        if (safeDuration < 0) safeDuration = video.duration;
+                        
+                        let safeTarget = Math.min(targetVideoTime, safeDuration);
+                        
+                        // LERP suave (Interpolação Linear)
+                        currentVideoTime += (safeTarget - currentVideoTime) * speedFactor;
+                        
+                        // Threshold para evitar atualizações microscópicas inócuas que disparam render
+                        if (Math.abs(safeTarget - currentVideoTime) > 0.05) {
                             video.currentTime = currentVideoTime;
                         }
                     }
@@ -2047,12 +2080,23 @@
                     targetVideoTime = progress * video.duration;
                 };
 
-                video.addEventListener('loadedmetadata', () => {
+                const initVideo = () => {
                     isVideoLoaded = true;
                     onScroll();
-                    currentVideoTime = targetVideoTime;
-                    video.currentTime = currentVideoTime;
-                });
+                    // Só força o update se houver real diferença, para não travar de imediato
+                    if (Math.abs(video.currentTime - targetVideoTime) > 0.1) {
+                        currentVideoTime = targetVideoTime;
+                        video.currentTime = currentVideoTime;
+                    }
+                };
+
+                // Otimização: aguardar HAVE_FUTURE_DATA ou canplay/canplaythrough
+                if (video.readyState >= 3) {
+                    initVideo();
+                } else {
+                    video.addEventListener('canplaythrough', initVideo);
+                    video.addEventListener('canplay', initVideo); // Fallback caso não carregue 100% no preload
+                }
 
                 window.addEventListener('scroll', onScroll, { passive: true });
             }
