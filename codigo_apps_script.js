@@ -1,78 +1,47 @@
 // ============================================================
-// CÓDIGO PARA O GOOGLE APPS SCRIPT
-// Cole este código em: Extensões > Apps Script > Código.gs
+// CÓDIGO DO SITE (FRONTEND)
+// Cole no seu arquivo script.js ou dentro da tag <script> do HTML
 // ============================================================
 
-function doPost(e) {
-  try {
-    // Detectar formato dos dados (formulário ou JSON)
-    var data;
+const formAgendamento = document.querySelector('#seu-formulario'); // Garanta que o ID do seu <form> seja "seu-formulario"
 
-    if (e.parameter && e.parameter.nome) {
-      // Dados vieram de um formulário HTML (application/x-www-form-urlencoded)
-      data = e.parameter;
-    } else if (e.postData && e.postData.contents) {
-      // Dados vieram como JSON no body
-      data = JSON.parse(e.postData.contents);
-    } else {
-      throw new Error("Nenhum dado recebido");
-    }
+if (formAgendamento) {
+    formAgendamento.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-    // Acessar a planilha ativa
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+        // Captura os dados digitados pelos IDs dos inputs
+        const nomeCliente = document.querySelector('#nome').value;
+        const telefoneCliente = document.querySelector('#telefone').value;
+        const dataAgendamento = document.querySelector('#data').value;
+        const procedimentoEscolhido = document.querySelector('#procedimento').value;
 
-    // Adicionar linha com os dados
-    sheet.appendRow([
-      new Date(),                   // A: Timestamp
-      data.nome || "",              // B: Nome
-      data.email || "",             // C: Email
-      data.telefone || "",          // D: Telefone
-      data.servico || "",           // E: Serviço
-      data.data || "",              // F: Data do Agendamento
-      data.horario || "",           // G: Horário
-      data.observacoes || ""        // H: Observações
-    ]);
+        try {
+            // 1. Salva no Firebase
+            await db.collection("agendamentos").add({
+                nome: nomeCliente,
+                telefone: telefoneCliente,
+                data: dataAgendamento,
+                procedimento: procedimentoEscolhido,
+                criadoEm: new Date()
+            });
 
-    // Enviar email de confirmação para o cliente
-    if (data.email && data.email !== "" && data.email !== "undefined") {
-      var subjectClient = "Confirmação de Agendamento - Clínica Elevation";
-      var bodyClient = "Olá " + data.nome + ",\n\n" +
-                       "Recebemos seu pedido de agendamento!\n\n" +
-                       "Serviço: " + data.servico + "\n" +
-                       "Data: " + data.data + "\n" +
-                       "Horário: " + data.horario + "\n\n" +
-                       "Entraremos em contato em breve para confirmar.\n\n" +
-                       "Obrigado(a)!\nClínica Elevation";
+            // 2. Dispara a notificação via WhatsApp (CallMeBot)
+            const meuNumero = "5511980272343";
+            const apiKey = "6360757";
+            
+            const textoMensagem = `🚨 *Novo Agendamento!*%0A%0A👤 *Cliente:* ${encodeURIComponent(nomeCliente)}%0A📞 *WhatsApp:* ${encodeURIComponent(telefoneCliente)}%0A📅 *Data:* ${encodeURIComponent(dataAgendamento)}%0A💉 *Procedimento:* ${encodeURIComponent(procedimentoEscolhido)}`;
 
-      MailApp.sendEmail(data.email, subjectClient, bodyClient);
-    }
+            fetch(`https://api.callmebot.com/whatsapp.php?phone=${meuNumero}&text=${textoMensagem}&apikey=${apiKey}`, {
+                mode: 'no-cors'
+            });
 
-    // Enviar notificação para o dono da planilha
-    var emailSalao = Session.getActiveUser().getEmail();
-    if (emailSalao) {
-      var subjectAdmin = "Novo Agendamento: " + data.nome;
-      var bodyAdmin = "Novo agendamento recebido no site:\n\n" +
-                      "Nome: " + data.nome + "\n" +
-                      "Email: " + data.email + "\n" +
-                      "Telefone: " + data.telefone + "\n" +
-                      "Serviço: " + data.servico + "\n" +
-                      "Data: " + data.data + "\n" +
-                      "Horário: " + data.horario + "\n" +
-                      "Observações: " + data.observacoes;
+            // 3. Sucesso para o cliente
+            alert("Agendamento realizado com sucesso! Entraremos em contato.");
+            formAgendamento.reset();
 
-      MailApp.sendEmail(emailSalao, subjectAdmin, bodyAdmin);
-    }
-
-    // Retornar resposta
-    return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
-      .setMimeType(ContentService.MimeType.JSON);
-
-  } catch(error) {
-    return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": error.toString()}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function doGet(e) {
-  return ContentService.createTextOutput("Script ativo e funcionando!");
+        } catch (error) {
+            console.error("Erro ao agendar: ", error);
+            alert("Ocorreu um erro ao agendar. Tente novamente.");
+        }
+    });
 }
