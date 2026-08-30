@@ -1,36 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clínica Elevation | [Sua Especialidade/Serviço] em São Paulo</title>
-    <meta name="description" content="Conheça a Clínica Elevation. Oferecemos tratamentos especializados em [sua área] com foco no seu bem-estar. Agende sua consulta.">
+    <meta name="description"
+        content="Conheça a Clínica Elevation. Oferecemos tratamentos especializados em [sua área] com foco no seu bem-estar. Agende sua consulta.">
+
     <!-- Phosphor Icons (Premium Minimalist Icons) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
     <!-- Booking System (Firebase Sync) -->
     <script src="booking-system.js"></script>
+
     <!-- Modern Premium Font Stack -->
-    <link
-        href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- GSAP & ScrollTrigger for Scrollcraft Transitions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <style>
-        /* Taste Skill v2 Baseline Configuration */
+        /* Design DNA & Taste-Skill Core Design Tokens */
         :root {
-            /* Colors: Zinc-950 base, desaturated gold accent */
-            --bg-dark: #09090b;
+            --bg-dark: #08090b;
+            --bg-surface: #0e1015;
+            --bg-surface-elevated: #151820;
+            --bg-surface-hover: #1c202a;
             --accent: #d4af37;
-            --accent-dim: rgba(212, 175, 55, 0.15);
+            --accent-light: #f5df93;
+            --accent-dim: rgba(212, 175, 55, 0.12);
+            --accent-glow: rgba(212, 175, 55, 0.25);
             --text-high: #ffffff;
-            --text-muted: #a1a1aa;
-            --glass-border: rgba(255, 255, 255, 0.06);
+            --text-muted: #9496a1;
+            --text-dim: #636674;
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --glass-border-hover: rgba(212, 175, 55, 0.35);
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
-            --transition: all 0.6s var(--ease);
+            --transition: all 0.5s var(--ease);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
         }
 
         * {
@@ -40,23 +59,21 @@
         }
 
         body {
-            font-family: 'Satoshi', sans-serif;
+            font-family: 'Satoshi', 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-high);
             overflow-x: hidden;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
         }
 
-        /* Typography Override */
-        h1,
-        h2,
-        h3,
-        h4,
-        .display-font {
+        /* Typography Hierarchy */
+        h1, h2, h3, h4, .display-font {
             font-family: 'Cabinet Grotesk', sans-serif;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
+            color: var(--text-high);
         }
 
         ::selection {
@@ -64,8 +81,10 @@
             color: var(--bg-dark);
         }
 
+        /* Custom Modern Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
+            height: 5px;
         }
 
         ::-webkit-scrollbar-track {
@@ -73,20 +92,57 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #27272a;
-            border-radius: 10px;
+            background: #232833;
+            border-radius: 999px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+            background: var(--accent);
         }
 
-        /* --- Minimal Navigation --- */
+        /* Ambient Dynamic Background & Grid Overlay */
+        .ambient-grid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-size: 48px 48px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        }
+
+        #cursorGlow {
+            position: fixed;
+            width: 550px;
+            height: 550px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        /* Scrollcraft Top Progress Bar */
+        #scrollProgressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #f7e6a1);
+            z-index: 1000;
+            box-shadow: 0 0 10px var(--accent-glow);
+            transition: width 0.05s ease;
+        }
+
+        /* --- Minimal Navigation (Pear.no Style) --- */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2.5rem 5vw;
+            padding: 2rem 6vw;
             position: fixed;
             width: 100%;
             top: 0;
@@ -95,15 +151,12 @@
         }
 
         .navbar.scrolled {
-            padding: 1.25rem 5vw;
-            background: rgba(9, 9, 11, 0.85);
-            backdrop-filter: blur(16px);
+            padding: 1rem 6vw;
+            background: rgba(8, 9, 11, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
-        }
-
-        .glare-image {
-            height: 40px;
-            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         }
 
         .nav-links {
@@ -111,6 +164,7 @@
             gap: 2.5rem;
             list-style: none;
             align-items: center;
+            margin-left: auto;
         }
 
         .nav-links a {
@@ -118,58 +172,60 @@
             font-size: 0.85rem;
             font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             text-decoration: none;
             transition: var(--transition);
             position: relative;
+            padding: 0.25rem 0;
         }
 
         .nav-links a:hover {
             color: var(--text-high);
         }
 
-        .nav-links a.highlight {
-            color: var(--accent);
-            padding: 0.6rem 1.25rem;
-            border-radius: 99px;
-            border: 1px solid var(--accent-dim);
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
-        }
-
-        .nav-links a.highlight:hover {
-            background: var(--accent-dim);
-        }
-
-        .nav-cursive {
+        .nav-links a.nav-cursive {
             font-family: 'Pinyon Script', cursive !important;
-            font-size: 1.6rem !important;
+            font-size: 1.7rem !important;
             text-transform: none !important;
             letter-spacing: normal !important;
             color: var(--accent) !important;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
             display: inline-block;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
-        .nav-cursive:hover {
-            color: #f7e6a1 !important; /* Dourado mais claro/brilhante */
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4) !important;
-            transform: scale(1.05);
+        .nav-links a.nav-cursive:hover {
+            color: #f7e6a1 !important;
+            text-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4) !important;
+            transform: scale(1.06) translateY(-1px);
         }
+
         .mobile-menu-btn {
             display: none;
-            background: none;
-            border: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
             color: var(--text-high);
-            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            font-size: 1.4rem;
             cursor: pointer;
+            transition: var(--transition);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--bg-surface-elevated);
+            border-color: var(--accent-dim);
+            color: var(--accent);
         }
 
         /* --- Taste Skill Asymmetric Hero --- */
         .hero {
             position: relative;
-            height: 350vh;
-            /* Scroll tie */
+            height: 350vh; /* Desktop scrub scroll tie */
+            z-index: 10;
         }
 
         .hero-sticky-container {
@@ -194,18 +250,19 @@
             border: 1px solid var(--glass-border);
             border-right: none;
             z-index: 1;
+            box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6);
         }
 
-        /* Gradiente na junção para disfarçar a borda e permitir texto por cima */
         .hero-video-wrapper::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 50%;
+            width: 55%;
             height: 100%;
-            background: linear-gradient(to right, var(--bg-dark) 0%, transparent 100%);
+            background: linear-gradient(to right, var(--bg-dark) 0%, rgba(8, 9, 11, 0.8) 40%, transparent 100%);
             z-index: 2;
+            pointer-events: none;
         }
 
         #hero-video {
@@ -215,82 +272,84 @@
             object-position: center;
             will-change: transform;
             transform: translateZ(0);
-            pointer-events: none; /* Mitigação de overhead em eventos de toque */
+            pointer-events: none;
         }
 
         .hero-content-wrapper {
             position: relative;
-            padding-left: 10vw;
-            padding-top: 120px; /* Previne sobreposição com o logotipo/navbar */
+            padding-left: 8vw;
+            padding-top: 100px;
             z-index: 10;
             width: 55%;
         }
 
-        /* Staggered Fade Up Animations */
-        .animate-up {
-            opacity: 0;
-            transform: translateY(24px);
-            animation: fadeUp 1.2s var(--ease) forwards;
-        }
-
-        @keyframes fadeUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .hero-content span {
-            color: var(--text-muted);
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.15em;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-bottom: 2rem;
-            padding: 0.3rem 1rem;
-            border: 1px solid var(--glass-border);
-            border-radius: 99px;
-            background: rgba(255, 255, 255, 0.02);
-            animation-delay: 0.1s;
+            letter-spacing: 0.18em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.75rem;
+            padding: 0.4rem 1.1rem;
+            border: 1px solid var(--accent-dim);
+            border-radius: var(--radius-full);
+            background: rgba(212, 175, 55, 0.05);
+            backdrop-filter: blur(8px);
         }
 
         .hero-content h1 {
-            font-size: clamp(3.5rem, 6vw, 6.5rem);
+            font-size: clamp(3.5rem, 6.5vw, 6.5rem);
             line-height: 0.95;
-            margin-bottom: 1rem; /* Reduzido de 2rem */
+            margin-bottom: 1.25rem;
             font-weight: 700;
-            animation-delay: 0.3s;
+            letter-spacing: -0.04em;
         }
 
         .hero-content p {
             color: var(--text-muted);
             font-size: 1.1rem;
             max-width: 45ch;
-            margin-bottom: 2rem; /* Reduzido de 3.5rem */
-            animation-delay: 0.5s;
+            margin-bottom: 2.25rem;
+            line-height: 1.65;
+        }
+
+        /* Buttons & Interactive Elements (Design DNA standard) */
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 50;
         }
 
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1.8rem; /* Reduzido para encaixar melhor */
+            gap: 0.75rem;
+            padding: 0.9rem 2rem;
             background: var(--text-high);
             color: var(--bg-dark);
             text-decoration: none;
-            border-radius: 99px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
             transition: var(--transition);
-            animation-delay: 0.7s;
             will-change: transform;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
             background: var(--accent);
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+            color: var(--bg-dark);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
 
         .btn-primary:active {
@@ -300,101 +359,88 @@
         .btn-secondary {
             display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1.8rem; /* Reduzido para encaixar melhor */
-            background: transparent;
+            gap: 0.75rem;
+            padding: 0.9rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
             color: var(--text-high);
-            border: 1px solid var(--accent);
-            border-radius: 99px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-full);
             font-weight: 500;
-            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
             cursor: pointer;
             transition: var(--transition);
             will-change: transform;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
         }
 
         .btn-secondary:hover {
             transform: translateY(-2px);
-            background: var(--accent);
-            color: var(--bg-dark);
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+            background: var(--bg-surface-elevated);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .btn-secondary:active {
             transform: scale(0.97);
         }
 
-        .hero-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 1rem; /* Reduzido de 1.25rem */
-            margin-bottom: 2rem; /* Reduzido de 3.5rem */
-            animation-delay: 0.7s;
-            position: relative;
-            z-index: 50; /* Garante que os botões fiquem acima de overlays ou iluminações */
-        }
-
-        .hero-buttons .btn-primary {
-            animation-delay: 0s;
-            margin-bottom: 0;
-        }
-
-        .hero-buttons .btn-secondary {
-            text-decoration: none;
-        }
-
-        /* Botão Reposicionado com Fundo Isolante */
         .btn-tertiary {
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            padding: 0.8rem 1.4rem; /* Reduzido */
-            background: rgba(9, 9, 11, 0.5); /* Isola o botão do glow de fundo */
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 99px;
+            padding: 0.75rem 1.6rem;
+            background: rgba(14, 16, 21, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: var(--radius-full);
             color: var(--accent);
             text-decoration: none;
             font-family: 'Pinyon Script', cursive;
-            font-size: 1.5rem; /* Reduzido de 1.8rem */
+            font-size: 1.55rem;
             transition: var(--transition);
             will-change: transform;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
         .btn-tertiary:hover {
-            transform: translateY(-2px) scale(1.05);
-            background: rgba(212, 175, 55, 0.1);
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px) scale(1.04);
+            background: rgba(212, 175, 55, 0.12);
+            text-shadow: 0 0 18px rgba(212, 175, 55, 0.5);
             border-color: var(--accent);
         }
-        
+
         .btn-tertiary:active {
             transform: scale(0.97);
         }
-        
+
         .btn-tertiary i {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
         }
 
+        /* Scroll Indicator */
         .scroll-indicator {
             position: absolute;
             bottom: 40px;
-            left: 10vw;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
+            left: 8vw;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 1rem;
-            animation-delay: 1s;
+            font-family: 'Satoshi', sans-serif;
+            font-weight: 600;
         }
 
         .scroll-line {
-            width: 40px;
+            width: 44px;
             height: 1px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -406,8 +452,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: var(--text-high);
-            animation: scrollLine 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+            background: var(--accent);
+            animation: scrollLine 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
         }
 
         @keyframes scrollLine {
@@ -416,93 +462,94 @@
             }
         }
 
-        /* --- Sections (Asymmetric & Clean) --- */
+        /* --- Sections (Asymmetric & Clean Design DNA) --- */
         .section-premium {
-            padding: 10rem 5vw;
-            max-width: 1600px;
+            padding: 9rem 6vw;
+            max-width: 1440px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
         .intro-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8vw;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 6vw;
             align-items: center;
         }
 
         .intro-img-wrapper {
             position: relative;
-            border-radius: 24px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
-        }
-
-        .intro-img-wrapper::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            pointer-events: none;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
         }
 
         .intro-img {
             width: 100%;
             display: block;
-            border-radius: 24px;
-            transition: var(--transition);
-            filter: grayscale(20%);
+            border-radius: var(--radius-lg);
+            transition: transform 0.8s var(--ease), filter 0.8s var(--ease);
+            filter: grayscale(15%) contrast(102%);
         }
 
         .intro-img-wrapper:hover .intro-img {
-            transform: scale(1.03);
-            filter: grayscale(0%);
+            transform: scale(1.04);
+            filter: grayscale(0%) contrast(105%);
         }
 
         .intro-text h2 {
-            font-size: clamp(2.5rem, 4vw, 3.5rem);
-            margin-bottom: 2rem;
+            font-size: clamp(2.4rem, 4vw, 3.6rem);
+            margin-bottom: 1.75rem;
             line-height: 1.1;
+            font-weight: 700;
         }
 
         .intro-text p {
             color: var(--text-muted);
             font-size: 1.1rem;
             margin-bottom: 2.5rem;
-            max-width: 50ch;
+            max-width: 52ch;
+            line-height: 1.75;
         }
 
         .stats-grid {
             display: flex;
             gap: 4rem;
             border-top: 1px solid var(--glass-border);
-            padding-top: 3rem;
-            margin-top: 3rem;
+            padding-top: 2.5rem;
+            margin-top: 2.5rem;
         }
 
         .stat-item h4 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             line-height: 1;
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: -0.04em;
         }
 
         .stat-item p {
-            color: var(--text-muted);
+            color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             font-size: 0.75rem;
+            font-weight: 600;
         }
 
-        /* --- Minimalist Services Rows --- */
+        /* --- Minimalist Services Rows (Pear.no List Design) --- */
         .services-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 6rem;
+            margin-bottom: 5rem;
         }
 
         .services-header h2 {
-            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-size: clamp(2.5rem, 4vw, 3.8rem);
+            line-height: 1.05;
         }
 
         .services-list {
@@ -513,46 +560,52 @@
             display: grid;
             grid-template-columns: 80px 1fr auto;
             align-items: center;
-            padding: 3rem 0;
+            padding: 2.5rem 1.5rem;
             border-bottom: 1px solid var(--glass-border);
             text-decoration: none;
             color: inherit;
             transition: var(--transition);
             position: relative;
+            border-radius: var(--radius-md);
         }
 
         .service-row i {
-            font-size: 2rem;
-            color: var(--text-muted);
+            font-size: 1.8rem;
+            color: var(--text-dim);
             transition: var(--transition);
         }
 
         .service-row h3 {
-            font-size: 1.8rem;
+            font-size: 1.65rem;
             font-weight: 500;
             transition: var(--transition);
+            letter-spacing: -0.02em;
         }
 
         .service-row .arrow {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            opacity: 0;
-            transform: translateX(-20px);
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            opacity: 0.4;
+            transform: translateX(-10px);
             transition: var(--transition);
         }
 
         .service-row::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -2rem;
-            right: -2rem;
-            bottom: 0;
+            inset: 0;
             background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
             opacity: 0;
             transition: var(--transition);
+            border-radius: var(--radius-md);
             z-index: -1;
-            border-radius: 12px;
+        }
+
+        .service-row:hover {
+            background: rgba(255, 255, 255, 0.015);
+            border-color: rgba(212, 175, 55, 0.25);
+            padding-left: 2rem;
+            padding-right: 2rem;
         }
 
         .service-row:hover::before {
@@ -561,11 +614,12 @@
 
         .service-row:hover i {
             color: var(--accent);
-            scale: 1.1;
+            transform: scale(1.15);
         }
 
         .service-row:hover h3 {
-            transform: translateX(10px);
+            transform: translateX(8px);
+            color: var(--text-high);
         }
 
         .service-row:hover .arrow {
@@ -576,295 +630,123 @@
 
         /* --- Immersive Experience Section --- */
         .exp-section {
-            padding: 10vw 5vw;
+            padding: 8vw 6vw;
             background: #000;
+            position: relative;
+            z-index: 10;
         }
 
         .exp-banner {
-            height: 60vh;
-            border-radius: 2rem;
-            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=2000');
+            height: 55vh;
+            min-height: 380px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.75)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            /* Parallax effect */
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
             border: 1px solid var(--glass-border);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+        }
+
+        .exp-banner:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-3px);
         }
 
         .exp-banner h2 {
-            font-size: clamp(3rem, 6vw, 5rem);
+            font-size: clamp(2.5rem, 5.5vw, 4.5rem);
             font-weight: 700;
+            text-align: center;
+            padding: 0 2rem;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* --- Clean Footer --- */
-        footer {
+        /* --- Instagram Embed Section --- */
+        .instagram-section {
+            padding: 7rem 6vw;
             background: var(--bg-dark);
-            padding: 8rem 5vw 3rem;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 6rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .footer-col h4 {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            font-weight: 500;
-        }
-
-        .footer-col p {
-            color: var(--text-muted);
-            max-width: 40ch;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: var(--transition);
-            display: inline-block;
-        }
-
-        .footer-links a:hover {
-            color: var(--text-high);
-            transform: translateX(5px);
-        }
-
-        .social-row {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-high);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-btn:hover {
-            background: var(--text-high);
-            color: var(--bg-dark);
-        }
-
-        .footer-bottom {
-            margin-top: 6rem;
-            padding-top: 3rem;
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .mobile-popover {
-            display: none;
-        }
-
-        /* --- Viewport & Mobile Adjustments --- */
-        @media (max-width: 992px) {
-            #hero-video {
-                pointer-events: none; /* Mitigação de lag em devices touch */
-            }
-
-            .nav-links {
-                display: none; /* Esconde os links padrões no mobile */
-            }
-
-            /* Menu Mobile Estilo Popover (Shadcn) */
-            .mobile-popover {
-                position: fixed;
-                top: 5rem;
-                right: 5vw;
-                width: calc(100vw - 10vw);
-                max-width: 320px;
-                background: rgba(9, 9, 11, 0.85);
-                backdrop-filter: blur(24px);
-                border: 1px solid rgba(212, 175, 55, 0.15);
-                border-radius: 20px;
-                padding: 1.5rem;
-                z-index: 99;
-                opacity: 0;
-                visibility: hidden;
-                transform: scale(0.95) translateY(-10px);
-                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-                transform-origin: top right;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-                display: flex;
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .mobile-popover.active {
-                opacity: 1;
-                visibility: visible;
-                transform: scale(1) translateY(0);
-            }
-
-            .popover-link {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-                padding: 1rem;
-                color: var(--text-high);
-                text-decoration: none;
-                border-radius: 12px;
-                transition: var(--transition);
-                font-size: 1.1rem;
-                font-weight: 500;
-            }
-
-            .popover-link i {
-                font-size: 1.4rem;
-                color: var(--text-muted);
-                transition: var(--transition);
-            }
-
-            .popover-link:hover {
-                background: rgba(255, 255, 255, 0.05);
-            }
-            
-            .popover-link:hover i {
-                color: var(--gold);
-            }
-
-            .popover-link.highlight-link {
-                color: var(--accent);
-                background: rgba(212, 175, 55, 0.05);
-                border: 1px solid rgba(212, 175, 55, 0.1);
-            }
-            
-            .popover-link.highlight-link i {
-                color: var(--accent);
-            }
-
-            /* Reseta o Scroll Locker do Vídeo no Mobile */
-            .hero {
-                height: auto !important; /* Permite expansão vertical */
-                min-height: 100vh !important;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-                z-index: 101; /* Acima do menu overlay */
-                position: relative;
-            }
-
-            .intro-grid {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 4rem;
-            }
-
-            .services-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2rem;
-                margin-bottom: 3rem;
-            }
-
-            .hero-sticky-container {
-                position: relative !important;
-                height: 100dvh !important;
-                min-height: 100vh !important;
-                display: flex !important;
-                align-items: center;
-                padding-top: 0;
-                overflow: hidden !important;
-            }
-
-            .hero-video-wrapper {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
-                border: none;
-                z-index: 1;
-            }
-
-            .hero-video-wrapper::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(to top, var(--bg-dark) 0%, rgba(9, 9, 11, 0.7) 40%, rgba(9, 9, 11, 0.4) 100%);
-                z-index: 2;
-            }
-
-            .hero-content-wrapper {
-                padding-left: 5vw;
-                padding-right: 5vw;
-                align-self: center;
-                padding-top: 6rem; /* Espaço para a navbar */
-                padding-bottom: 2rem;
-                position: relative;
-                z-index: 10;
-                width: 100%;
-            }
-
-            .hero-content h1 {
-                font-size: 3.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: center;
-                text-align: center;
-            }
-
-            .service-row {
-                grid-template-columns: 50px 1fr auto;
-                padding: 2rem 0;
-            }
-
-            .service-row h3 {
-                font-size: 1.4rem;
-            }
-        }
-
-        /* --- Internal Booking Section --- */
-        .booking-section {
-            padding: 6rem 5vw 8rem;
-            background: #000;
             position: relative;
+            z-index: 10;
+        }
+
+        .instagram-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+        }
+
+        .instagram-section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .instagram-section-header span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.4rem 1.25rem;
+            border: 1px solid var(--accent-dim);
+            border-radius: var(--radius-full);
+            background: rgba(212, 175, 55, 0.05);
+            margin-bottom: 1.25rem;
+        }
+
+        .instagram-section-header h2 {
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+            font-weight: 700;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.15;
+        }
+
+        .instagram-section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 60ch;
+            margin: 0 auto;
+            line-height: 1.65;
+        }
+
+        .instagram-embed-wrapper {
+            max-width: 540px;
+            margin: 0 auto;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-surface);
+            padding: 1.5rem;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5), 0 0 50px rgba(212, 175, 55, 0.04);
+            transition: var(--transition);
+        }
+
+        .instagram-embed-wrapper:hover {
+            border-color: rgba(212, 175, 55, 0.25);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.08);
+            transform: translateY(-4px);
+        }
+
+        /* --- Internal Booking Section (Engineered UI & UX) --- */
+        .booking-section {
+            padding: 7rem 6vw 9rem;
+            background: #050608;
+            position: relative;
+            z-index: 10;
         }
 
         .booking-section::before {
@@ -873,20 +755,22 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 200px;
+            width: 240px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
         }
 
         .booking-container {
-            max-width: 900px;
+            max-width: 920px;
             margin: 0 auto;
-            background: rgba(14, 14, 16, 0.95);
+            background: rgba(14, 16, 21, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
-            border-radius: 28px;
+            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 175, 55, 0.03);
-            padding: 3rem 4rem;
+            box-shadow: 0 35px 90px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.04);
+            padding: 3.5rem 4rem;
         }
 
         .booking-header {
@@ -900,21 +784,21 @@
             gap: 0.5rem;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.16em;
             font-size: 0.75rem;
             font-weight: 600;
             padding: 0.4rem 1.25rem;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 99px;
+            border: 1px solid var(--accent-dim);
+            border-radius: var(--radius-full);
             background: rgba(212, 175, 55, 0.05);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .booking-header h2 {
-            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
             font-weight: 700;
             margin-bottom: 0.75rem;
-            line-height: 1.1;
+            line-height: 1.15;
         }
 
         .booking-header p {
@@ -922,6 +806,7 @@
             font-size: 1.05rem;
             max-width: 60ch;
             margin: 0 auto;
+            line-height: 1.65;
         }
 
         .booking-form-wrapper {
@@ -941,26 +826,33 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
 
         .form-group label {
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.85rem;
+            font-weight: 600;
             color: var(--text-muted);
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .form-group label i {
+            color: var(--accent);
+            font-size: 1rem;
         }
 
         .form-group select,
         .form-group input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             color: var(--text-high);
             padding: 1rem 1.25rem;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-family: inherit;
             outline: none;
             transition: var(--transition);
@@ -970,17 +862,18 @@
         .form-group select:focus,
         .form-group input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
             background: rgba(255, 255, 255, 0.06);
         }
 
         .form-group select option {
-            background: #121214;
+            background: #0f1116;
             color: var(--text-high);
+            padding: 8px;
         }
 
         .form-group select optgroup {
-            background: #121214;
+            background: #0f1116;
             color: var(--accent);
             font-weight: 600;
             font-style: normal;
@@ -988,92 +881,89 @@
         }
 
         .booking-status-info {
-            padding: 1.25rem;
-            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            border-radius: var(--radius-md);
             font-size: 0.95rem;
             margin-top: 2rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            line-height: 1.4;
+            gap: 0.85rem;
+            line-height: 1.5;
         }
 
         .booking-status-info.success {
             background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            color: #e5c158;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            color: #f7e6a1;
         }
 
         .booking-status-info.error {
             background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #f87171;
         }
 
-        @media (max-width: 768px) {
-            .booking-section {
-                padding: 4rem 3vw 5rem;
-            }
-
-            .booking-container {
-                border-radius: 20px;
-                padding: 2rem 1.5rem;
-            }
-
-            .form-row.split {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-        }
+        /* Calendar Skin */
         .calendar-container {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 20px;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
             width: 100%;
         }
+
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+
         .calendar-header h4 {
             color: #fff;
-            font-family: 'Cabinet Grotesk', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
         }
+
         .calendar-header button {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
             color: #fff;
-            border-radius: 8px;
-            width: 36px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: all 0.3s var(--transition);
+            transition: var(--transition);
         }
+
         .calendar-header button:hover {
-            background: var(--gold);
-            color: #000;
-            border-color: var(--gold);
+            background: var(--accent);
+            color: var(--bg-dark);
+            border-color: var(--accent);
+            transform: scale(1.05);
         }
+
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            color: #a1a1aa;
+            color: var(--text-dim);
             font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
+
         .calendar-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
+            gap: 8px;
         }
+
         .calendar-day {
             aspect-ratio: 1;
             display: flex;
@@ -1083,106 +973,41 @@
             color: #fff;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s var(--ease);
             border: 1px solid transparent;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.025);
+            font-weight: 500;
         }
+
         .calendar-day:hover:not(.disabled) {
-            border-color: var(--gold);
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.1);
             transform: translateY(-2px);
+            color: var(--accent-light);
         }
+
         .calendar-day.selected {
-            background: var(--gold);
-            color: #000;
+            background: var(--accent);
+            color: var(--bg-dark);
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-            border-color: var(--gold);
+            box-shadow: 0 4px 20px var(--accent-glow);
+            border-color: var(--accent);
             transform: translateY(-2px);
         }
+
         .calendar-day.disabled {
-            color: #555;
+            color: #3b3e4a;
             background: transparent;
             cursor: not-allowed;
             text-decoration: line-through;
         }
 
-        /* --- Instagram Embed Section --- */
-        .instagram-section {
-            padding: 6rem 5vw;
-            background: var(--bg-dark);
-            position: relative;
-        }
-
-        .instagram-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        }
-
-        .instagram-section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .instagram-section-header span {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.4rem 1.25rem;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 99px;
-            background: rgba(212, 175, 55, 0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        .instagram-section-header h2 {
-            font-size: clamp(2rem, 3.5vw, 3rem);
-            font-weight: 700;
-            margin-top: 1rem;
-            margin-bottom: 0.75rem;
-            line-height: 1.1;
-        }
-
-        .instagram-section-header p {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            max-width: 60ch;
-            margin: 0 auto;
-        }
-
-        .instagram-embed-wrapper {
-            max-width: 540px;
-            margin: 0 auto;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.02);
-            padding: 1.5rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(212, 175, 55, 0.03);
-            transition: var(--transition);
-        }
-
-        .instagram-embed-wrapper:hover {
-            border-color: rgba(212, 175, 55, 0.15);
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4), 0 0 50px rgba(212, 175, 55, 0.06);
-            transform: translateY(-4px);
-        }
-
         /* --- Location / Map Section --- */
         .location-section {
-            padding: 6rem 5vw 8rem;
+            padding: 7rem 6vw 9rem;
             background: #000;
             position: relative;
+            z-index: 10;
         }
 
         .location-section::before {
@@ -1191,19 +1016,19 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 200px;
+            width: 240px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
         }
 
         .location-container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
         }
 
         .location-header {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 4rem;
         }
 
         .location-header span {
@@ -1212,22 +1037,22 @@
             gap: 0.5rem;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.16em;
             font-size: 0.75rem;
             font-weight: 600;
             padding: 0.4rem 1.25rem;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 99px;
+            border: 1px solid var(--accent-dim);
+            border-radius: var(--radius-full);
             background: rgba(212, 175, 55, 0.05);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .location-header h2 {
-            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
             font-weight: 700;
-            margin-top: 1rem;
+            margin-top: 0.75rem;
             margin-bottom: 0.75rem;
-            line-height: 1.1;
+            line-height: 1.15;
         }
 
         .location-header p {
@@ -1235,95 +1060,100 @@
             font-size: 1.05rem;
             max-width: 60ch;
             margin: 0 auto;
+            line-height: 1.65;
         }
 
         .location-content {
             display: grid;
             grid-template-columns: 1fr 1.5fr;
-            gap: 3rem;
+            gap: 3.5rem;
             align-items: stretch;
         }
 
         .location-info-card {
-            background: rgba(14, 14, 16, 0.95);
+            background: rgba(14, 16, 21, 0.85);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 2rem;
+            gap: 2.25rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
         }
 
         .location-info-item {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         .location-info-item .icon-circle {
-            width: 48px;
-            height: 48px;
-            min-width: 48px;
-            border-radius: 14px;
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 16px;
             background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.18);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: var(--accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .location-info-item h4 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.35rem;
         }
 
         .location-info-item p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .location-map-wrapper {
-            border-radius: 24px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             border: 1px solid var(--glass-border);
             position: relative;
-            min-height: 380px;
+            min-height: 400px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
         }
 
         .location-map-wrapper iframe {
             width: 100%;
             height: 100%;
-            min-height: 380px;
+            min-height: 400px;
             border: none;
             filter: grayscale(60%) invert(92%) contrast(90%) hue-rotate(180deg);
             transition: filter 0.6s var(--ease);
         }
 
         .location-map-wrapper:hover iframe {
-            filter: grayscale(30%) invert(92%) contrast(90%) hue-rotate(180deg);
+            filter: grayscale(20%) invert(92%) contrast(90%) hue-rotate(180deg);
         }
 
         .location-map-cta {
             text-align: center;
-            margin-top: 2.5rem;
+            margin-top: 3rem;
         }
 
         .location-map-cta a {
             display: inline-flex;
             align-items: center;
             gap: 0.8rem;
-            padding: 0.8rem 2rem;
-            background: transparent;
+            padding: 0.9rem 2.2rem;
+            background: rgba(255, 255, 255, 0.02);
             color: var(--text-high);
             border: 1px solid var(--accent);
-            border-radius: 99px;
+            border-radius: var(--radius-full);
             font-weight: 500;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
             text-decoration: none;
             transition: var(--transition);
         }
@@ -1332,41 +1162,425 @@
             background: var(--accent);
             color: var(--bg-dark);
             transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 10px 40px var(--accent-glow);
         }
 
-        @media (max-width: 992px) {
+        /* --- Clean Modern Footer --- */
+        .footer-premium {
+            background-color: var(--bg-dark);
+            position: relative;
+            overflow: hidden;
+            padding: 7rem 6vw 3rem;
+            border-top: 1px solid var(--glass-border);
+            z-index: 10;
+        }
+
+        .footer-premium::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, rgba(232, 155, 130, 0.04) 40%, transparent 70%);
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .footer-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 4rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 2.2rem;
+            color: var(--text-high);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.75;
+            max-width: 380px;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-glass-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-high);
+            font-size: 1.3rem;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-glass-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent), #e89b82);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .social-glass-btn:hover {
+            transform: translateY(-4px);
+            border-color: transparent;
+            color: var(--bg-dark);
+            box-shadow: 0 10px 25px var(--accent-glow);
+        }
+
+        .social-glass-btn:hover::after {
+            opacity: 1;
+        }
+
+        .footer-col h4 {
+            font-size: 1.05rem;
+            color: var(--text-high);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 600;
+        }
+
+        .footer-nav {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .footer-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            width: fit-content;
+        }
+
+        .footer-nav a::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent), #e89b82);
+            transition: var(--transition);
+        }
+
+        .footer-nav a:hover {
+            color: var(--text-high);
+            transform: translateX(5px);
+        }
+
+        .footer-nav a:hover::before {
+            width: 100%;
+        }
+
+        .footer-nav i {
+            font-size: 1.1rem;
+            color: rgba(212, 175, 55, 0.5);
+            transition: var(--transition);
+        }
+
+        .footer-nav a:hover i {
+            color: var(--accent);
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            padding: 2.25rem;
+        }
+
+        .contact-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            margin-bottom: 1.75rem;
+        }
+
+        .btn-contact-glow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            background: var(--text-high);
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .btn-contact-glow:hover {
+            background: linear-gradient(135deg, var(--accent), #e89b82);
+            box-shadow: 0 12px 30px var(--accent-glow);
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom-bar {
+            margin-top: 6rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dev-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 18px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .dev-badge span {
+            color: var(--text-high);
+            font-weight: 600;
+        }
+
+        .dev-badge:hover {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.06);
+            color: var(--accent);
+        }
+
+        /* --- Mobile Popover & Responsive Rules --- */
+        .mobile-popover {
+            position: fixed;
+            top: 5rem;
+            right: 6vw;
+            width: calc(100vw - 12vw);
+            max-width: 320px;
+            background: rgba(9, 10, 14, 0.92);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 24px;
+            padding: 1.5rem;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95) translateY(-10px);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: top right;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mobile-popover.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+        }
+
+        .popover-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1.1rem;
+            color: var(--text-high);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .popover-link i {
+            font-size: 1.35rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .popover-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .popover-link:hover i {
+            color: var(--accent);
+        }
+
+        .popover-link.highlight-link {
+            color: var(--accent);
+            background: rgba(212, 175, 55, 0.06);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .popover-link.highlight-link i {
+            color: var(--accent);
+        }
+
+        @media (max-width: 1024px) {
+            .footer-wrapper {
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+            }
             .location-content {
                 grid-template-columns: 1fr;
             }
         }
 
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: flex;
+            }
+            .hero {
+                height: auto !important;
+                min-height: 100vh !important;
+            }
+            .hero-sticky-container {
+                position: relative !important;
+                height: 100dvh !important;
+                min-height: 100vh !important;
+                display: flex !important;
+                align-items: center;
+                padding-top: 0;
+            }
+            .hero-video-wrapper {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+                border: none;
+                z-index: 1;
+            }
+            .hero-video-wrapper::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to top, var(--bg-dark) 0%, rgba(8, 9, 11, 0.8) 45%, rgba(8, 9, 11, 0.4) 100%);
+                z-index: 2;
+            }
+            .hero-content-wrapper {
+                padding-left: 6vw;
+                padding-right: 6vw;
+                padding-top: 6rem;
+                padding-bottom: 2rem;
+                position: relative;
+                z-index: 10;
+                width: 100%;
+            }
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 3.5rem;
+            }
+            .services-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+                margin-bottom: 3.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .instagram-section {
-                padding: 4rem 3vw;
+            .section-premium, .booking-section, .location-section, .instagram-section {
+                padding: 5rem 6vw;
             }
-
-            .instagram-embed-wrapper {
-                padding: 1rem;
-                border-radius: 16px;
+            .booking-container {
+                border-radius: 24px;
+                padding: 2.25rem 1.5rem;
             }
-
-            .location-section {
-                padding: 4rem 3vw 5rem;
+            .form-row.split {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
             }
-
+            .service-row {
+                grid-template-columns: 50px 1fr auto;
+                padding: 1.75rem 0.5rem;
+            }
+            .service-row h3 {
+                font-size: 1.35rem;
+            }
+            .footer-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            .footer-brand p {
+                margin: 0 auto 2rem;
+            }
+            .footer-socials {
+                justify-content: center;
+            }
+            .footer-nav {
+                align-items: center;
+            }
+            .footer-nav a:hover {
+                transform: translateX(0) scale(1.05);
+            }
+            .footer-bottom-bar {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
             .location-info-card {
                 padding: 2rem 1.5rem;
-                border-radius: 20px;
             }
-
-            .location-map-wrapper {
-                border-radius: 20px;
-                min-height: 300px;
-            }
-
-            .location-map-wrapper iframe {
-                min-height: 300px;
+            .location-map-wrapper, .location-map-wrapper iframe {
+                min-height: 320px;
             }
         }
     </style>
@@ -1374,17 +1588,22 @@
 
 <body>
 
-    <nav class="navbar">
-        <!-- Logotipo removido permanentemente conforme solicitado para melhoria visual e foco na leitura -->
+    <!-- Ambient Visual Glow & Grid -->
+    <div class="ambient-grid"></div>
+    <div id="cursorGlow"></div>
+    <div id="scrollProgressBar"></div>
 
+    <!-- Navigation -->
+    <nav class="navbar">
         <ul class="nav-links">
             <li><a href="index.html">Início</a></li>
             <li><a href="beleza.html" class="nav-cursive">Harmonização Facial</a></li>
             <li><a href="produtos.html" class="nav-cursive">Linha Elevation</a></li>
-            
         </ul>
 
-        <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir Menu">
+            <i class="ph ph-list"></i>
+        </button>
     </nav>
 
     <!-- Mobile Popover Menu -->
@@ -1392,7 +1611,10 @@
         <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
         <a href="beleza.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
         <a href="produtos.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-package"></i> Linha Elevation</a>
-        <a href="#agendamento" class="popover-link" style="color: var(--gold); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.1); justify-content: center; margin-top: 0.5rem;"><i class="ph ph-whatsapp-logo"></i> Agendar Horário</a>
+        <a href="#agendamento" class="popover-link"
+            style="color: var(--accent); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.1); justify-content: center; margin-top: 0.5rem;">
+            <i class="ph ph-whatsapp-logo"></i> Agendar Horário
+        </a>
     </div>
 
     <!-- Taste Skill Redesigned Asymmetric Hero -->
@@ -1407,12 +1629,10 @@
 
             <div class="hero-content-wrapper">
                 <div class="hero-content">
-                    <span class="animate-up">Seja Bem-Vinda à Excelência</span>
-                    <h1 class="animate-up">Clínica<br>Elevation</h1>
-                    <p class="animate-up">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza
-                        natural.</p>
-                    <div class="hero-buttons animate-up">
-                          <!-- Botão Reposicionado e com Contraste Corrigido -->
+                    <span class="reveal-item">Seja Bem-Vinda à Excelência</span>
+                    <h1 class="reveal-item">Clínica<br>Elevation</h1>
+                    <p class="reveal-item">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza natural.</p>
+                    <div class="hero-buttons reveal-item">
                         <a href="beleza.html" class="btn-tertiary">
                             Harmonização Facial <i class="ph ph-sparkle"></i>
                         </a>
@@ -1422,17 +1642,17 @@
                         <a href="#agendamento" class="btn-secondary">
                             Agendar Horário <i class="ph ph-calendar"></i>
                         </a>
-                      
                     </div>
                 </div>
             </div>
 
-            <div class="scroll-indicator animate-up">
+            <div class="scroll-indicator reveal-item">
                 <div class="scroll-line"></div>
             </div>
         </div>
     </header>
 
+    <!-- Intro / Essência Section -->
     <section class="section-premium">
         <div class="intro-grid">
             <div class="intro-text">
@@ -1454,11 +1674,11 @@
         </div>
     </section>
 
+    <!-- Nossas Especialidades Section -->
     <section class="section-premium" style="padding-top: 0;">
         <div class="services-header">
             <h2>Nossas<br>Especialidades</h2>
-            <p style="color: var(--text-muted); max-width: 40ch;">Protocolos avançados desenvolvidos para quem busca
-                resultados extraordinários.</p>
+            <p style="color: var(--text-muted); max-width: 40ch; line-height: 1.65;">Protocolos avançados desenvolvidos para quem busca resultados extraordinários.</p>
         </div>
 
         <div class="services-list">
@@ -1490,14 +1710,14 @@
         </div>
     </section>
 
+    <!-- Immersive Experience Section -->
     <section class="exp-section">
         <a href="espaço.html" style="text-decoration: none; color: inherit;">
             <div class="exp-banner">
                 <h2>Conheça nosso Santuário</h2>
             </div>
         </a>
-        <div
-            style="display: flex; gap: 3rem; justify-content: center; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; flex-wrap: wrap;">
+        <div style="display: flex; gap: 3rem; justify-content: center; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.12em; flex-wrap: wrap;">
             <span>Localização Premium</span>
             <span style="color: var(--glass-border)">|</span>
             <span id="easter-egg-trigger" style="cursor: default; user-select: none;">Atendimento Exclusivo</span>
@@ -1514,7 +1734,97 @@
             <p>Acompanhe nossos bastidores, transformações e as últimas novidades diretamente no nosso Instagram.</p>
         </div>
         <div class="instagram-embed-wrapper">
-            <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DaksX8pMrdP/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/p/DaksX8pMrdP/?utm_source=ig_embed&amp;utm_campaign=loading" style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style="display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style="color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">Ver essa foto no Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style="width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style="width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style="background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style="width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style="color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/p/DaksX8pMrdP/?utm_source=ig_embed&amp;utm_campaign=loading" style="color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Um post compartilhado por Elevation Hair Estética, Dra Cristina (@clinica_elevation)</a></p></div></blockquote>
+            <blockquote class="instagram-media" data-instgrm-captioned
+                data-instgrm-permalink="https://www.instagram.com/p/DaksX8pMrdP/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14"
+                style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+                <div style="padding:16px;"> <a
+                        href="https://www.instagram.com/p/DaksX8pMrdP/?utm_source=ig_embed&amp;utm_campaign=loading"
+                        style="background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
+                        target="_blank">
+                        <div style="display: flex; flex-direction: row; align-items: center;">
+                            <div
+                                style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;">
+                            </div>
+                            <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                <div
+                                    style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;">
+                                </div>
+                                <div
+                                    style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 19% 0;"></div>
+                        <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px"
+                                height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg"
+                                xmlns:xlink="https://www.w3.org/1999/xlink">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                                        <g>
+                                            <path
+                                                d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631">
+                                            </path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg></div>
+                        <div style="padding-top: 8px;">
+                            <div
+                                style="color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">
+                                Ver essa foto no Instagram</div>
+                        </div>
+                        <div style="padding: 12.5% 0;"></div>
+                        <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;">
+                            <div>
+                                <div
+                                    style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);">
+                                </div>
+                                <div
+                                    style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;">
+                                </div>
+                                <div
+                                    style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);">
+                                </div>
+                            </div>
+                            <div style="margin-left: 8px;">
+                                <div
+                                    style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;">
+                                </div>
+                                <div
+                                    style="width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)">
+                                </div>
+                            </div>
+                            <div style="margin-left: auto;">
+                                <div
+                                    style="width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);">
+                                </div>
+                                <div
+                                    style="background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);">
+                                </div>
+                                <div
+                                    style="width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);">
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;">
+                            <div
+                                style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;">
+                            </div>
+                            <div
+                                style="background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;">
+                            </div>
+                        </div>
+                    </a>
+                    <p
+                        style="color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">
+                        <a href="https://www.instagram.com/p/DaksX8pMrdP/?utm_source=ig_embed&amp;utm_campaign=loading"
+                            style="color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;"
+                            target="_blank">Um post compartilhado por Elevation Hair Estética, Dra Cristina
+                            (@clinica_elevation)</a></p>
+                </div>
+            </blockquote>
             <script async src="//www.instagram.com/embed.js"></script>
         </div>
     </section>
@@ -1525,9 +1835,10 @@
             <div class="booking-header">
                 <span class="booking-header-badge"><i class="ph ph-calendar-check"></i> Agenda Online</span>
                 <h2>Escolha seu Horário</h2>
-                <p>Selecione o procedimento desejado, a data e o horário de sua preferência. Em seguida, siga as instruções para concluir.</p>
+                <p>Selecione o procedimento desejado, a data e o horário de sua preferência. Em seguida, siga as
+                    instruções para concluir.</p>
             </div>
-            
+
             <div class="booking-form-wrapper">
                 <form id="pre-booking-form" onsubmit="window.handleBookingSubmit(event);">
                     <div class="form-row split">
@@ -1538,6 +1849,13 @@
                         <div class="form-group">
                             <label for="booking-whatsapp"><i class="ph ph-whatsapp-logo"></i> WhatsApp</label>
                             <input type="tel" id="booking-whatsapp" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="booking-email"><i class="ph ph-envelope-simple"></i> E-mail</label>
+                            <input type="email" id="booking-email" placeholder="seu.email@exemplo.com" required>
                         </div>
                     </div>
 
@@ -1555,14 +1873,19 @@
                                 <optgroup label="Harmonização Facial">
                                     <option value="Preenchimento Labial">Preenchimento Labial (45 min)</option>
                                     <option value="Rinomodelação">Rinomodelação (45 min)</option>
-                                    <option value="Preenchimento de Mandíbula (Jawline)">Preenchimento de Mandíbula (Jawline) (60 min)</option>
-                                    <option value="Harmonização Facial Completa">Harmonização Facial Completa (90 min)</option>
+                                    <option value="Preenchimento de Mandíbula (Jawline)">Preenchimento de Mandíbula
+                                        (Jawline) (60 min)</option>
+                                    <option value="Harmonização Facial Completa">Harmonização Facial Completa (90 min)
+                                    </option>
                                 </optgroup>
                                 <optgroup label="Maquiagem Profissional">
                                     <option value="Maquiagem Social Premium">Maquiagem Social Premium (45 min)</option>
-                                    <option value="Maquiagem Noiva Elevation">Maquiagem Noiva Elevation (90 min)</option>
-                                    <option value="Maquiagem para Eventos VIP">Maquiagem para Eventos VIP (60 min)</option>
-                                    <option value="Maquiagem Artística / Editorial">Maquiagem Artística / Editorial (120 min)</option>
+                                    <option value="Maquiagem Noiva Elevation">Maquiagem Noiva Elevation (90 min)
+                                    </option>
+                                    <option value="Maquiagem para Eventos VIP">Maquiagem para Eventos VIP (60 min)
+                                    </option>
+                                    <option value="Maquiagem Artística / Editorial">Maquiagem Artística / Editorial (120
+                                        min)</option>
                                 </optgroup>
                                 <optgroup label="Cuidados Especiais & Estética">
                                     <option value="Criolipólise">Criolipólise (60 min)</option>
@@ -1576,7 +1899,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="form-row split">
                         <div class="form-group" style="grid-column: 1 / -1;">
                             <label><i class="ph ph-calendar-blank"></i> Escolha a Data</label>
@@ -1596,7 +1919,7 @@
                             <!-- Input oculto que o Firebase vai ler -->
                             <input type="hidden" id="booking-date" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="booking-time"><i class="ph ph-clock"></i> Horário Disponível</label>
                             <select id="booking-time" required disabled>
@@ -1651,432 +1974,168 @@
                             <p>(11) 98027-2343</p>
                         </div>
                     </div>
-                    <a href="https://www.google.com/maps/search/Rua+Aldeia+dos+Machacalis+126A+São+Paulo" target="_blank" class="btn-primary" style="justify-content: center; margin-top: 1rem; text-decoration: none;">
+                    <a href="https://www.google.com/maps/search/Rua+Aldeia+dos+Machacalis+126A+São+Paulo"
+                        target="_blank" class="btn-primary"
+                        style="justify-content: center; margin-top: 1rem; text-decoration: none;">
                         Abrir no Maps <i class="ph ph-arrow-square-out"></i>
                     </a>
                 </div>
 
                 <div class="location-map-wrapper">
                     <iframe
-                        src="https://maps.google.com/maps?q=Rua+Aldeia+dos+Machacalis+126A+S%C3%A3o+Paulo+SP+Brasil&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade"
-                        allowfullscreen>
+                        src="https://maps.google.com/maps?q=Rua+Aldeia+dos+Machacalis+126A+S%C3%A3o+Paulo+SP+Brasil&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen>
                     </iframe>
                 </div>
             </div>
 
             <div class="location-map-cta">
-                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20saber%20como%20chegar%20na%20Cl%C3%ADnica%20Elevation." target="_blank">
+                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20saber%20como%20chegar%20na%20Cl%C3%ADnica%20Elevation."
+                    target="_blank">
                     <i class="ph ph-whatsapp-logo"></i> Precisa de ajuda para chegar?
                 </a>
             </div>
         </div>
     </section>
 
-<!-- O Novo Rodapé Premium Elevation -->
-<style>
-    /* Variáveis exclusivas do Rodapé */
-    :root {
-        --footer-bg: #09090b;
-        --footer-gold: #d4af37;
-        --footer-salmon: #e89b82; /* Toque quente e sofisticado */
-        --footer-text: #ffffff;
-        --footer-muted: #8a8a93;
-        --footer-border: rgba(255, 255, 255, 0.05);
-        --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    <!-- Footer -->
+    <footer class="footer-premium">
+        <div class="footer-wrapper">
+            <!-- Brand Section -->
+            <div class="footer-brand">
+                <h3><img src="logonovosalao.png" alt="Icon" style="height: 30px;"> Elevation</h3>
+                <p>Especialistas em realçar a sua beleza natural. A mais alta tecnologia e precisão profissional em um
+                    ambiente projetado para a sua elevação.</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-glass-btn"><i
+                            class="ph ph-instagram-logo"></i></a>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation."
+                        target="_blank" class="social-glass-btn"><i class="ph ph-whatsapp-logo"></i></a>
+                    <a href="#" class="social-glass-btn"><i class="ph ph-tiktok-logo"></i></a>
+                </div>
+            </div>
 
-    .footer-premium {
-        background-color: var(--footer-bg);
-        position: relative;
-        overflow: hidden;
-        padding: 6rem 5vw 2rem;
-        border-top: 1px solid var(--footer-border);
-        font-family: 'Satoshi', sans-serif;
-    }
+            <!-- Links Navigation -->
+            <div class="footer-col">
+                <h4>Menu Premium</h4>
+                <ul class="footer-nav">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="valores.html">Nossos Serviços</a></li>
+                    <li><a href="produtos.html">Linha de Produtos</a></li>
+                    <li><a href="espaço.html">O Santuário</a></li>
+                    <li><a href="sobrenos.html">Nossa História</a></li>
+                </ul>
+            </div>
 
-    /* Brilho de fundo (Glow) luxuoso e contido */
-    .footer-premium::before {
-        content: '';
-        position: absolute;
-        top: -150px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 600px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(232, 155, 130, 0.05) 40%, transparent 70%);
-        filter: blur(60px);
-        z-index: 0;
-        pointer-events: none;
-    }
+            <!-- Contact Info -->
+            <div class="footer-col">
+                <h4>Atendimento</h4>
+                <ul class="footer-nav">
+                    <li>
+                        <a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352"
+                            target="_blank">
+                            <i class="ph ph-map-pin"></i> Rua Aldeia dos Machacalis, 126 A
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:+5511980272343">
+                            <i class="ph ph-phone"></i> (11) 98027-2343
+                        </a>
+                    </li>
+                    <li>
+                        <a style="cursor: default;">
+                            <i class="ph ph-clock"></i> Seg: 09h-14h | Ter-Sáb: 09h-18h
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-    .footer-wrapper {
-        position: relative;
-        z-index: 1;
-        max-width: 1400px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1.5fr;
-        gap: 4rem;
-    }
-
-    /* Coluna da Marca */
-    .footer-brand h3 {
-        font-family: 'Cabinet Grotesk', sans-serif;
-        font-size: 2.2rem;
-        color: var(--footer-text);
-        margin-bottom: 1.5rem;
-        letter-spacing: -0.02em;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .footer-brand p {
-        color: var(--footer-muted);
-        font-size: 1.05rem;
-        line-height: 1.7;
-        max-width: 380px;
-        margin-bottom: 2.5rem;
-    }
-
-    /* Redes Sociais - Estilo Glassmorphism */
-    .footer-socials {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .social-glass-btn {
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--footer-border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--footer-text);
-        font-size: 1.3rem;
-        text-decoration: none;
-        backdrop-filter: blur(10px);
-        transition: var(--transition-smooth);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .social-glass-btn::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, var(--footer-gold), var(--footer-salmon));
-        opacity: 0;
-        transition: var(--transition-smooth);
-        z-index: -1;
-    }
-
-    .social-glass-btn:hover {
-        transform: translateY(-5px);
-        border-color: transparent;
-        color: var(--footer-bg);
-    }
-
-    .social-glass-btn:hover::after {
-        opacity: 1;
-    }
-
-    /* Colunas de Links */
-    .footer-col h4 {
-        font-family: 'Cabinet Grotesk', sans-serif;
-        font-size: 1.1rem;
-        color: var(--footer-text);
-        margin-bottom: 2rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-    }
-
-    .footer-nav {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-    }
-
-    .footer-nav a {
-        color: var(--footer-muted);
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: var(--transition-smooth);
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        position: relative;
-        width: fit-content;
-    }
-
-    /* Efeito Pro-Max no Hover do Link */
-    .footer-nav a::before {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0%;
-        height: 1px;
-        background: linear-gradient(90deg, var(--footer-gold), var(--footer-salmon));
-        transition: var(--transition-smooth);
-    }
-
-    .footer-nav a:hover {
-        color: var(--footer-text);
-        transform: translateX(5px);
-    }
-
-    .footer-nav a:hover::before {
-        width: 100%;
-    }
-
-    .footer-nav i {
-        font-size: 1.1rem;
-        color: rgba(212, 175, 55, 0.5);
-        transition: var(--transition-smooth);
-    }
-
-    .footer-nav a:hover i {
-        color: var(--footer-gold);
-    }
-
-    /* Coluna de Contato / Newsletter */
-    .contact-card {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid var(--footer-border);
-        border-radius: 20px;
-        padding: 2rem;
-    }
-
-    .contact-card p {
-        color: var(--footer-muted);
-        font-size: 0.95rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .btn-contact-glow {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        width: 100%;
-        padding: 1rem;
-        border-radius: 12px;
-        background: var(--footer-text);
-        color: var(--footer-bg);
-        text-decoration: none;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 0.9rem;
-        transition: var(--transition-smooth);
-    }
-
-    .btn-contact-glow:hover {
-        background: linear-gradient(135deg, var(--footer-gold), var(--footer-salmon));
-        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
-        color: var(--footer-text);
-        transform: scale(1.02);
-    }
-
-    /* Linha Final */
-    .footer-bottom-bar {
-        margin-top: 6rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--footer-border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--footer-muted);
-        font-size: 0.85rem;
-        position: relative;
-        z-index: 1;
-    }
-
-    .dev-badge {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 255, 255, 0.03);
-        padding: 8px 16px;
-        border-radius: 99px;
-        border: 1px solid var(--footer-border);
-        text-decoration: none;
-        color: var(--footer-muted);
-        transition: var(--transition-smooth);
-    }
-
-    .dev-badge span {
-        color: var(--footer-text);
-        font-weight: 500;
-    }
-
-    .dev-badge:hover {
-        border-color: var(--footer-gold);
-        background: rgba(212, 175, 55, 0.05);
-        color: var(--footer-gold);
-    }
-
-    /* Responsividade */
-    @media (max-width: 1024px) {
-        .footer-wrapper {
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .footer-wrapper {
-            grid-template-columns: 1fr;
-            gap: 3rem;
-            text-align: center;
-        }
-
-        .footer-brand p {
-            margin: 0 auto 2rem;
-        }
-
-        .footer-socials {
-            justify-content: center;
-        }
-
-        .footer-nav {
-            align-items: center;
-        }
-
-        .footer-nav a:hover {
-            transform: translateX(0) scale(1.05);
-        }
-
-        .footer-bottom-bar {
-            flex-direction: column;
-            gap: 1.5rem;
-            text-align: center;
-        }
-    }
-</style>
-
-<footer class="footer-premium">
-    <div class="footer-wrapper">
-        <!-- Brand Section -->
-        <div class="footer-brand">
-            <h3><img src="logonovosalao.png" alt="Icon" style="height: 30px;"> Elevation</h3>
-            <p>Especialistas em realçar a sua beleza natural. A mais alta tecnologia e precisão profissional em um ambiente projetado para a sua elevação.</p>
-            <div class="footer-socials">
-                <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-glass-btn"><i class="ph ph-instagram-logo"></i></a>
-                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation." target="_blank" class="social-glass-btn"><i class="ph ph-whatsapp-logo"></i></a>
-                <a href="#" class="social-glass-btn"><i class="ph ph-tiktok-logo"></i></a>
+            <!-- Action Card -->
+            <div class="footer-col">
+                <div class="contact-card">
+                    <h4>Sua Transformação</h4>
+                    <p>Pronta para elevar sua autoestima? Agende uma avaliação exclusiva diretamente com nossos
+                        especialistas.</p>
+                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o."
+                        target="_blank" class="btn-contact-glow">
+                        <i class="ph ph-calendar-plus"></i> Agendar Avaliação
+                    </a>
+                </div>
             </div>
         </div>
 
-        <!-- Links Navigation -->
-        <div class="footer-col">
-            <h4>Menu Premium</h4>
-            <ul class="footer-nav">
-                <li><a href="index.html">Início</a></li>
-                <li><a href="valores.html">Nossos Serviços</a></li>
-                <li><a href="produtos.html">Linha de Produtos</a></li>
-                <li><a href="espaço.html">O Santuário</a></li>
-                <li><a href="sobrenos.html">Nossa História</a></li>
-            </ul>
+        <!-- Bottom Bar -->
+        <div class="footer-bottom-bar">
+            <p>&copy; 2026 Clínica Elevation. Todos os direitos reservados à marca.</p>
+            <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank" class="dev-badge">
+                <i class="ph ph-code"></i> Desenvolvido por <span>ChrisDev</span>
+            </a>
         </div>
+    </footer>
 
-        <!-- Contact Info -->
-        <div class="footer-col">
-            <h4>Atendimento</h4>
-            <ul class="footer-nav">
-                <li>
-                    <a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank">
-                        <i class="ph ph-map-pin"></i> Rua Aldeia dos Machacalis, 126 A
-                    </a>
-                </li>
-                <li>
-                    <a href="tel:+5511980272343">
-                        <i class="ph ph-phone"></i> (11) 98027-2343
-                    </a>
-                </li>
-                <li>
-                    <a style="cursor: default;">
-                        <i class="ph ph-clock"></i> Seg: 09h-14h | Ter-Sáb: 09h-18h
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Action Card -->
-        <div class="footer-col">
-            <div class="contact-card">
-                <h4>Sua Transformação</h4>
-                <p>Pronta para elevar sua autoestima? Agende uma avaliação exclusiva diretamente com nossos especialistas.</p>
-                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" class="btn-contact-glow">
-                    <i class="ph ph-calendar-plus"></i> Agendar Avaliação
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Bar -->
-    <div class="footer-bottom-bar">
-        <p>&copy; 2026 Clínica Elevation. Todos os direitos reservados à marca.</p>
-        <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank" class="dev-badge">
-            <i class="ph ph-code"></i> Desenvolvido por <span>ChrisDev</span>
-        </a>
-    </div>
-</footer>
-
+    <!-- Scripts and Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const isMobile = window.matchMedia("(max-width: 767px)").matches;
+            const isMobile = window.matchMedia("(max-width: 991px)").matches;
             const heroSection = document.querySelector('.hero');
             const video = document.getElementById('hero-video');
             if (video) video.style.willChange = 'transform';
 
-            // --- Lógica Híbrida do Vídeo (Scope 3) ---
+            // Ambient Cursor Spotlight
+            const cursorGlow = document.getElementById('cursorGlow');
+            if (cursorGlow && !isMobile) {
+                window.addEventListener('pointermove', (e) => {
+                    cursorGlow.style.left = `${e.clientX}px`;
+                    cursorGlow.style.top = `${e.clientY}px`;
+                });
+            }
+
+            // Scrollcraft Progress Bar
+            const progressBar = document.getElementById('scrollProgressBar');
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                if (height > 0 && progressBar) {
+                    const scrolled = (winScroll / height) * 100;
+                    progressBar.style.width = scrolled + '%';
+                }
+            }, { passive: true });
+
+            // --- Lógica Híbrida do Vídeo (Scrub on Desktop, Autoplay on Mobile) ---
             if (isMobile) {
-                // Mobile: Autoplay contínuo, sem block de scroll
-                video.autoplay = true;
-                video.loop = true;
-                video.muted = true;
-                video.playsInline = true;
-                video.play().catch(() => {});
-            } else {
-                // Desktop: Scrub-on-Scroll com LERP otimizado
+                if (video) {
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.play().catch(() => { });
+                }
+            } else if (video && heroSection) {
                 video.pause();
                 video.autoplay = false;
                 video.loop = false;
-                
+
                 let targetVideoTime = 0;
                 let currentVideoTime = 0;
                 let isVideoLoaded = false;
                 let rAFId = null;
-                const speedFactor = 0.05; // Reduz a velocidade da interpolação para aliviar o decodificador
+                const speedFactor = 0.06;
 
                 const renderLoop = () => {
-                    // Só prossegue se o vídeo tiver buffer suficiente (readyState >= 3)
                     if (isVideoLoaded && video.duration && !isNaN(video.duration) && video.readyState >= 3) {
-                        // Margem de segurança de 0.1s para evitar travar o codec ao bater no limite cravado
                         let safeDuration = video.duration - 0.1;
                         if (safeDuration < 0) safeDuration = video.duration;
-                        
                         let safeTarget = Math.min(targetVideoTime, safeDuration);
-                        
-                        // LERP suave (Interpolação Linear)
+
                         currentVideoTime += (safeTarget - currentVideoTime) * speedFactor;
-                        
-                        // Threshold para evitar atualizações microscópicas inócuas que disparam render
-                        if (Math.abs(safeTarget - currentVideoTime) > 0.05) {
+
+                        if (Math.abs(safeTarget - currentVideoTime) > 0.04) {
                             video.currentTime = currentVideoTime;
                         }
                     }
                     rAFId = window.requestAnimationFrame(renderLoop);
                 };
-                
+
                 rAFId = window.requestAnimationFrame(renderLoop);
 
                 const onScroll = () => {
@@ -2094,32 +2153,32 @@
                 const initVideo = () => {
                     isVideoLoaded = true;
                     onScroll();
-                    // Só força o update se houver real diferença, para não travar de imediato
                     if (Math.abs(video.currentTime - targetVideoTime) > 0.1) {
                         currentVideoTime = targetVideoTime;
                         video.currentTime = currentVideoTime;
                     }
                 };
 
-                // Otimização: aguardar HAVE_FUTURE_DATA ou canplay/canplaythrough
                 if (video.readyState >= 3) {
                     initVideo();
                 } else {
                     video.addEventListener('canplaythrough', initVideo);
-                    video.addEventListener('canplay', initVideo); // Fallback caso não carregue 100% no preload
+                    video.addEventListener('canplay', initVideo);
                 }
 
                 window.addEventListener('scroll', onScroll, { passive: true });
             }
 
-            // --- Navbar Blur on Scroll (Scope 2) ---
+            // --- Navbar Blur on Scroll ---
             window.addEventListener('scroll', () => {
                 const nav = document.querySelector('.navbar');
-                if (window.scrollY > 10) nav.classList.add('scrolled');
-                else nav.classList.remove('scrolled');
+                if (nav) {
+                    if (window.scrollY > 15) nav.classList.add('scrolled');
+                    else nav.classList.remove('scrolled');
+                }
             }, { passive: true });
 
-            // --- Menu Mobile Popover (Scope 2) ---
+            // --- Menu Mobile Popover ---
             const mobileBtn = document.getElementById('mobile-menu-btn');
             const popoverMenu = document.getElementById('mobile-popover');
 
@@ -2133,7 +2192,6 @@
                     }
                 });
 
-                // Fechar popover ao clicar num link
                 popoverMenu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         popoverMenu.classList.remove('active');
@@ -2153,9 +2211,47 @@
                 });
             });
 
+            // GSAP Staggered Reveal on Scroll
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                gsap.from('.hero-content .reveal-item', {
+                    opacity: 0,
+                    y: 30,
+                    stagger: 0.12,
+                    duration: 1,
+                    ease: 'power3.out'
+                });
+
+                gsap.from('.intro-grid > *', {
+                    scrollTrigger: {
+                        trigger: '.intro-grid',
+                        start: 'top 80%',
+                    },
+                    opacity: 0,
+                    y: 35,
+                    stagger: 0.2,
+                    duration: 0.9,
+                    ease: 'power2.out'
+                });
+
+                gsap.from('.service-row', {
+                    scrollTrigger: {
+                        trigger: '.services-list',
+                        start: 'top 80%',
+                    },
+                    opacity: 0,
+                    x: -25,
+                    stagger: 0.1,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            }
+
             // Date / Time Slot Logic for Internal Booking Form
             const nameInput = document.getElementById('booking-name');
             const whatsappInput = document.getElementById('booking-whatsapp');
+            const emailInput = document.getElementById('booking-email');
             const dateInput = document.getElementById('booking-date');
             const timeSelect = document.getElementById('booking-time');
             const procedureSelect = document.getElementById('booking-procedure');
@@ -2205,7 +2301,6 @@
                 "Ritual de Ofurô": 90
             };
 
-            // Helper time functions
             function timeToMinutes(timeStr) {
                 const [hrs, mins] = timeStr.split(':').map(Number);
                 return hrs * 60 + mins;
@@ -2217,13 +2312,12 @@
                 return `${String(hrs).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
             }
 
-            // Availability validation logic
             function checkAvailability(proposedDate, proposedTime, proposedProcedure) {
                 const duration = durations[proposedProcedure] || 60;
                 const startMins = timeToMinutes(proposedTime);
                 const endMins = startMins + duration;
 
-                const appointments = window.getAppointments();
+                const appointments = typeof window.getAppointments === 'function' ? window.getAppointments() : [];
                 const sameDayAppointments = appointments.filter(app => app.date === proposedDate);
 
                 for (const app of sameDayAppointments) {
@@ -2231,7 +2325,6 @@
                     const appStart = timeToMinutes(app.time);
                     const appEnd = appStart + appDuration;
 
-                    // Gap rule: 20 minutes buffer required between bookings
                     const proposedEndsBeforeExistingStarts = (endMins + 20 <= appStart);
                     const proposedStartsAfterExistingEnds = (startMins >= appEnd + 20);
 
@@ -2253,47 +2346,46 @@
                 const monthYearText = document.getElementById('calendar-month-year');
                 const hiddenInput = document.getElementById('booking-date');
                 if (!daysContainer || !hiddenInput) return;
-                
+
                 daysContainer.innerHTML = '';
-                
+
                 const firstDay = new Date(year, month, 1).getDay();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-                
+
                 const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
                 monthYearText.textContent = `${monthNames[month]} ${year}`;
-                
-                // blanks
-                for(let i=0; i<firstDay; i++) {
+
+                for (let i = 0; i < firstDay; i++) {
                     const emptyDiv = document.createElement('div');
                     daysContainer.appendChild(emptyDiv);
                 }
-                
+
                 const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                for(let i=1; i<=daysInMonth; i++) {
+                today.setHours(0, 0, 0, 0);
+
+                for (let i = 1; i <= daysInMonth; i++) {
                     const cellDate = new Date(year, month, i);
                     const dayDiv = document.createElement('div');
                     dayDiv.className = 'calendar-day';
                     dayDiv.textContent = i;
-                    
-                    if(cellDate < today || cellDate.getDay() === 0) {
+
+                    if (cellDate < today || cellDate.getDay() === 0) {
                         dayDiv.classList.add('disabled');
                     } else {
                         dayDiv.addEventListener('click', () => {
                             document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
                             dayDiv.classList.add('selected');
-                            
+
                             const yyyy = cellDate.getFullYear();
                             const mm = String(cellDate.getMonth() + 1).padStart(2, '0');
                             const dd = String(cellDate.getDate()).padStart(2, '0');
                             hiddenInput.value = `${yyyy}-${mm}-${dd}`;
-                            
+
                             const dayOfWeek = cellDate.getDay();
-                            
+
                             statusMessage.style.display = 'none';
                             statusMessage.className = 'booking-status-info';
-                            
+
                             timeSelect.disabled = false;
                             timeSelect.innerHTML = '<option value="" disabled selected>Selecione um horário...</option>';
 
@@ -2318,34 +2410,43 @@
                     daysContainer.appendChild(dayDiv);
                 }
             }
-            
+
             const prevBtn = document.getElementById('prev-month');
             const nextBtn = document.getElementById('next-month');
-            if(prevBtn && nextBtn) {
+            if (prevBtn && nextBtn) {
                 prevBtn.addEventListener('click', () => {
                     currentCalMonth--;
-                    if(currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
+                    if (currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
                     renderCalendar(currentCalMonth, currentCalYear);
                 });
                 nextBtn.addEventListener('click', () => {
                     currentCalMonth++;
-                    if(currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
+                    if (currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
                     renderCalendar(currentCalMonth, currentCalYear);
                 });
                 renderCalendar(currentCalMonth, currentCalYear);
             }
 
-            window.handleBookingSubmit = function(event) {
+            window.handleBookingSubmit = function (event) {
                 event.preventDefault();
-                
+
                 const nameVal = nameInput ? nameInput.value.trim() : '';
                 const whatsappVal = whatsappInput ? whatsappInput.value.trim() : '';
+                const emailVal = emailInput ? emailInput.value.trim() : '';
                 const whatsappRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
-                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
                 if (!nameVal || nameVal.length < 3) {
                     statusMessage.style.display = 'flex';
                     statusMessage.className = 'booking-status-info error';
                     statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, insira seu nome completo.';
+                    return;
+                }
+
+                if (!emailRegex.test(emailVal)) {
+                    statusMessage.style.display = 'flex';
+                    statusMessage.className = 'booking-status-info error';
+                    statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, insira um e-mail válido.';
                     return;
                 }
 
@@ -2357,7 +2458,6 @@
                 }
 
                 if (dateInput && timeSelect && procedureSelect && dateInput.value && timeSelect.value && procedureSelect.value) {
-                    // Check availability rule
                     const validation = checkAvailability(dateInput.value, timeSelect.value, procedureSelect.value);
                     if (!validation.available) {
                         statusMessage.style.display = 'flex';
@@ -2366,24 +2466,42 @@
                         return;
                     }
 
-                    // Save to cloud (Firebase) or localStorage fallback
-                    window.saveAppointment({
-                        name: nameVal,
-                        whatsapp: whatsappVal,
-                        procedure: procedureSelect.value,
-                        date: dateInput.value,
-                        time: timeSelect.value
-                    });
+                    if (typeof window.saveAppointment === 'function') {
+                        window.saveAppointment({
+                            name: nameVal,
+                            whatsapp: whatsappVal,
+                            email: emailVal,
+                            procedure: procedureSelect.value,
+                            date: dateInput.value,
+                            time: timeSelect.value
+                        });
+                    }
 
-                    // Success Feedback
+                    // Dispara webhook/fetch para o Google Apps Script
+                    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxAxj-uBi-MB3ZV0N3T5F5AtJ7AgkdMJJdtzF_9pATNg7Vy1APS_SMA1KGi4lPgIBP5vg/exec';
+                    fetch(googleScriptURL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            nome: nameVal,
+                            email: emailVal,
+                            telefone: whatsappVal,
+                            procedimento: procedureSelect.value,
+                            data: dateInput.value,
+                            horario: timeSelect.value
+                        })
+                    }).catch(err => console.error('Erro ao enviar email:', err));
+
                     statusMessage.style.display = 'flex';
                     statusMessage.className = 'booking-status-info success';
-                    statusMessage.innerHTML = '<i class="ph ph-check-circle"></i> Seu agendamento foi recebido com sucesso! A clínica entrará em contato em breve.';
-                    
-                    // Reset Form
+                    statusMessage.innerHTML = '<i class="ph ph-check-circle"></i> Solicitação enviada com sucesso! Analisaremos a disponibilidade e você receberá a confirmação no seu e-mail em breve.';
+
                     document.getElementById('pre-booking-form').reset();
                     document.querySelectorAll('.calendar-day').forEach(c => c.classList.remove('selected'));
-                    if(document.getElementById('booking-date')) document.getElementById('booking-date').value = '';
+                    if (document.getElementById('booking-date')) document.getElementById('booking-date').value = '';
                     timeSelect.disabled = true;
                     timeSelect.innerHTML = '<option value="" disabled selected>Selecione a data primeiro...</option>';
 
@@ -2394,7 +2512,7 @@
                 }
             };
 
-            // Easter Egg click handler
+            // Easter Egg 3-click trigger
             const easterEggTrigger = document.getElementById('easter-egg-trigger');
             if (easterEggTrigger) {
                 let clicks = 0;
@@ -2415,8 +2533,7 @@
         });
     </script>
 
-
-
+    <!-- Botpress Webchat Integration -->
     <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2025/09/06/16/20250906163757-P63KJWE6.js" defer></script>
 
