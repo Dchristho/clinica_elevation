@@ -142,21 +142,41 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem 6vw;
+            padding: 1.5rem 6vw;
             position: fixed;
             width: 100%;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
             transition: var(--transition);
         }
 
         .navbar.scrolled {
             padding: 1rem 6vw;
-            background: rgba(8, 9, 11, 0.82);
+            background: rgba(8, 9, 11, 0.88);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-brand img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
         }
 
         .nav-links {
@@ -325,6 +345,74 @@
             margin-bottom: 2rem;
             position: relative;
             z-index: 50;
+        }
+
+        .hero-buttons-desktop {
+            display: flex;
+        }
+
+        .hero-buttons-mobile {
+            display: none;
+        }
+
+        .btn-mobile-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.4rem;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            letter-spacing: 0.02em;
+            box-sizing: border-box;
+        }
+
+        .btn-mobile-hero span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            font-size: 1rem;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+            backdrop-filter: none !important;
+        }
+
+        .btn-mobile-hero.btn-mobile-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #f5df93 100%);
+            color: var(--bg-dark);
+            box-shadow: 0 8px 25px var(--accent-glow);
+        }
+
+        .btn-mobile-hero.btn-mobile-primary span {
+            color: var(--bg-dark) !important;
+            font-weight: 700;
+        }
+
+        .btn-mobile-hero.btn-mobile-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            color: var(--text-high);
+            backdrop-filter: blur(12px);
+        }
+
+        .btn-mobile-hero.btn-mobile-secondary span {
+            color: var(--text-high) !important;
+        }
+
+        .btn-mobile-hero.btn-mobile-secondary span i {
+            color: var(--accent);
+        }
+
+        .btn-mobile-hero:hover, .btn-mobile-hero:active {
+            transform: translateY(-2px);
+            border-color: var(--accent);
         }
 
         .btn-primary {
@@ -539,12 +627,12 @@
             font-weight: 600;
         }
 
-        /* --- Minimalist Services Rows (Pear.no List Design) --- */
+        /* --- Minimalist Services Rows (Nossas Especialidades) --- */
         .services-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
         }
 
         .services-header h2 {
@@ -553,40 +641,67 @@
         }
 
         .services-list {
+            display: flex;
+            flex-direction: column;
             border-top: 1px solid var(--glass-border);
+            width: 100%;
+            position: relative;
+            z-index: 5;
         }
 
         .service-row {
             display: grid;
-            grid-template-columns: 80px 1fr auto;
+            grid-template-columns: 60px 1fr auto;
             align-items: center;
-            padding: 2.5rem 1.5rem;
+            gap: 1.5rem;
+            padding: 2.2rem 1.5rem;
             border-bottom: 1px solid var(--glass-border);
             text-decoration: none;
             color: inherit;
             transition: var(--transition);
             position: relative;
             border-radius: var(--radius-md);
+            background: transparent;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .service-row i {
             font-size: 1.8rem;
-            color: var(--text-dim);
+            color: var(--accent);
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-row .service-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
         }
 
         .service-row h3 {
-            font-size: 1.65rem;
-            font-weight: 500;
+            font-size: 1.5rem;
+            font-weight: 600;
             transition: var(--transition);
             letter-spacing: -0.02em;
+            color: var(--text-high);
+            margin: 0;
+        }
+
+        .service-row .service-sub {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin: 0;
+            line-height: 1.4;
         }
 
         .service-row .arrow {
             font-size: 1.4rem;
             color: var(--text-dim);
-            opacity: 0.4;
-            transform: translateX(-10px);
+            opacity: 0.6;
+            transform: translateX(-6px);
             transition: var(--transition);
         }
 
@@ -594,7 +709,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
             opacity: 0;
             transition: var(--transition);
             border-radius: var(--radius-md);
@@ -602,10 +717,11 @@
         }
 
         .service-row:hover {
-            background: rgba(255, 255, 255, 0.015);
-            border-color: rgba(212, 175, 55, 0.25);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(212, 175, 55, 0.3);
             padding-left: 2rem;
             padding-right: 2rem;
+            transform: translateX(4px);
         }
 
         .service-row:hover::before {
@@ -613,18 +729,26 @@
         }
 
         .service-row:hover i {
-            color: var(--accent);
+            color: #f7e6a1;
             transform: scale(1.15);
         }
 
         .service-row:hover h3 {
-            transform: translateX(8px);
-            color: var(--text-high);
+            color: var(--accent);
         }
 
         .service-row:hover .arrow {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateX(2px);
+            color: var(--accent);
+        }
+
+        .service-row.highlight-service {
+            border-color: rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.02);
+        }
+
+        .service-row.highlight-service h3 {
             color: var(--accent);
         }
 
@@ -1536,6 +1660,16 @@
         }
 
         @media (max-width: 768px) {
+            .hero-buttons-desktop {
+                display: none !important;
+            }
+            .hero-buttons-mobile {
+                display: flex !important;
+                flex-direction: column;
+                width: 100%;
+                gap: 0.85rem;
+                margin-bottom: 2rem;
+            }
             .section-premium, .booking-section, .location-section, .instagram-section {
                 padding: 5rem 6vw;
             }
@@ -1548,11 +1682,15 @@
                 gap: 1.25rem;
             }
             .service-row {
-                grid-template-columns: 50px 1fr auto;
-                padding: 1.75rem 0.5rem;
+                grid-template-columns: 44px 1fr auto;
+                padding: 1.5rem 0.8rem;
+                gap: 1rem;
             }
             .service-row h3 {
-                font-size: 1.35rem;
+                font-size: 1.25rem;
+            }
+            .service-row .service-sub {
+                font-size: 0.85rem;
             }
             .footer-wrapper {
                 grid-template-columns: 1fr;
@@ -1595,6 +1733,11 @@
 
     <!-- Navigation -->
     <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="logonovosalao.png" alt="Elevation Logo">
+            <span>Elevation</span>
+        </a>
+
         <ul class="nav-links">
             <li><a href="index.html">Início</a></li>
             <li><a href="beleza.html" class="nav-cursive">Harmonização Facial</a></li>
@@ -1611,9 +1754,12 @@
         <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
         <a href="beleza.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
         <a href="produtos.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-package"></i> Linha Elevation</a>
+        <a href="valores.html" class="popover-link"><i class="ph ph-scissors"></i> Nossos Serviços</a>
+        <a href="espaço.html" class="popover-link"><i class="ph ph-buildings"></i> O Santuário</a>
+        <a href="sobrenos.html" class="popover-link"><i class="ph ph-heart"></i> Nossa História</a>
         <a href="#agendamento" class="popover-link"
-            style="color: var(--accent); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.1); justify-content: center; margin-top: 0.5rem;">
-            <i class="ph ph-whatsapp-logo"></i> Agendar Horário
+            style="color: var(--accent); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.12); justify-content: center; margin-top: 0.5rem; font-weight: 600;">
+            <i class="ph ph-calendar-check"></i> Agendar Horário
         </a>
     </div>
 
@@ -1632,7 +1778,9 @@
                     <span class="reveal-item">Seja Bem-Vinda à Excelência</span>
                     <h1 class="reveal-item">Clínica<br>Elevation</h1>
                     <p class="reveal-item">Onde a sofisticação encontra o cuidado profissional para realçar sua beleza natural.</p>
-                    <div class="hero-buttons reveal-item">
+                    
+                    <!-- Desktop Hero Buttons (Preservados exatamente para PC) -->
+                    <div class="hero-buttons hero-buttons-desktop reveal-item">
                         <a href="beleza.html" class="btn-tertiary">
                             Harmonização Facial <i class="ph ph-sparkle"></i>
                         </a>
@@ -1641,6 +1789,22 @@
                         </a>
                         <a href="#agendamento" class="btn-secondary">
                             Agendar Horário <i class="ph ph-calendar"></i>
+                        </a>
+                    </div>
+
+                    <!-- Mobile Hero Buttons (Exclusivo para celular / touch) -->
+                    <div class="hero-buttons hero-buttons-mobile reveal-item">
+                        <a href="valores.html" class="btn-mobile-hero btn-mobile-primary">
+                            <span><i class="ph ph-scissors"></i> Nossos Serviços</span>
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                        <a href="espaço.html" class="btn-mobile-hero btn-mobile-secondary">
+                            <span><i class="ph ph-buildings"></i> O Santuário</span>
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                        <a href="sobrenos.html" class="btn-mobile-hero btn-mobile-secondary">
+                            <span><i class="ph ph-heart"></i> Nossa História</span>
+                            <i class="ph ph-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -1674,8 +1838,8 @@
         </div>
     </section>
 
-    <!-- Nossas Especialidades Section -->
-    <section class="section-premium" style="padding-top: 0;">
+    <!-- Nossas Especialidades Section (4 Links Essenciais 100% Funcionais) -->
+    <section class="section-premium" style="padding-top: 0;" id="especialidades">
         <div class="services-header">
             <h2>Nossas<br>Especialidades</h2>
             <p style="color: var(--text-muted); max-width: 40ch; line-height: 1.65;">Protocolos avançados desenvolvidos para quem busca resultados extraordinários.</p>
@@ -1684,28 +1848,35 @@
         <div class="services-list">
             <a href="valores.html" class="service-row">
                 <i class="ph ph-scissors"></i>
-                <h3>Serviços Essenciais</h3>
+                <div class="service-info">
+                    <h3>Serviços Essenciais</h3>
+                    <p class="service-sub">Cortes, escovas, tratamentos capilares e cuidados clássicos</p>
+                </div>
                 <i class="ph ph-arrow-right arrow"></i>
             </a>
             <a href="maquiagem.html" class="service-row">
                 <i class="ph ph-sparkle"></i>
-                <h3>Alta Definição Facial</h3>
+                <div class="service-info">
+                    <h3>Maquiagem</h3>
+                    <p class="service-sub">Produções exclusivas para noivas, eventos VIP e produções sociais</p>
+                </div>
+                <i class="ph ph-arrow-right arrow"></i>
+            </a>
+            <a href="beleza.html" class="service-row highlight-service">
+                <i class="ph ph-magic-wand"></i>
+                <div class="service-info">
+                    <h3>Botox no Rosto / Harmonização</h3>
+                    <p class="service-sub">Preenchimento labial, jawline, rinomodelação e rejuvenescimento facial</p>
+                </div>
                 <i class="ph ph-arrow-right arrow"></i>
             </a>
             <a href="cuidados.html" class="service-row">
                 <i class="ph ph-drop"></i>
-                <h3>Estética Avançada</h3>
+                <div class="service-info">
+                    <h3>Estética Avançada</h3>
+                    <p class="service-sub">Tecnologia de ponta, tratamentos faciais e corporais de alta performance</p>
+                </div>
                 <i class="ph ph-arrow-right arrow"></i>
-            </a>
-            <a href="beleza.html" class="service-row" style="color: var(--accent);">
-                <i class="ph ph-magic-wand" style="color: var(--accent);"></i>
-                <h3 style="color: var(--accent);">Harmonização Facial</h3>
-                <i class="ph ph-arrow-right arrow" style="color: var(--accent);"></i>
-            </a>
-            <a href="produtos.html" class="service-row" style="color: var(--accent);">
-                <i class="ph ph-magic-wand" style="color: var(--accent);"></i>
-                <h3 style="color: var(--accent);">Linha Elevation</h3>
-                <i class="ph ph-arrow-right arrow" style="color: var(--accent);"></i>
             </a>
         </div>
     </section>
@@ -2019,11 +2190,12 @@
             <div class="footer-col">
                 <h4>Menu Premium</h4>
                 <ul class="footer-nav">
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="valores.html">Nossos Serviços</a></li>
-                    <li><a href="produtos.html">Linha de Produtos</a></li>
-                    <li><a href="espaço.html">O Santuário</a></li>
-                    <li><a href="sobrenos.html">Nossa História</a></li>
+                    <li><a href="index.html"><i class="ph ph-house"></i> Início</a></li>
+                    <li><a href="beleza.html" style="color: var(--accent);"><i class="ph ph-sparkle" style="color: var(--accent);"></i> Harmonização Facial</a></li>
+                    <li><a href="produtos.html" style="color: var(--accent);"><i class="ph ph-package" style="color: var(--accent);"></i> Linha Elevation</a></li>
+                    <li><a href="valores.html"><i class="ph ph-scissors"></i> Nossos Serviços</a></li>
+                    <li><a href="espaço.html"><i class="ph ph-buildings"></i> O Santuário</a></li>
+                    <li><a href="sobrenos.html"><i class="ph ph-heart"></i> Nossa História</a></li>
                 </ul>
             </div>
 
@@ -2235,16 +2407,25 @@
                     ease: 'power2.out'
                 });
 
-                gsap.from('.service-row', {
-                    scrollTrigger: {
-                        trigger: '.services-list',
-                        start: 'top 80%',
-                    },
-                    opacity: 0,
-                    x: -25,
-                    stagger: 0.1,
-                    duration: 0.8,
-                    ease: 'power2.out'
+                gsap.fromTo('.service-row', 
+                    { opacity: 0, y: 25 },
+                    {
+                        scrollTrigger: {
+                            trigger: '#especialidades',
+                            start: 'top 85%',
+                        },
+                        opacity: 1,
+                        y: 0,
+                        stagger: 0.12,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                        clearProps: 'transform,opacity'
+                    }
+                );
+                
+                // Recalcula os gatilhos quando imagens e DOM carregarem
+                window.addEventListener('load', () => {
+                    ScrollTrigger.refresh();
                 });
             }
 

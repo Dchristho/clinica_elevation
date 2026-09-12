@@ -6,16 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Nós - Clínica Elevation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700&f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&family=Pinyon+Script&display=swap" rel="stylesheet">
     <style>
         :root {
+            --bg-base: #09090b;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.2);
+            --text-high: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-bg: rgba(9, 9, 11, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --gold: #d4af37;
             --dark: #111;
             --darkER: #0a0a0a;
             --light: #f9f9f9;
-            --text-muted: #bbb;
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -33,34 +41,190 @@
             line-height: 1.6;
         }
 
-        /* Botão Voltar Premium */
-        .back-button {
+        /* Top Navigation Bar */
+        .navbar {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            color: #fff;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 12px 25px;
-            font-size: 13px;
-            border-radius: 50px;
-            cursor: pointer;
-            z-index: 1000;
-            transition: var(--transition);
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem 5vw;
             display: flex;
             align-items: center;
-            gap: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            justify-content: space-between;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            background: rgba(9, 9, 11, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .back-button:hover {
-            background: var(--gold);
-            color: var(--dark);
-            transform: translateX(-8px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-            border-color: var(--gold);
+        .navbar.scrolled {
+            padding: 0.85rem 5vw;
+            background: rgba(9, 9, 11, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-high);
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-brand img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.25rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-high);
+        }
+
+        .nav-links a.nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.7rem !important;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+            color: var(--accent) !important;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+            display: inline-block;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .nav-links a.nav-cursive:hover {
+            color: #f7e6a1 !important;
+            text-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4) !important;
+            transform: scale(1.06) translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-high);
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent);
+            border-color: var(--accent-dim);
+        }
+
+        /* Mobile Dropdown Popover */
+        .mobile-popover {
+            position: fixed;
+            top: 75px;
+            right: 5vw;
+            width: 280px;
+            background: rgba(15, 15, 18, 0.95);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 999;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-popover.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        .popover-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-high);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-size: 0.98rem;
+            font-weight: 500;
+        }
+
+        .popover-link i {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .popover-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--accent);
+        }
+
+        .popover-link:hover i {
+            color: var(--accent);
+        }
+
+        .popover-link.highlight-link {
+            color: var(--accent);
+            background: rgba(212, 175, 55, 0.06);
+            border: 1px solid rgba(212, 175, 55, 0.18);
+        }
+
+        .popover-link.highlight-link i {
+            color: var(--accent);
+        }
+
+        .popover-link.nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.45rem !important;
+            text-transform: none !important;
+        }
+
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none !important;
+            }
+            .mobile-menu-btn {
+                display: flex !important;
+                margin-left: auto;
+            }
         }
 
         /* Hero Section Storytelling */
@@ -452,9 +616,35 @@
 
 <body>
 
-    <button class="back-button" onclick="window.history.back()">
-        <i class="fas fa-arrow-left"></i> Voltar
-    </button>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="logonovosalao.png" alt="Elevation Logo">
+            <span>Elevation</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="beleza.html" class="nav-cursive">Harmonização Facial</a></li>
+            <li><a href="produtos.html" class="nav-cursive">Linha Elevation</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir Menu">
+            <i class="ph ph-list"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Dropdown Popover -->
+    <div class="mobile-popover" id="mobile-popover">
+        <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
+        <a href="beleza.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
+        <a href="produtos.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-package"></i> Linha Elevation</a>
+        <a href="valores.html" class="popover-link"><i class="ph ph-scissors"></i> Nossos Serviços</a>
+        <a href="espaço.html" class="popover-link"><i class="ph ph-buildings"></i> O Santuário</a>
+        <a href="sobrenos.html" class="popover-link"><i class="ph ph-heart"></i> Nossa História</a>
+        <a href="index.html#agendamento" class="popover-link"
+            style="color: var(--accent); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.12); justify-content: center; margin-top: 0.5rem; font-weight: 600;">
+            <i class="ph ph-calendar-check"></i> Agendar Horário
+        </a>
+    </div>
 
     <div class="hero">
         <p>Elegância & Excelência</p>
@@ -523,51 +713,362 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h4>Clínica Elevation</h4>
-                <p style="color: #bbb; margin-bottom: 25px;">
-                    Redefinindo os padrões de beleza e bem-estar com sofisticação e ciência estética.
-                </p>
-                <div class="footer-socials">
-                    <a href="https://www.instagram.com/clinica_elevation" target="_blank"><i
-                            class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
-                        target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.facebook.com/profile.php?id=100064480581505" target="_blank"><i
-                            class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.tiktok.com/@salao_elevation" target="_blank"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
+<!-- O Novo Rodapé Premium Elevation -->
+<style>
+    /* Variáveis exclusivas do Rodapé */
+    :root {
+        --footer-bg: #09090b;
+        --footer-gold: #d4af37;
+        --footer-salmon: #e89b82; /* Toque quente e sofisticado */
+        --footer-text: #ffffff;
+        --footer-muted: #8a8a93;
+        --footer-border: rgba(255, 255, 255, 0.05);
+        --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-            <div class="footer-column">
-                <h4>Navegação</h4>
-                <ul>
-                    <li><a href="espaço.html"><i class="fas fa-chevron-right"></i> Galeria do Espaço</a></li>
-                    <li><a href="valores.html"><i class="fas fa-chevron-right"></i> Serviços & Preços</a></li>
-                    <li><a href="cuidados.html"><i class="fas fa-chevron-right"></i> Dicas Exclusivas</a></li>
-                    <li><a href="sobrenos.html"><i class="fas fa-chevron-right"></i> Nossa História</a></li>
-                </ul>
-            </div>
+    .footer-premium {
+        background-color: var(--footer-bg);
+        position: relative;
+        overflow: hidden;
+        padding: 6rem 5vw 2rem;
+        border-top: 1px solid var(--footer-border);
+        font-family: 'Satoshi', sans-serif;
+    }
 
-            <div class="footer-column">
-                <h4>Contato</h4>
-                <ul>
-                    <li><a href="https://wa.me/message/67PXANH2XQKSN1" target="_blank"><i class="fas fa-phone-alt"></i>
-                            Agendamento VIP</a></li>
-                    <li><a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank"><i class="fas fa-map-marker-alt"></i> Localização Atemporal</a></li>
-                    <li><a><i class="fas fa-clock"></i> Seg: 09h às 14h | Ter - Sáb: 09h às 18h</a></li>
-                </ul>
+    /* Brilho de fundo (Glow) luxuoso e contido */
+    .footer-premium::before {
+        content: '';
+        position: absolute;
+        top: -150px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(232, 155, 130, 0.05) 40%, transparent 70%);
+        filter: blur(60px);
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .footer-wrapper {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.5fr;
+        gap: 4rem;
+    }
+
+    /* Coluna da Marca */
+    .footer-brand h3 {
+        font-family: 'Cabinet Grotesk', sans-serif;
+        font-size: 2.2rem;
+        color: var(--footer-text);
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .footer-brand p {
+        color: var(--footer-muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        max-width: 380px;
+        margin-bottom: 2.5rem;
+    }
+
+    /* Redes Sociais - Estilo Glassmorphism */
+    .footer-socials {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .social-glass-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--footer-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--footer-text);
+        font-size: 1.3rem;
+        text-decoration: none;
+        backdrop-filter: blur(10px);
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .social-glass-btn::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--footer-gold), var(--footer-salmon));
+        opacity: 0;
+        transition: var(--transition-smooth);
+        z-index: -1;
+    }
+
+    .social-glass-btn:hover {
+        transform: translateY(-5px);
+        border-color: transparent;
+        color: var(--footer-bg);
+    }
+
+    .social-glass-btn:hover::after {
+        opacity: 1;
+    }
+
+    /* Colunas de Links */
+    .footer-col h4 {
+        font-family: 'Cabinet Grotesk', sans-serif;
+        font-size: 1.1rem;
+        color: var(--footer-text);
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .footer-nav {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .footer-nav a {
+        color: var(--footer-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: var(--transition-smooth);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        width: fit-content;
+    }
+
+    /* Efeito Pro-Max no Hover do Link */
+    .footer-nav a::before {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0%;
+        height: 1px;
+        background: linear-gradient(90deg, var(--footer-gold), var(--footer-salmon));
+        transition: var(--transition-smooth);
+    }
+
+    .footer-nav a:hover {
+        color: var(--footer-text);
+        transform: translateX(5px);
+    }
+
+    .footer-nav a:hover::before {
+        width: 100%;
+    }
+
+    .footer-nav i {
+        font-size: 1.1rem;
+        color: rgba(212, 175, 55, 0.5);
+        transition: var(--transition-smooth);
+    }
+
+    .footer-nav a:hover i {
+        color: var(--footer-gold);
+    }
+
+    /* Coluna de Contato / Newsletter */
+    .contact-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--footer-border);
+        border-radius: 20px;
+        padding: 2rem;
+    }
+
+    .contact-card p {
+        color: var(--footer-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-contact-glow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 1rem;
+        border-radius: 12px;
+        background: var(--footer-text);
+        color: var(--footer-bg);
+        text-decoration: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.9rem;
+        transition: var(--transition-smooth);
+    }
+
+    .btn-contact-glow:hover {
+        background: linear-gradient(135deg, var(--footer-gold), var(--footer-salmon));
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+        color: var(--footer-text);
+        transform: scale(1.02);
+    }
+
+    /* Linha Final */
+    .footer-bottom-bar {
+        margin-top: 6rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--footer-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--footer-muted);
+        font-size: 0.85rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .dev-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 8px 16px;
+        border-radius: 99px;
+        border: 1px solid var(--footer-border);
+        text-decoration: none;
+        color: var(--footer-muted);
+        transition: var(--transition-smooth);
+    }
+
+    .dev-badge span {
+        color: var(--footer-text);
+        font-weight: 500;
+    }
+
+    .dev-badge:hover {
+        border-color: var(--footer-gold);
+        background: rgba(212, 175, 55, 0.05);
+        color: var(--footer-gold);
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+        .footer-wrapper {
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .footer-wrapper {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .footer-brand p {
+            margin: 0 auto 2rem;
+        }
+
+        .footer-socials {
+            justify-content: center;
+        }
+
+        .footer-nav {
+            align-items: center;
+        }
+
+        .footer-nav a:hover {
+            transform: translateX(0) scale(1.05);
+        }
+
+        .footer-bottom-bar {
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+        }
+    }
+</style>
+
+<footer class="footer-premium">
+    <div class="footer-wrapper">
+        <!-- Brand Section -->
+        <div class="footer-brand">
+            <h3><img src="logonovosalao.png" alt="Icon" style="height: 30px;"> Elevation</h3>
+            <p>Especialistas em realçar a sua beleza natural. A mais alta tecnologia e precisão profissional em um ambiente projetado para a sua elevação.</p>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/clinica_elevation" target="_blank" class="social-glass-btn"><i class="ph ph-instagram-logo"></i></a>
+                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20melhor%20os%20servi%C3%A7os%20e%20agendar%20um%20atendimento%20personalizado%20na%20Cl%C3%ADnica%20Elevation." target="_blank" class="social-glass-btn"><i class="ph ph-whatsapp-logo"></i></a>
+                <a href="#" class="social-glass-btn"><i class="ph ph-tiktok-logo"></i></a>
             </div>
         </div>
 
-        <div class="footer-bottom">
-            <p>&copy; 2024 Clínica Elevation. Todos os direitos reservados.</p>
-            <p>Criado com maestria por <a href="https://sweet-jalebi-b98578.netlify.app/" class="credit-link"
-                    target="_blank">ChrisDev</a></p>
+        <!-- Links Navigation -->
+        <div class="footer-col">
+            <h4>Menu Premium</h4>
+            <ul class="footer-nav">
+                <li><a href="index.html"><i class="ph ph-house"></i> Início</a></li>
+                <li><a href="beleza.html" style="color: var(--footer-gold);"><i class="ph ph-sparkle" style="color: var(--footer-gold);"></i> Harmonização Facial</a></li>
+                <li><a href="produtos.html" style="color: var(--footer-gold);"><i class="ph ph-package" style="color: var(--footer-gold);"></i> Linha Elevation</a></li>
+                <li><a href="valores.html"><i class="ph ph-scissors"></i> Nossos Serviços</a></li>
+                <li><a href="espaço.html"><i class="ph ph-buildings"></i> O Santuário</a></li>
+                <li><a href="sobrenos.html"><i class="ph ph-heart"></i> Nossa História</a></li>
+            </ul>
         </div>
-    </footer>
+
+        <!-- Contact Info -->
+        <div class="footer-col">
+            <h4>Atendimento</h4>
+            <ul class="footer-nav">
+                <li>
+                    <a href="https://search.brave.com/search?q=Aldeia+dos+Machacalis+126+A%2C+S%C3%A3o+Paulo%2C+Brazil+08430430&view=full&map_src=c&bbox=-46.859%2C-23.703%2C-45.980%2C-23.352" target="_blank">
+                        <i class="ph ph-map-pin"></i> Rua Aldeia dos Machacalis, 126 A
+                    </a>
+                </li>
+                <li>
+                    <a href="tel:+5511980272343">
+                        <i class="ph ph-phone"></i> (11) 98027-2343
+                    </a>
+                </li>
+                <li>
+                    <a style="cursor: default;">
+                        <i class="ph ph-clock"></i> Seg: 09h-14h | Ter-Sáb: 09h-18h
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Action Card -->
+        <div class="footer-col">
+            <div class="contact-card">
+                <h4>Sua Transformação</h4>
+                <p>Pronta para elevar sua autoestima? Agende uma avaliação exclusiva diretamente com nossos especialistas.</p>
+                <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" class="btn-contact-glow">
+                    <i class="ph ph-calendar-plus"></i> Agendar Avaliação
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom-bar">
+        <p>&copy; 2026 Clínica Elevation. Todos os direitos reservados à marca.</p>
+        <a href="https://sweet-jalebi-b98578.netlify.app/" target="_blank" class="dev-badge">
+            <i class="ph ph-code"></i> Desenvolvido por <span>ChrisDev</span>
+        </a>
+    </div>
+</footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -591,6 +1092,31 @@
 
             window.addEventListener('scroll', handleReveal);
             handleReveal(); // Trigger imediato
+
+            // Navbar scroll blur
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('.navbar');
+                if (nav) {
+                    if (window.scrollY > 15) nav.classList.add('scrolled');
+                    else nav.classList.remove('scrolled');
+                }
+            }, { passive: true });
+
+            // Mobile Popover toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const popoverMenu = document.getElementById('mobile-popover');
+            if (mobileBtn && popoverMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    popoverMenu.classList.toggle('active');
+                    mobileBtn.innerHTML = popoverMenu.classList.contains('active') ? '<i class="ph ph-x"></i>' : '<i class="ph ph-list"></i>';
+                });
+                popoverMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        popoverMenu.classList.remove('active');
+                        mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
+                    });
+                });
+            }
         });
     </script>
 </body>

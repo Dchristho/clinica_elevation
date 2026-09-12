@@ -7,11 +7,12 @@
     <title>Harmonização Facial Natural | Clínica Elevation</title>
 
     <!-- Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Dancing+Script:wght@600&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
+    <!-- Fonts & Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Smooth Scroll (Lenis) -->
@@ -27,10 +28,14 @@
     <style>
         :root {
             --gold: #d4af37;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.15);
             --dark: #111;
             --darkER: #0a0a0a;
-            --light: #f9f9f9;
+            --bg-dark: #08090b;
+            --text-high: #ffffff;
             --text-muted: #bbb;
+            --glass-border: rgba(255, 255, 255, 0.08);
             --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -70,53 +75,194 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* --- Header Navigation (Existing Style) --- */
-        .header-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 40px;
+        /* --- Minimal Navigation Standard --- */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1.5rem 6vw;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
-            backdrop-filter: blur(10px);
             transition: var(--transition);
+            background: transparent;
         }
 
-        .header-nav.scrolled {
-            background: rgba(10, 10, 10, 0.95);
-            padding: 15px 40px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        .navbar.scrolled {
+            padding: 1rem 6vw;
+            background: rgba(8, 9, 11, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         }
 
-        .logo-home {
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             text-decoration: none;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            transition: var(--transition);
+            color: #ffffff;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
         }
 
-        .logo-home img {
-            height: 45px;
+        .nav-brand img {
+            height: 32px;
             width: auto;
-            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.25rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-high);
+        }
+
+        .nav-links a.nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.7rem !important;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+            color: var(--accent) !important;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+            display: inline-block;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .nav-links a.nav-cursive:hover {
+            color: #f7e6a1 !important;
+            text-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4) !important;
+            transform: scale(1.06) translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-high);
+            width: 44px;
+            height: 44px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: var(--transition);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn:hover {
+            background: #1c202a;
+            border-color: rgba(212, 175, 55, 0.3);
+            color: var(--accent);
+        }
+
+        /* Mobile Popover Menu */
+        .mobile-popover {
+            position: fixed;
+            top: 4.8rem;
+            right: 5vw;
+            width: calc(100vw - 10vw);
+            max-width: 320px;
+            background: rgba(9, 10, 14, 0.94);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 24px;
+            padding: 1.25rem;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95) translateY(-10px);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: top right;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .mobile-popover.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+        }
+
+        .popover-link {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 0.85rem 1rem;
+            color: var(--text-high);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-size: 0.98rem;
+            font-weight: 500;
+        }
+
+        .popover-link i {
+            font-size: 1.25rem;
+            color: var(--text-muted);
             transition: var(--transition);
         }
 
-        .logo-home span {
-            color: var(--gold);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
+        .popover-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--accent);
+        }
+
+        .popover-link:hover i {
+            color: var(--accent);
+        }
+
+        .popover-link.highlight-link {
+            color: var(--accent);
+            background: rgba(212, 175, 55, 0.06);
+            border: 1px solid rgba(212, 175, 55, 0.18);
+        }
+
+        .popover-link.highlight-link i {
+            color: var(--accent);
+        }
+
+        .popover-link.nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.45rem !important;
+            text-transform: none !important;
+        }
+
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none !important;
+            }
+            .mobile-menu-btn {
+                display: flex !important;
+                margin-left: auto;
+            }
         }
 
         .logo-home:hover {
@@ -795,17 +941,37 @@
 
 <body>
 
-    <!-- Header Navigation -->
-    <nav class="header-nav">
-        <a href="index.html" class="logo-home">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
             <img src="logonovosalao.png" alt="Elevation Logo">
-            <span>Início</span>
+            <span>Elevation</span>
         </a>
-        <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
-            class="logo-home" style="border-color: var(--gold);">
-            <span>Agendar</span>
-        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="beleza.html" class="nav-cursive" style="color: #f7e6a1;">Harmonização Facial</a></li>
+            <li><a href="produtos.html" class="nav-cursive">Linha Elevation</a></li>
+        </ul>
+
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir Menu">
+            <i class="ph ph-list"></i>
+        </button>
     </nav>
+
+    <!-- Mobile Popover Menu -->
+    <div class="mobile-popover" id="mobile-popover">
+        <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
+        <a href="beleza.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
+        <a href="produtos.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-package"></i> Linha Elevation</a>
+        <a href="valores.html" class="popover-link"><i class="ph ph-scissors"></i> Nossos Serviços</a>
+        <a href="espaço.html" class="popover-link"><i class="ph ph-buildings"></i> O Santuário</a>
+        <a href="sobrenos.html" class="popover-link"><i class="ph ph-heart"></i> Nossa História</a>
+        <a href="index.html#agendamento" class="popover-link"
+            style="color: var(--accent); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.12); justify-content: center; margin-top: 0.5rem; font-weight: 600;">
+            <i class="ph ph-calendar-check"></i> Agendar Horário
+        </a>
+    </div>
 
     <!-- Floating CTA -->
     <a href="https://wa.me/5511980272343?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20personalizada%20na%20Cl%C3%ADnica%20Elevation%20e%20conhecer%20os%20tratamentos%20exclusivos."
@@ -1299,11 +1465,12 @@
         <div class="footer-col">
             <h4>Menu Premium</h4>
             <ul class="footer-nav">
-                <li><a href="index.html">Início</a></li>
-                <li><a href="valores.html">Nossos Serviços</a></li>
-                <li><a href="produtos.html">Linha de Produtos</a></li>
-                <li><a href="espaço.html">O Santuário</a></li>
-                <li><a href="sobrenos.html">Nossa História</a></li>
+                <li><a href="index.html"><i class="ph ph-house"></i> Início</a></li>
+                <li><a href="beleza.html" style="color: var(--accent);"><i class="ph ph-sparkle" style="color: var(--accent);"></i> Harmonização Facial</a></li>
+                <li><a href="produtos.html" style="color: var(--accent);"><i class="ph ph-package" style="color: var(--accent);"></i> Linha Elevation</a></li>
+                <li><a href="valores.html"><i class="ph ph-scissors"></i> Nossos Serviços</a></li>
+                <li><a href="espaço.html"><i class="ph ph-buildings"></i> O Santuário</a></li>
+                <li><a href="sobrenos.html"><i class="ph ph-heart"></i> Nossa História</a></li>
             </ul>
         </div>
 
@@ -1399,10 +1566,33 @@
 
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
-            const nav = document.querySelector('.header-nav');
-            if (window.scrollY > 50) nav.classList.add('scrolled');
-            else nav.classList.remove('scrolled');
-        });
+            const nav = document.querySelector('.navbar');
+            if (nav) {
+                if (window.scrollY > 15) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            }
+        }, { passive: true });
+
+        // Mobile Popover Menu
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const popoverMenu = document.getElementById('mobile-popover');
+        if (mobileBtn && popoverMenu) {
+            mobileBtn.addEventListener('click', () => {
+                popoverMenu.classList.toggle('active');
+                if (popoverMenu.classList.contains('active')) {
+                    mobileBtn.innerHTML = '<i class="ph ph-x"></i>';
+                } else {
+                    mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
+                }
+            });
+
+            popoverMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    popoverMenu.classList.remove('active');
+                    mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
+                });
+            });
+        }
 
         // FAQ Toggle
         document.querySelectorAll('.faq-question').forEach(q => {
@@ -1415,10 +1605,12 @@
         // Carousel Testimonial
         const track = document.querySelector('.testimonial-track');
         let index = 0;
-        setInterval(() => {
-            index = (index + 1) % 3;
-            track.style.transform = `translateX(-${index * (track.offsetWidth / 3 + 10)}px)`;
-        }, 5000);
+        if (track) {
+            setInterval(() => {
+                index = (index + 1) % 3;
+                track.style.transform = `translateX(-${index * (track.offsetWidth / 3 + 10)}px)`;
+            }, 5000);
+        }
 
         // Vanilla Tilt handles cards and images via data-tilt
     </script>

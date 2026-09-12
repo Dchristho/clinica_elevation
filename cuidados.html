@@ -13,11 +13,18 @@
     <!-- Booking System (Firebase Sync) -->
     <script src="booking-system.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700&f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&family=Pinyon+Script&display=swap" rel="stylesheet">
     <style>
         :root {
+            --bg-base: #09090b;
+            --accent: #d4af37;
+            --accent-dim: rgba(212, 175, 55, 0.2);
+            --text-high: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-bg: rgba(9, 9, 11, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --gold: #d4af37;
             --gold-dark: #b5942f;
             --beige-light: #FDFBF7;
@@ -42,82 +49,190 @@
             line-height: 1.6;
         }
 
-        /* Botão Home/Voltar Premium */
-        .nav-header {
+        /* Top Navigation Bar */
+        .navbar {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            padding: 20px 40px;
+            padding: 1.25rem 5vw;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
             z-index: 1000;
-            background: rgba(253, 251, 247, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.4s ease;
+            background: rgba(9, 9, 11, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .back-link {
+        .navbar.scrolled {
+            padding: 0.85rem 5vw;
+            background: rgba(9, 9, 11, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0.75rem;
             text-decoration: none;
-            color: var(--gold);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            color: var(--text-high);
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-brand img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
             font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            text-decoration: none;
             transition: var(--transition);
-            background: var(--white);
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        /* Glare Logo Style for Header */
-        .glare-container {
             position: relative;
+            padding: 0.25rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-high);
+        }
+
+        .nav-links a.nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.7rem !important;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+            color: var(--accent) !important;
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
             display: inline-block;
-            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .nav-links a.nav-cursive:hover {
+            color: #f7e6a1 !important;
+            text-shadow: 0 0 24px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4) !important;
+            transform: scale(1.06) translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
             border-radius: 12px;
+            color: var(--text-high);
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             cursor: pointer;
-        }
-
-        .glare-image {
-            height: 45px;
             transition: var(--transition);
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+            z-index: 1001;
         }
 
-        .glare {
-            position: absolute;
-            top: -150%;
-            left: -150%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(212, 175, 55, 0.5) 52%, rgba(255, 255, 255, 0.2) 55%, transparent 70%);
-            transform: rotate(30deg);
-            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-            pointer-events: none;
+        .mobile-menu-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent);
+            border-color: var(--accent-dim);
+        }
+
+        /* Mobile Dropdown Popover */
+        .mobile-popover {
+            position: fixed;
+            top: 75px;
+            right: 5vw;
+            width: 280px;
+            background: rgba(15, 15, 18, 0.95);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 999;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .glare-container:hover .glare {
-            top: -70%;
-            left: -70%;
+        .mobile-popover.active {
             opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
         }
 
-        .glare-container:hover .glare-image {
-            transform: scale(1.05);
-            filter: brightness(1.1);
+        .popover-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-high);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-size: 0.98rem;
+            font-weight: 500;
         }
 
-        .back-link:hover {
-            background: var(--gold);
-            color: var(--white);
-            transform: translateX(-5px);
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        .popover-link i {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .popover-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--accent);
+        }
+
+        .popover-link:hover i {
+            color: var(--accent);
+        }
+
+        .popover-link.highlight-link {
+            color: var(--accent);
+            background: rgba(212, 175, 55, 0.06);
+            border: 1px solid rgba(212, 175, 55, 0.18);
+        }
+
+        .popover-link.highlight-link i {
+            color: var(--accent);
+        }
+
+        .popover-link.nav-cursive {
+            font-family: 'Pinyon Script', cursive !important;
+            font-size: 1.45rem !important;
+            text-transform: none !important;
+        }
+
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none !important;
+            }
+            .mobile-menu-btn {
+                display: flex !important;
+                margin-left: auto;
+            }
         }
 
         /* Hero clean beige - Resolvendo problema do fundo preto */
@@ -836,17 +951,35 @@
 
 <body>
 
-    <nav class="nav-header">
-        <div class="logo">
-            <div class="glare-container" onclick="window.location.href='index.html'">
-                <img src="logonovosalao.png" alt="Elevation Logo" class="glare-image">
-                <div class="glare"></div>
-            </div>
-        </div>
-        <a href="beleza.html" class="back-link">
-            <i class="fas fa-chevron-left"></i> Menu
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="logonovosalao.png" alt="Elevation Logo">
+            <span>Elevation</span>
         </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="beleza.html" class="nav-cursive">Harmonização Facial</a></li>
+            <li><a href="produtos.html" class="nav-cursive">Linha Elevation</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Abrir Menu">
+            <i class="ph ph-list"></i>
+        </button>
     </nav>
+
+    <!-- Mobile Dropdown Popover -->
+    <div class="mobile-popover" id="mobile-popover">
+        <a href="index.html" class="popover-link"><i class="ph ph-house"></i> Início</a>
+        <a href="beleza.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-sparkle"></i> Harmonização Facial</a>
+        <a href="produtos.html" class="popover-link highlight-link nav-cursive"><i class="ph ph-package"></i> Linha Elevation</a>
+        <a href="valores.html" class="popover-link"><i class="ph ph-scissors"></i> Nossos Serviços</a>
+        <a href="espaço.html" class="popover-link"><i class="ph ph-buildings"></i> O Santuário</a>
+        <a href="sobrenos.html" class="popover-link"><i class="ph ph-heart"></i> Nossa História</a>
+        <a href="index.html#agendamento" class="popover-link"
+            style="color: var(--accent); border: 1px solid var(--accent-dim); background: rgba(212, 175, 55, 0.12); justify-content: center; margin-top: 0.5rem; font-weight: 600;">
+            <i class="ph ph-calendar-check"></i> Agendar Horário
+        </a>
+    </div>
 
     <div class="hero">
         <div class="hero-logo-box">
@@ -1394,11 +1527,12 @@
         <div class="footer-col">
             <h4>Menu Premium</h4>
             <ul class="footer-nav">
-                <li><a href="index.html">Início</a></li>
-                <li><a href="valores.html">Nossos Serviços</a></li>
-                <li><a href="produtos.html">Linha de Produtos</a></li>
-                <li><a href="espaço.html">O Santuário</a></li>
-                <li><a href="sobrenos.html">Nossa História</a></li>
+                <li><a href="index.html"><i class="ph ph-house"></i> Início</a></li>
+                <li><a href="beleza.html" style="color: var(--footer-gold);"><i class="ph ph-sparkle" style="color: var(--footer-gold);"></i> Harmonização Facial</a></li>
+                <li><a href="produtos.html" style="color: var(--footer-gold);"><i class="ph ph-package" style="color: var(--footer-gold);"></i> Linha Elevation</a></li>
+                <li><a href="valores.html"><i class="ph ph-scissors"></i> Nossos Serviços</a></li>
+                <li><a href="espaço.html"><i class="ph ph-buildings"></i> O Santuário</a></li>
+                <li><a href="sobrenos.html"><i class="ph ph-heart"></i> Nossa História</a></li>
             </ul>
         </div>
 
@@ -1717,6 +1851,31 @@
                     statusMessage.innerHTML = '<i class="ph ph-warning-circle"></i> Por favor, preencha todos os campos.';
                 }
             };
+
+            // Navbar scroll blur
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('.navbar');
+                if (nav) {
+                    if (window.scrollY > 15) nav.classList.add('scrolled');
+                    else nav.classList.remove('scrolled');
+                }
+            }, { passive: true });
+
+            // Mobile Popover toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const popoverMenu = document.getElementById('mobile-popover');
+            if (mobileBtn && popoverMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    popoverMenu.classList.toggle('active');
+                    mobileBtn.innerHTML = popoverMenu.classList.contains('active') ? '<i class="ph ph-x"></i>' : '<i class="ph ph-list"></i>';
+                });
+                popoverMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        popoverMenu.classList.remove('active');
+                        mobileBtn.innerHTML = '<i class="ph ph-list"></i>';
+                    });
+                });
+            }
         });
     </script>
 </body>
