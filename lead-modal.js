@@ -60,7 +60,7 @@
   overlay.setAttribute('role','dialog');
   overlay.setAttribute('aria-modal','true');
   overlay.setAttribute('aria-label','Oferta especial da Clinica Elevation');
-  overlay.innerHTML = '<div id="elev-modal-card"><div id="elev-modal-img" aria-hidden="true"></div><div id="elev-modal-content"><button id="elev-modal-close" aria-label="Fechar">\u00d7</button><div class="elev-step elev-active" id="elev-step-1"><div class="elev-progress"><div class="elev-dot elev-dot-active"></div><div class="elev-dot"></div></div><div class="elev-eyebrow">\u2726 Presente exclusivo</div><h2 class="elev-heading">Ei, n\u00e3o v\u00e1 embora,<br><span>VOC\u00ca GANHOU UM PRESENTE!</span></h2><p class="elev-subtext">Clique e resgate seu presente:</p><div class="elev-btn-group"><button class="elev-btn elev-btn-primary" id="elev-facial-btn">\u2726 QUERO FACIAL</button><button class="elev-btn elev-btn-secondary" id="elev-corporal-btn">\u2726 QUERO CORPORAL</button></div></div><div class="elev-step" id="elev-step-2"><div class="elev-progress"><div class="elev-dot"></div><div class="elev-dot elev-dot-active"></div></div><div class="elev-eyebrow">\u2726 \u00daltimo passo</div><h2 class="elev-heading">S\u00f3 mais um passo para<br><span>resgatar seu presente!</span></h2><p class="elev-subtext">Preencha abaixo para garantir seu atendimento exclusivo:</p><form class="elev-form" id="elev-lead-form" novalidate><input class="elev-input" id="elev-nome" type="text" placeholder="Seu nome completo" required autocomplete="name"><input class="elev-input" id="elev-email" type="email" placeholder="Seu melhor e-mail" required autocomplete="email"><input class="elev-input" id="elev-telefone" type="tel" placeholder="WhatsApp (DDD + n\u00famero)" required autocomplete="tel" inputmode="numeric" maxlength="15"><button type="submit" class="elev-submit">RESGATAR MEU PRESENTE \u2192</button><p class="elev-privacy">\ud83d\udd12 Seus dados est\u00e3o protegidos. N\u00e3o enviamos spam.</p></form></div></div></div>';
+  overlay.innerHTML = '<div id="elev-modal-card"><div id="elev-modal-img" aria-hidden="true"></div><div id="elev-modal-content"><button id="elev-modal-close" aria-label="Fechar">\u00d7</button><div class="elev-step elev-active" id="elev-step-1"><div class="elev-progress"><div class="elev-dot elev-dot-active"></div><div class="elev-dot"></div></div><div class="elev-eyebrow">\u2726 Oferta exclusiva para voc\u00ea</div><h2 class="elev-heading">Feche um pacote de uma<br>dessas categorias e<br><span>reivindique seu presente!</span></h2><p class="elev-subtext">Escolha a categoria desejada e garanta seu presente gratuito \u2014 vagas limitadas:</p><div class="elev-btn-group"><button class="elev-btn elev-btn-primary" id="elev-facial-btn">\u2728 QUERO FACIAL</button><button class="elev-btn elev-btn-secondary" id="elev-corporal-btn">\u2728 QUERO CORPORAL</button></div></div><div class="elev-step" id="elev-step-2"><div class="elev-progress"><div class="elev-dot"></div><div class="elev-dot elev-dot-active"></div></div><div class="elev-eyebrow">\u2726 \u00daltimo passo \u2014 quase l\u00e1!</div><h2 class="elev-heading" id="elev-step2-heading">S\u00f3 mais um passo para<br><span id="elev-step2-choice">resgatar seu presente!</span></h2><p class="elev-subtext" id="elev-step2-sub">Preencha seus dados abaixo e nossa equipe entrar\u00e1 em contato para agendar seu hor\u00e1rio:</p><form class="elev-form" id="elev-lead-form" novalidate><input class="elev-input" id="elev-nome" type="text" placeholder="Seu nome completo" required autocomplete="name"><input class="elev-input" id="elev-telefone" type="tel" placeholder="WhatsApp (DDD + n\u00famero)" required autocomplete="tel" inputmode="numeric" maxlength="15"><button type="submit" class="elev-submit">RESGATAR MEU PRESENTE \u2192</button><p class="elev-privacy">\ud83d\udd12 Seus dados est\u00e3o protegidos. N\u00e3o enviamos spam.</p></form></div></div></div>';
   document.body.appendChild(overlay);
 
   /* === State === */
@@ -94,10 +94,20 @@
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
 
   document.getElementById('elev-facial-btn').addEventListener('click', function(){
-    choiceLabel = 'Facial'; goToStep2();
+    choiceLabel = 'Hidratação Facial';
+    document.getElementById('elev-step2-heading').innerHTML =
+      'Fechando o pacote <span style="color:#d4af37">facial</span>,<br>você irá ganhar uma <span>hidratação facial! ✨</span>';
+    document.getElementById('elev-step2-sub').textContent =
+      'Deixe seus dados abaixo para nossa especialista entrar em contato e garantir seu presente (vagas limitadas):';
+    goToStep2();
   });
   document.getElementById('elev-corporal-btn').addEventListener('click', function(){
-    choiceLabel = 'Corporal'; goToStep2();
+    choiceLabel = 'Massagem Moderna Local';
+    document.getElementById('elev-step2-heading').innerHTML =
+      'Fechando um pacote de <span style="color:#d4af37">corporal</span>,<br>ganha <span>massagem moderna local! ✨</span>';
+    document.getElementById('elev-step2-sub').textContent =
+      'Deixe seus dados abaixo para nossa especialista entrar em contato e garantir seu presente (vagas limitadas):';
+    goToStep2();
   });
 
   document.getElementById('elev-telefone').addEventListener('input', function(){
@@ -107,10 +117,9 @@
   document.getElementById('elev-lead-form').addEventListener('submit', function(e){
     e.preventDefault();
     var nome     = document.getElementById('elev-nome').value.trim();
-    var email    = document.getElementById('elev-email').value.trim();
     var telefone = document.getElementById('elev-telefone').value.trim();
     var valid    = true;
-    [['elev-nome',nome],['elev-email',email],['elev-telefone',telefone]].forEach(function(pair){
+    [['elev-nome',nome],['elev-telefone',telefone]].forEach(function(pair){
       if (!pair[1]) {
         valid = false;
         var el = document.getElementById(pair[0]);
@@ -120,7 +129,7 @@
       }
     });
     if (!valid) return;
-    var waMsg = encodeURIComponent('Ola! Meu nome e ' + nome + '. Reivindiquei meu presente gratis (' + choiceLabel + ') pelo site e gostaria de saber como funciona para marcar meu horario. Meu e-mail: ' + email);
+    var waMsg = encodeURIComponent('Olá! Meu nome é ' + nome + '. Quero fechar o pacote de ' + choiceLabel + ' e reivindicar meu presente vindo pelo site. Poderia me passar mais informações para agendar? 😊');
     close();
     window.open('https://wa.me/' + WA_NUMBER + '?text=' + waMsg, '_blank', 'noopener,noreferrer');
   });
